@@ -1,0 +1,187 @@
+[
+  {
+    "name": "Sun",
+    "size": 10.391400,
+    "texture": "/assets/sun-texture.jpg",
+    "position": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "rotationSpeed": {
+      "x": 0,
+      "y": 0.005,
+      "z": 0
+    },
+    "translationSpeed": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "name": "Mercury",
+    "size": 0.04879,
+    "texture": "/assets/mercury-texture.png",
+    "position": {
+      "x": 57.9,
+      "y": 0,
+      "z": 0
+    },
+    "rotationSpeed": {
+      "x": 0,
+      "y": 0.04,
+      "z": 0
+    },
+    "translationSpeed": {
+      "x": 0,
+      "y": 0.0047,
+      "z": 0
+    }
+  },
+  {
+    "name": "Venus",
+    "size": 0.12104,
+    "texture": "/assets/venus-texture.jpg",
+    "position": {
+      "x": 108.2,
+      "y": 0,
+      "z": 0
+    },
+    "rotationSpeed": {
+      "x": 0,
+      "y": 0.03,
+      "z": 0
+    },
+    "translationSpeed": {
+      "x": 0,
+      "y": 0.0035,
+      "z": 0
+    }
+  },
+  {
+    "name": "Earth",
+    "size": 0.12756,
+    "texture": "/assets/earth-texture.jpg",
+    "position": {
+      "x": 149.2,
+      "y": 0,
+      "z": 0
+    },
+    "rotationSpeed": {
+      "x": 0,
+      "y": 0.01,
+      "z": 0
+    },
+    "translationSpeed": {
+      "x": 0,
+      "y": 0.00298,
+      "z": 0
+    }
+  },
+  {
+    "name": "Mars",
+    "size": 0.06792,
+    "texture": "/assets/mars-texture.jpg",
+    "position": {
+      "x": 227.9,
+      "y": 0,
+      "z": 0
+    },
+    "rotationSpeed": {
+      "x": 0,
+      "y": 0.008,
+      "z": 0
+    },
+    "translationSpeed": {
+      "x": 0,
+      "y": 0.00241,
+      "z": 0
+    }
+  },
+  {
+    "name": "Jupiter",
+    "size": 1.42984,
+    "texture": "/assets/jupiter-texture.jpg",
+    "position": {
+      "x": 778.6,
+      "y": 0,
+      "z": 0
+    },
+    "rotationSpeed": {
+      "x": 0,
+      "y": 0.002,
+      "z": 0
+    },
+    "translationSpeed": {
+      "x": 0,
+      "y": 0.00131,
+      "z": 0
+    }
+  },
+  {
+    "name": "Saturn",
+    "size": 1.20536,
+    "texture": "/assets/saturn-texture.jpg",
+    "position": {
+      "x": 1433.5,
+      "y": 0,
+      "z": 0
+    },
+    "rotationSpeed": {
+      "x": 0,
+      "y": 0.02,
+      "z": 0
+    },
+    "translationSpeed": {
+      "x": 0,
+      "y": 0.0097,
+      "z": 0
+    },
+    "ring": {
+      "texture": "/assets/satur-rings.png",
+      "innerRadius": 0.7,
+      "outerRadius": 1.2
+    }
+  },
+  {
+    "name": "Uranus",
+    "size": 0.51118,
+    "texture": "/assets/uranus-texture.jpg",
+    "position": {
+      "x": 2872.5,
+      "y": 0,
+      "z": 0
+    },
+    "rotationSpeed": {
+      "x": 0,
+      "y": 0.03,
+      "z": 0
+    },
+    "translationSpeed": {
+      "x": 0,
+      "y": 0.0068,
+      "z": 0
+    }
+  },
+  {
+    "name": "Neptune",
+    "size": 0.49528,
+    "texture": "/assets/neptune-texture.jpg",
+    "position": {
+      "x": 4495.1,
+      "y": 0,
+      "z": 0
+    },
+    "rotationSpeed": {
+      "x": 0,
+      "y": 0.03,
+      "z": 0
+    },
+    "translationSpeed": {
+      "x": 0,
+      "y": 0.0054,
+      "z": 0
+    }
+  }
+]
