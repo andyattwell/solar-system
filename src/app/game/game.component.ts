@@ -7,6 +7,10 @@ import { Planet } from "./Planet";
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ActionNavComponent } from './action-nav/action-nav.component';
+import { PlanetDialogComponent } from './planet-dialog/planet-dialog.component';
+
+import { MatDialog } from '@angular/material/dialog';
+
 @Component({
   selector: 'app-game',
   standalone: true,
@@ -16,6 +20,8 @@ import { ActionNavComponent } from './action-nav/action-nav.component';
 })
 
 export class GameComponent implements AfterViewInit {
+  constructor(public dialog: MatDialog) {}
+
   @ViewChild('canvas')
   private canvasRef!: ElementRef;
   
@@ -189,7 +195,21 @@ export class GameComponent implements AfterViewInit {
 
   public selectPlanet(planet:Planet):void {
     this.selectedPlanet = planet;
-    this.followPlanet();
+    // this.followPlanet();
+    // this.dialog.closeAll();
+    // this.dialog.ngOnDestroy()
+    
+    const dialogRef = this.dialog.open(PlanetDialogComponent, {
+      height: '400px',
+      width: '400px',
+      data: planet,
+      hasBackdrop: true,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+    
   }
   
   private followPlanet(): void {

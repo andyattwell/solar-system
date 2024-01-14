@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>{{ data.name }}</h1>
+<div mat-dialog-content>
+  <mat-list>
+    <mat-list-item>Size: {{ data.size }}</mat-list-item>
+    <mat-list-item>Position: 
+      X:{{ position.x }} 
+      Y:{{ position.y }} 
+      Z:{{ position.z }}
+    </mat-list-item>
+    <mat-list-item>Rotation speed: {{ rotation }}</mat-list-item>
+    <mat-list-item>
+      <mat-slider>
+        <input matSliderThumb min="0" max="400" step="1" [(value)]="rotation">
+      </mat-slider>
+    </mat-list-item>
+    <mat-list-item>Orbit speed: {{ orbitSpeed }}</mat-list-item>
+    <mat-list-item>
+      <mat-slider>
+        <input matSliderThumb min="0" max="100" step="1" [(value)]="orbitSpeed">
+      </mat-slider>
+    </mat-list-item>
+    <mat-list-item>Orbit: {{ data.orbit }}</mat-list-item>
+    <mat-list-item>
+      <mat-slider>
+        <input matSliderThumb min="10" max="100" step="1" [(value)]="data.orbitRadius">
+      </mat-slider>
+    </mat-list-item>
+  </mat-list>
+</div>

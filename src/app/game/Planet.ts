@@ -34,12 +34,12 @@ export class Planet extends THREE.Mesh {
   // private velocity: THREE.Vector2;
 
   private rotationSpeedX: number = 0;
-  private rotationSpeedY: number = 0.01;
+  public rotationSpeedY: number = 0.01;
   private rotationSpeedZ: number = 0;
 
-  private angle: number = 0;
-  private orbit: number = 0;
-  private orbitSpeed: number = 0;
+  public angle: number = 0;
+  public orbit: number = 0;
+  public orbitSpeed: number = 0;
 
   private scaleSizeFactor: number = 1;
   private scaleDistanceFactor: number = 0.5;
@@ -60,6 +60,7 @@ export class Planet extends THREE.Mesh {
     if (props.orbit) {
       this.orbit = props.orbit * this.scaleDistanceFactor + 10;
     }
+
     if (props.orbitSpeed) {
       this.orbitSpeed = props.orbitSpeed * 0.001;
     }
@@ -103,12 +104,27 @@ export class Planet extends THREE.Mesh {
 
   }
 
+  public get orbitRadius() {
+    return this.orbit
+  }
+
+  public set orbitRadius(orbit) {
+    this.orbit = orbit
+    this.addOrbitRing();
+  }
+
   private addOrbitRing() {
     if (!this.orbit || this.orbit === 0) {
       return;
     }
+
+    if (this.orbitRing) {
+      this.remove(this.orbitRing)
+    }
+    
     const orbitRad = this.orbit;
     let orbitRingGeo = new THREE.RingGeometry(orbitRad-this.size / 2, orbitRad+this.size / 2, 60, 3, 0, Math.PI * 2);
+
     const orbitRingMat = new THREE.MeshLambertMaterial({
       color: 0xFFFFFF,
       side: THREE.DoubleSide
@@ -117,6 +133,7 @@ export class Planet extends THREE.Mesh {
     this.orbitRing.rotation.x =  Math.PI * 0.5
     this.orbitRing.name = "orbitring";
     this.add(this.orbitRing);
+    this.orbitRing.geometry
   }
 
   public followOrbit(parent:any, timeScale: number) {

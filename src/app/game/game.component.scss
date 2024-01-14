@@ -5,6 +5,7 @@
   left: 0;
   right: 0;
   background: #eee;
+  z-index: 0;
 }
 
 .game-container {
@@ -15,5 +16,6 @@
     position: absolute; 
     height: 100%; 
     width: 100%;
+    z-index: 1;
   }
 }
