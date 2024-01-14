@@ -20,7 +20,7 @@ export class GameComponent implements AfterViewInit {
   private canvasRef!: ElementRef;
   
   // Scene properties
-  @Input() public cameraZ: number = 1000;
+  @Input() public cameraZ: number = 5000;
   @Input() public fieldOfView: number = 1;
   @Input('nearClipping') public nearClippingPlane: number = 1;
   @Input('farClipping') public farClippingPlane: number = 80000;
@@ -74,17 +74,16 @@ export class GameComponent implements AfterViewInit {
 
   createControls() {
     this.controls = new OrbitControls( this.camera, this.renderer.domElement );
-    this.controls.maxDistance = 40000;
-    this.controls.minDistance = 50;
-    this.controls.enabled = true;
+    // this.controls.maxDistance = 40000;
+    // this.controls.minDistance = 50;
+    // this.controls.enabled = true;
     this.controls.enableZoom = false;
-    this.controls.enablePan = false;
-    this.controls.enableDamping = false;
+    // this.controls.enablePan = true;
+    // this.controls.enableDamping = true;
     // this.controls.zoomSpeed = 0.001;
     // this.controls.zoomToCursor = true;
     this.camera.position.set(0,0,this.cameraZ);
     this.controls.update();
-
   }
 
   private crateSkyBox():void {
@@ -133,14 +132,13 @@ export class GameComponent implements AfterViewInit {
    * @memberof CubeComponent
    */
   private animateScene() {
-    // this.cube.rotation.x += this.rotationSpeedX;
     this.planets.forEach(planet => {
       planet.animate(this.planets[0]);
     });
-    if (this.selectedPlanet) {
-      this.followPlanet()
-    }
-    // this.controls.update()
+    // if (this.selectedPlanet) {
+    //   this.followPlanet()
+    // }
+    this.controls.update()
   }
 
   private createPlanets() {
@@ -192,13 +190,15 @@ export class GameComponent implements AfterViewInit {
     const offset = this.selectedPlanet.size / 2;
     // const posX = this.selectedPlanet.position.x + this.selectedPlanet.size / 2 - offset;
     const planetPos = this.selectedPlanet.planet.position;
-    const posX = 0;
-    const posY = planetPos.y + this.selectedPlanet.size / 2 + offset;
-    const posZ = planetPos.z + this.selectedPlanet.size / 2 + offset;
+    // const posX = planetPos.x + this.selectedPlanet.size / 2 + offset;
+    // const posY = planetPos.y - this.selectedPlanet.size;
+    // const posZ = planetPos.z - this.selectedPlanet.size;
 
-    this.camera.position.set(posX, posY, posZ);
+    // this.camera.position.set(posX, posY, posZ);
     this.camera.lookAt(planetPos.x, planetPos.y, planetPos.z);
-    this.controls.target = planetPos;
+    this.controls.target = new THREE.Vector3(planetPos.x, planetPos.y, planetPos.z);
+    // this.camera.position.z = planetPos.z - this.selectedPlanet.size * 2;
+    // this.camera.position.x = planetPos.x - this.selectedPlanet.size * 2;
 
     this.controls.update();
   }

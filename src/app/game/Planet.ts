@@ -5,6 +5,7 @@ export interface PlanetProps {
   size: number;
   mass: number;
   orbit?: number;
+  orbitSpeed?:number;
   texture: string;
   position: {
     x: number,
@@ -12,11 +13,6 @@ export interface PlanetProps {
     z: number
   };
   rotationSpeed: {
-    x: number,
-    y: number,
-    z: number
-  };
-  translationSpeed: {
     x: number,
     y: number,
     z: number
@@ -33,6 +29,8 @@ export class Planet extends THREE.Mesh {
   // private mass: number;
   private loader = new THREE.TextureLoader();
   public planet:THREE.Mesh;
+  private orbitRing!:THREE.Mesh;
+  private ring!:THREE.Mesh;
   // private velocity: THREE.Vector2;
 
   private rotationSpeedX: number = 0;
@@ -41,9 +39,11 @@ export class Planet extends THREE.Mesh {
 
   private angle: number = 0;
   private orbit: number = 0;
+  private orbitSpeed: number = 0;
 
   private scaleSizeFactor: number = 1;
   private scaleDistanceFactor: number = 0.5;
+  private timeScale: number = 1;
 
   private planetTexture: string;
 
@@ -51,11 +51,20 @@ export class Planet extends THREE.Mesh {
     super(new THREE.SphereGeometry(0));
     // this.velocity = new THREE.Vector2(props.rotationSpeed.y, props.rotationSpeed.y)
     // this.mass = props.mass;
-    this.size = props.size * this.scaleSizeFactor;
+    this.size = props.size;
+    this.name = props.name;
+
+    this.rotationSpeedY = 1 / props.rotationSpeed.y;
+    this.rotationSpeedX = 1 / props.rotationSpeed.x;
+    this.rotationSpeedZ = 1 / props.rotationSpeed.z;
+
     if (props.orbit) {
       this.orbit = props.orbit * this.scaleDistanceFactor + 10;
     }
-    this.name = props.name;
+    if (props.orbitSpeed) {
+      this.orbitSpeed = props.orbitSpeed * 0.001;
+    }
+
     const planetGeo = new THREE.SphereGeometry(this.size);
     let planetMat;
     
@@ -75,14 +84,20 @@ export class Planet extends THREE.Mesh {
     if (props.name === 'Sun') {
       this.addLight()
     } else {
-      this.planet.position.x = this.orbit / 2;
-      this.planet.position.y = 0;
-      this.planet.position.z = this.orbit / 2
-      // this.followOrbit();
+      // this.planet.position.x = this.orbit / 2;
+      // this.planet.position.y = 0;
+      // this.planet.position.z = this.orbit / 2
+      this.followOrbit({
+        position: {
+          x: 0,
+          y: 0,
+          z: 0
+        }
+      });
     }
 
     if (props.ring) {
-      this.addRings(props.ring);
+      // this.addRings(props.ring);
     }
 
     this.addOrbitRing();
@@ -90,16 +105,36 @@ export class Planet extends THREE.Mesh {
   }
 
   private addOrbitRing() {
-    const orbitRad = this.orbit / 2;
-    let orbitRingGeo = new THREE.RingGeometry(orbitRad-0.05, orbitRad, 60, 3, 0, Math.PI * 2);
+    if (!this.orbit || this.orbit === 0) {
+      return;
+    }
+    const orbitRad = this.orbit;
+    let orbitRingGeo = new THREE.RingGeometry(orbitRad-this.size / 2, orbitRad+this.size / 2, 60, 3, 0, Math.PI * 2);
     const orbitRingMat = new THREE.MeshLambertMaterial({
       color: 0xFFFFFF,
       side: THREE.DoubleSide
     })
-    let orbitRing = new THREE.Mesh(orbitRingGeo, orbitRingMat);
-    orbitRing.rotation.x =  Math.PI * 0.5
-    orbitRing.name = "orbitring";
-    this.add(orbitRing);
+    this.orbitRing = new THREE.Mesh(orbitRingGeo, orbitRingMat);
+    this.orbitRing.rotation.x =  Math.PI * 0.5
+    this.orbitRing.name = "orbitring";
+    this.add(this.orbitRing);
+  }
+
+  public followOrbit(parent:any) {
+    // const radius = parent.size + this.orbit;
+    const radius = this.orbit;
+    const speed = this.orbitSpeed * this.timeScale;
+    
+    const px = parent.position.x + radius * Math.cos(this.angle); // <-- that's the maths you need
+    const pz = parent.position.y + radius * Math.sin(this.angle);
+    
+    if(this.name === 'Earth') {
+      // console.log(this.name, this.angle, this.angle * speed)
+    }
+
+    this.planet.position.x = px;
+    this.planet.position.z = pz;
+    this.angle = ((this.angle + Math.PI / 360 * speed) % (Math.PI * 2))
   }
 
   private addLight() {
@@ -109,18 +144,18 @@ export class Planet extends THREE.Mesh {
   }
 
   private addRings(props: any) {
-    let ringGeo = new THREE.RingGeometry(props.innerRadius, props.outerRadius, 20, 3, 0, Math.PI * 2);
-      const ringMat = new THREE.MeshLambertMaterial({
-        map: props.texture ? this.loader.load(props.texture): null,
-        // color: 0x000000,
-        side: THREE.DoubleSide
-      })
-      let ring = new THREE.Mesh(ringGeo, ringMat);
-      ring.rotation.x =  Math.PI * 0.5 + 0.05
-      ring.rotation.y = 0.05;
-      ring.rotation.z = 0.05;
-      ring.name = "ring";
-      this.add(ring);
+    // let ringGeo = new THREE.RingGeometry(props.innerRadius, props.outerRadius, 20, 3, 0, Math.PI * 2);
+    //   const ringMat = new THREE.MeshLambertMaterial({
+    //     map: props.texture ? this.loader.load(props.texture): null,
+    //     // color: 0x000000,
+    //     side: THREE.DoubleSide
+    //   })
+    //   this.ring = new THREE.Mesh(ringGeo, ringMat);
+    //   this.ring.rotation.x =  Math.PI * 0.5 + 0.05
+    //   this.ring.rotation.y = 0.05;
+    //   this.ring.rotation.z = 0.05;
+    //   this.ring.name = "ring";
+    //   this.planet.add(this.ring);
   }
   
   private degrees_to_radians(degrees:number):number {
@@ -158,22 +193,17 @@ export class Planet extends THREE.Mesh {
   //   this.position.x = this.position.x + this.velocity.x
   //   this.position.y = this.position.y + this.velocity.y
   // }
-  public followOrbit(parent:any) {
-    // const radius = parent.size + this.orbit;
-    const radius = this.orbit;
-    const px = parent.position.x + radius * Math.cos(this.angle); // <-- that's the maths you need
-    const py = parent.position.y + radius * Math.sin(this.angle);
-    this.planet.position.x = px;
-    this.planet.position.z = py;
-    this.angle = (this.angle + Math.PI / 360) % (Math.PI * 2);
-    // console.log({px, py, angle: this.angle})
-  }
 
   public animate(sun: Planet) {
 
-    this.planet.rotation.y += this.rotationSpeedY;
-    this.planet.rotation.x += this.rotationSpeedX;
-    this.planet.rotation.z += this.rotationSpeedZ;
+    // this.planet.rotation.x += this.rotationSpeedX * this.timeScale;
+    // this.planet.rotation.z += this.rotationSpeedZ * this.timeScale;
+
+    if (this.name === 'Venus' || this.name === 'Uranus') {
+      this.planet.rotation.y -= this.rotationSpeedY * this.timeScale;
+    } else {
+      this.planet.rotation.y += this.rotationSpeedY * this.timeScale;
+    }
 
     if (this.name !== 'Sun') {
       this.followOrbit(sun);

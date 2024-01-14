@@ -21,6 +21,7 @@ export class IOController {
     window.addEventListener( 'wheel', function(e:any){
       if (self.parent.camera) {
         if (e.deltaY < 0) {
+          console.log('ACA')
           if (self.parent.camera.position.z > 50) {
             self.parent.camera.translateZ( -100 )
             self.parent.controls.update();
@@ -35,9 +36,11 @@ export class IOController {
     });
 
     window.addEventListener("contextmenu", (e) => {
-      self.parent.selectedPlanet = null;
-      self.parent.camera.lookAt(0, 0, 0);
-      self.parent.controls.target = new THREE.Vector3(0,0,0);
+      // if (self.parent.selectedPlanet) {
+      //   self.parent.selectedPlanet = null;
+      //   self.parent.camera.lookAt(0, 0, 0);
+      //   self.parent.controls.target = new THREE.Vector3(0,0,0);
+      // }
     });
 
     // window.addEventListener('click', (e) => {
