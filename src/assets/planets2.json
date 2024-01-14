@@ -1,0 +1,46 @@
+[
+  {
+    "name": "Sun",
+    "size": 10.391400,
+    "mass": 1987687,
+    "orbit": 0,
+    "texture": "/assets/sun-texture.jpg",
+    "position": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "rotationSpeed": {
+      "x": 0,
+      "y": 0.005,
+      "z": 0
+    },
+    "translationSpeed": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  },
+  {
+    "name": "Jupiter",
+    "size": 1.42984,
+    "mass": 1898,
+    "orbit": 57.9,
+    "texture": "/assets/jupiter-texture.jpg",
+    "position": {
+      "x": 778.6,
+      "y": 0,
+      "z": 0
+    },
+    "rotationSpeed": {
+      "x": 0,
+      "y": 0.002,
+      "z": 0
+    },
+    "translationSpeed": {
+      "x": 0,
+      "y": 0.00131,
+      "z": 0
+    }
+  }
+]

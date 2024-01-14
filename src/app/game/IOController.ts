@@ -1,13 +1,11 @@
 import * as THREE from 'three';
 
-export class IOControler {
+export class IOController {
   public parent:any;
   private intersects:Array<any> = [];
   private hovered:any = {};
   private raycaster:THREE.Raycaster = new THREE.Raycaster();
-  private mouse:THREE.Vector2 = new THREE.Vector2() ;
-  private dragging:boolean = false;
-  private dragStart:any = null;
+  private mouse:THREE.Vector2 = new THREE.Vector2();
 
   constructor(parent:any) {
     this.parent = parent
@@ -16,14 +14,39 @@ export class IOControler {
 
   init () {
     const self = this;
-
-    window.addEventListener('click', (e) => {
-      self.clickHandler(e);
+    window.addEventListener('resize', () => {
+      self.parent.setAspectRatio();
     })
-
-    window.addEventListener("pointermove", (e) => {
-      self.mouseMoveHandler(e)
+    
+    window.addEventListener( 'wheel', function(e:any){
+      if (self.parent.camera) {
+        if (e.deltaY < 0) {
+          if (self.parent.camera.position.z > 50) {
+            self.parent.camera.translateZ( -100 )
+            self.parent.controls.update();
+          }
+        } else {
+          if (self.parent.camera.position.z < 40000) {
+            self.parent.camera.translateZ( 100 )
+            self.parent.controls.update();
+          }
+        }
+      }
     });
+
+    window.addEventListener("contextmenu", (e) => {
+      self.parent.selectedPlanet = null;
+      self.parent.camera.lookAt(0, 0, 0);
+      self.parent.controls.target = new THREE.Vector3(0,0,0);
+    });
+
+    // window.addEventListener('click', (e) => {
+    //   self.clickHandler(e);
+    // })
+
+    // window.addEventListener("pointermove", (e) => {
+    //   self.mouseMoveHandler(e)
+    // });
   }
 
   mouseMoveHandler(e:MouseEvent) {

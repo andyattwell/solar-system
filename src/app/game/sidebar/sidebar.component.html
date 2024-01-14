@@ -1,0 +1,11 @@
+<mat-list>
+  @if(planets && planets.length) {
+    @for (planet of planets; track planet) {
+      <a mat-list-item href="#" class="planet-li" (click)="selectPlanet($event, planet)">
+        <i matListItemIcon></i>
+        <span matListItemTitle>{{ planet.name }}</span>
+        <span matListItemLine>Produced by a plant</span>
+      </a>
+    }
+  }
+</mat-list>    

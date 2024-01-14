@@ -1,24 +1,26 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import Planets from "../../assets/planets.json"
-import { IOControler } from "./IOControler";
-import { Planet, PlanetProps } from "./Planet";
+import PlanetsJson from "../../assets/planets.json"
+import { IOController } from "./IOController";
+import { Planet } from "./Planet";
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [],
+  imports: [MatSidenavModule, SidebarComponent],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
 
-export class GameComponent implements OnInit, AfterViewInit {
+export class GameComponent implements AfterViewInit {
   @ViewChild('canvas')
   private canvasRef!: ElementRef;
-
+  
   // Scene properties
-  @Input() public cameraZ: number = 10000;
+  @Input() public cameraZ: number = 1000;
   @Input() public fieldOfView: number = 1;
   @Input('nearClipping') public nearClippingPlane: number = 1;
   @Input('farClipping') public farClippingPlane: number = 80000;
@@ -28,14 +30,15 @@ export class GameComponent implements OnInit, AfterViewInit {
   public get canvas(): HTMLCanvasElement {
     return this.canvasRef.nativeElement;
   }
-
   private renderer!: THREE.WebGLRenderer;
   private scene!: THREE.Scene; 
-  private planets:Array<Planet> = [];
+  public planets:Array<Planet> = [];
 
   private controls!: OrbitControls;
 
-  private Controler: IOControler = new IOControler(this);
+  private Controller: IOController = new IOController(this);
+
+  private selectedPlanet!: Planet;
   /**
    * Create the scene
    * 
@@ -46,103 +49,45 @@ export class GameComponent implements OnInit, AfterViewInit {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x000000);
 
+    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas })
+    this.renderer.setPixelRatio(this.getAspectRatio())
+    this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
+    // this.setAspectRatio();
+
     let aspectRatio = this.getAspectRatio();
+
     this.camera = new THREE.PerspectiveCamera(
       this.fieldOfView,
       aspectRatio,
       this.nearClippingPlane,
       this.farClippingPlane
     )
-    this.camera.position.z = this.cameraZ;
+    
+
+    this.createControls();
+    
 
     const light = new THREE.AmbientLight(0x404040);
     light.intensity = 10;
     this.scene.add(light);
-
-    this.createPlanets();
   }
 
-  /**
-   * Returns current aspect ratio
-   * 
-   * @private
-   * @memberof CubeComponent
-   */
-  private getAspectRatio() {
-    return this.canvas.clientWidth / this.canvas.clientHeight;
-  }
-
-  /**
-   * Animate cube
-   * 
-   * @private
-   * @memberof CubeComponent
-   */
-  private animateScene() {
-    // this.cube.rotation.x += this.rotationSpeedX;
-    this.planets.forEach(planet => {
-      planet.animate();
-    });
-  }
-
-  private createPlanets() {
-    let planets:Array<PlanetProps> = Planets;
-
-    const self = this;
-
-    planets.forEach(props => {
-      let planet = new Planet(props);
-      self.planets.push(planet);
-      self.scene.add(planet);
-    });
-
-  }
-  
-  /**
-   * Start the rendering loop
-   * 
-   * @private
-   * @memberof CubeComponent
-   */
-  private startRenderingLoop() {
-    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas })
-    this.renderer.setPixelRatio(this.getAspectRatio())
-    this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-
-    let component: GameComponent = this;
-    (function render(){
-      requestAnimationFrame(render);
-      component.animateScene();
-      component.renderer.render(component.scene, component.camera);
-    }())
-  }
-
-  ngOnInit(): void {
-    // throw new Error('Method not implemented.');
-  }
-
-  ngAfterViewInit(): void {
-    // throw new Error('Method not implemented.');
-    this.createScene();
-    this.startRenderingLoop();
-    this.crateSkyBox();
+  createControls() {
     this.controls = new OrbitControls( this.camera, this.renderer.domElement );
-    this.controls.maxDistance = 20000;
+    this.controls.maxDistance = 40000;
     this.controls.minDistance = 50;
+    this.controls.enabled = true;
+    this.controls.enableZoom = false;
+    this.controls.enablePan = false;
+    this.controls.enableDamping = false;
+    // this.controls.zoomSpeed = 0.001;
+    // this.controls.zoomToCursor = true;
+    this.camera.position.set(0,0,this.cameraZ);
+    this.controls.update();
 
-    const self = this
-    window.addEventListener("pointermove", (e) => {
-      self.mouseMoveHandler(e)
-    });
   }
 
-  mouseMoveHandler(event:Event) {
-    event.preventDefault();
-    let mouse = new THREE.Vector2();
-    let raycaster = new THREE.Raycaster();
-  }
-
-  private crateSkyBox() {
+  private crateSkyBox():void {
     const skyTexture = new THREE.TextureLoader().load("/assets/big-skybox-back.png");
     skyTexture.wrapS = THREE.MirroredRepeatWrapping;
     skyTexture.wrapT = THREE.MirroredRepeatWrapping;
@@ -165,4 +110,97 @@ export class GameComponent implements OnInit, AfterViewInit {
     skybox.name = "skybox";
     this.scene.add(skybox);
   }
+
+  private setAspectRatio(): void {
+    this.renderer.setPixelRatio(this.getAspectRatio())
+    this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
+  }
+
+  /**
+   * Returns current aspect ratio
+   * 
+   * @private
+   * @memberof CubeComponent
+   */
+  private getAspectRatio() {
+    return this.canvas.clientWidth / this.canvas.clientHeight;
+  }
+
+  /**
+   * Animate cube
+   * 
+   * @private
+   * @memberof CubeComponent
+   */
+  private animateScene() {
+    // this.cube.rotation.x += this.rotationSpeedX;
+    this.planets.forEach(planet => {
+      planet.animate(this.planets[0]);
+    });
+    if (this.selectedPlanet) {
+      this.followPlanet()
+    }
+    // this.controls.update()
+  }
+
+  private createPlanets() {
+    // let planets:Array<PlanetProps> = PlanetsJson;
+
+    const self = this;
+
+    PlanetsJson.forEach(props => {
+      try {
+        let planet = new Planet(props);
+        self.planets.push(planet);
+        self.scene.add(planet);
+      } catch (error) {
+        console.log({error, props})
+      }
+    });
+
+  }
+  
+  /**
+   * Start the rendering loop
+   * 
+   * @private
+   * @memberof CubeComponent
+   */
+  private startRenderingLoop() {
+    let component: GameComponent = this;
+    (function render(){
+      requestAnimationFrame(render);
+      component.animateScene();
+      component.renderer.render(component.scene, component.camera);
+    }())
+  }
+
+  ngAfterViewInit(): void {
+    // throw new Error('Method not implemented.');
+    this.createScene();
+    this.crateSkyBox();
+    this.createPlanets();
+    this.startRenderingLoop();
+  }
+
+  public selectPlanet(planet:Planet):void {
+    this.selectedPlanet = planet;
+    this.followPlanet();
+  }
+  
+  private followPlanet(): void {
+    const offset = this.selectedPlanet.size / 2;
+    // const posX = this.selectedPlanet.position.x + this.selectedPlanet.size / 2 - offset;
+    const planetPos = this.selectedPlanet.planet.position;
+    const posX = 0;
+    const posY = planetPos.y + this.selectedPlanet.size / 2 + offset;
+    const posZ = planetPos.z + this.selectedPlanet.size / 2 + offset;
+
+    this.camera.position.set(posX, posY, posZ);
+    this.camera.lookAt(planetPos.x, planetPos.y, planetPos.z);
+    this.controls.target = planetPos;
+
+    this.controls.update();
+  }
+
 }
