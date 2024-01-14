@@ -10,4 +10,10 @@
 .game-container {
   position: relative;
   overflow: hidden;
+
+  canvas {
+    position: absolute; 
+    height: 100%; 
+    width: 100%;
+  }
 }

@@ -1,6 +1,7 @@
 import { Component, Input, Output, AfterViewInit, EventEmitter } from '@angular/core';
 import { Planet } from "../Planet";
 import { MatListModule } from '@angular/material/list';
+
 @Component({
   selector: 'app-sidebar',
   standalone: true,

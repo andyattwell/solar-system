@@ -43,7 +43,6 @@ export class Planet extends THREE.Mesh {
 
   private scaleSizeFactor: number = 1;
   private scaleDistanceFactor: number = 0.5;
-  private timeScale: number = 1;
 
   private planetTexture: string;
 
@@ -93,7 +92,7 @@ export class Planet extends THREE.Mesh {
           y: 0,
           z: 0
         }
-      });
+      }, 1);
     }
 
     if (props.ring) {
@@ -120,10 +119,10 @@ export class Planet extends THREE.Mesh {
     this.add(this.orbitRing);
   }
 
-  public followOrbit(parent:any) {
+  public followOrbit(parent:any, timeScale: number) {
     // const radius = parent.size + this.orbit;
     const radius = this.orbit;
-    const speed = this.orbitSpeed * this.timeScale;
+    const speed = this.orbitSpeed * timeScale;
     
     const px = parent.position.x + radius * Math.cos(this.angle); // <-- that's the maths you need
     const pz = parent.position.y + radius * Math.sin(this.angle);
@@ -194,19 +193,19 @@ export class Planet extends THREE.Mesh {
   //   this.position.y = this.position.y + this.velocity.y
   // }
 
-  public animate(sun: Planet) {
+  public animate(sun: Planet, timeScale: number) {
 
     // this.planet.rotation.x += this.rotationSpeedX * this.timeScale;
     // this.planet.rotation.z += this.rotationSpeedZ * this.timeScale;
 
     if (this.name === 'Venus' || this.name === 'Uranus') {
-      this.planet.rotation.y -= this.rotationSpeedY * this.timeScale;
+      this.planet.rotation.y -= this.rotationSpeedY * timeScale;
     } else {
-      this.planet.rotation.y += this.rotationSpeedY * this.timeScale;
+      this.planet.rotation.y += this.rotationSpeedY * timeScale;
     }
 
     if (this.name !== 'Sun') {
-      this.followOrbit(sun);
+      this.followOrbit(sun, timeScale);
     }
   }
 

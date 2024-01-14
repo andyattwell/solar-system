@@ -1,0 +1,18 @@
+<div>
+  <button mat-mini-fab aria-label="Pause" (click)="pause()" [color]="!playing ? 'primary' : ''">
+    <mat-icon>pause</mat-icon>
+  </button>
+  <button mat-mini-fab aria-label="Fast rewind" (click)="rewindGame()" [color]="timeScale < 0 ? 'primary' : ''">
+    <mat-icon>fast_rewind</mat-icon>
+  </button>
+  <button mat-mini-fab aria-label="Time sace" disabled>
+    {{ timeScale }}
+  </button>
+
+  <button mat-mini-fab aria-label="Play" (click)="play()" [color]="playing ? 'primary' : ''">
+    <mat-icon>play_arrow</mat-icon>
+  </button>
+  <button mat-mini-fab aria-label="Fast forward" (click)="fastForward()" [color]="timeScale > 1 ? 'primary' : ''">
+    <mat-icon>fast_forward</mat-icon>
+  </button>
+</div>

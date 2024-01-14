@@ -19,18 +19,13 @@ export class IOController {
     })
     
     window.addEventListener( 'wheel', function(e:any){
-      if (self.parent.camera) {
+      if (e.target === self.parent.canvas && self.parent.camera) {
         if (e.deltaY < 0) {
-          console.log('ACA')
-          if (self.parent.camera.position.z > 50) {
-            self.parent.camera.translateZ( -100 )
-            self.parent.controls.update();
-          }
+          self.parent.camera.translateZ( -100 )
+          self.parent.controls.update();
         } else {
-          if (self.parent.camera.position.z < 40000) {
-            self.parent.camera.translateZ( 100 )
-            self.parent.controls.update();
-          }
+          self.parent.camera.translateZ( 100 )
+          self.parent.controls.update();
         }
       }
     });

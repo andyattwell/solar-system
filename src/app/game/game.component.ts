@@ -6,11 +6,11 @@ import { IOController } from "./IOController";
 import { Planet } from "./Planet";
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
-
+import { ActionNavComponent } from './action-nav/action-nav.component';
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [MatSidenavModule, SidebarComponent],
+  imports: [MatSidenavModule, SidebarComponent, ActionNavComponent],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
@@ -33,6 +33,9 @@ export class GameComponent implements AfterViewInit {
   private renderer!: THREE.WebGLRenderer;
   private scene!: THREE.Scene; 
   public planets:Array<Planet> = [];
+  
+  public timeScale: number = 1;
+  public play: boolean = false;
 
   private controls!: OrbitControls;
 
@@ -133,7 +136,7 @@ export class GameComponent implements AfterViewInit {
    */
   private animateScene() {
     this.planets.forEach(planet => {
-      planet.animate(this.planets[0]);
+      planet.animate(this.planets[0], this.timeScale);
     });
     // if (this.selectedPlanet) {
     //   this.followPlanet()
@@ -167,6 +170,9 @@ export class GameComponent implements AfterViewInit {
   private startRenderingLoop() {
     let component: GameComponent = this;
     (function render(){
+      if (!component.play) {
+        return;
+      }
       requestAnimationFrame(render);
       component.animateScene();
       component.renderer.render(component.scene, component.camera);
@@ -178,7 +184,7 @@ export class GameComponent implements AfterViewInit {
     this.createScene();
     this.crateSkyBox();
     this.createPlanets();
-    this.startRenderingLoop();
+    this.playGame();
   }
 
   public selectPlanet(planet:Planet):void {
@@ -201,6 +207,28 @@ export class GameComponent implements AfterViewInit {
     // this.camera.position.x = planetPos.x - this.selectedPlanet.size * 2;
 
     this.controls.update();
+  }
+
+  public pauseGame() {
+    console.log('pauseGame');
+    this.play = false;
+  }
+
+  public playGame() {
+    console.log('playGame');
+    this.play = true
+    this.timeScale = 1;
+    this.startRenderingLoop();
+  }
+
+  public changeSpeed(speed: number) {
+    this.timeScale = speed;
+    if (speed === 0) {
+      this.pauseGame();
+    } else {
+      this.playGame();
+      this.timeScale = speed;
+    }
   }
 
 }
