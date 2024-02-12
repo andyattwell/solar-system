@@ -222,7 +222,7 @@ export class Planet extends THREE.Mesh {
     }
 
     if (this.name !== 'Sun') {
-      this.followOrbit(sun, timeScale);
+      // this.followOrbit(sun, timeScale);
     }
   }
 

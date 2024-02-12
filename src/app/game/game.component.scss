@@ -8,6 +8,12 @@
   z-index: 0;
 }
 
+.mat-drawer-content {
+  position: absolute !important;
+  width: 100%;
+  margin-left: 0 !important;
+}
+
 .game-container {
   position: relative;
   overflow: hidden;

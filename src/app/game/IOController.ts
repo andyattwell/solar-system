@@ -64,77 +64,36 @@ export class IOController {
     });
   }
 
-  updateIntersects():void {
-    if (!this.parent.camera) {
-      return;
-    }
-      // update the picking ray with the camera and mouse position
-    this.raycaster.setFromCamera(this.mouse, this.parent.camera);
-
-    // calculate objects intersecting the picking ray
-    let planets = this.parent.scene.children.filter(
-      (p:any) => (p.name !== '' && p.name !== 'skybox')
-    ).map((p:any) => {
-      return p.planet
-    })
-    var intersects = this.raycaster.intersectObjects(planets);
-
-    Object.keys(this.hovered).forEach((key) => {
-      const hit = intersects.find((hit) => hit.object.uuid === key)
-      if (hit === undefined) {
-        // on pointer out
-        delete this.hovered[key]
-      }
-    })
-
-    if (intersects.length > 0) {
-      const hit = intersects[0]
-      console.log(intersects)
-      if (!this.hovered[hit.object.uuid]) {
-        // item hovered
-        this.hovered[hit.object.uuid] = hit.object
-      }
-    }
-  }
-
   mouseMoveHandler(e:MouseEvent):void {
     if (e.target !== this.parent.canvas) {
       return;
     }
-    this.mouse.set(
-      (e.clientX / this.parent.canvas.clientWidth) * 2 - 1, 
-      -(e.clientY / this.parent.canvas.clientHeight) * 2 + 1
-    )
+    const width = this.parent.canvas.parentElement?.clientWidth || 1;
+    const height = this.parent.canvas.parentElement?.clientHeight || 1;
+    const x = (e.clientX / width) * 2 - 1;
+    const y = -(e.clientY / height) * 2 + 1
+    
+    this.mouse.set(x, y)
     this.raycaster.setFromCamera(this.mouse, this.parent.camera)
-    let planets = this.parent.scene.children.filter(
-      (p:any) => (p.name !== '' && p.name !== 'skybox' && p.name !== "orbitring")
-    ).map((p:any) => {
+    let planets = this.parent.planets.map((p:any) => {
       return p.planet
     })
-    // let planets = this.parent.planets;
+
     this.intersects = this.raycaster.intersectObjects(planets, true)
+    
     if (this.intersects.length > 0) {
       this.hovered = this.intersects[0].object
     } else {
       this.hovered = null
     }
-
-    
   }
 
 
   clickHandler(e:MouseEvent) {
-
-    const hit = this.hovered;
-    console.log('click', hit)
-    // if (hit && hit.object.name !== 'skybox') {
-    //   console.log(hit.object.parent.name)
-    // }
-    this.parent.planets.forEach((o: THREE.Mesh, i:number) => {
-      if (this.hovered && this.hovered.uuid === o.uuid) {
-        console.log('click 2', this.parent.planets[i])
-      }
-    })
+    if (this.hovered?.parent) {
+      this.parent.selectPlanet(this.hovered.parent);
+      this.hovered = null
+    }
   }
 
 }

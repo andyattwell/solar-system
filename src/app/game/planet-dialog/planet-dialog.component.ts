@@ -45,8 +45,5 @@ export class PlanetDialogComponent implements AfterViewInit {
     this.data.orbitSpeed = speed * 0.001
   }
 
-  ngAfterViewInit(): void {
-    console.log('PlanetDialog', this.data)
-    parseFloat
-  }
+  ngAfterViewInit(): void {}
 }
