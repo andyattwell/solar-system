@@ -10,6 +10,8 @@ import { ActionNavComponent } from './action-nav/action-nav.component';
 import { PlanetDialogComponent } from './planet-dialog/planet-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
+import { get2dPosition } from '../../helpers'
+
 @Component({
   selector: 'app-game',
   standalone: true,
@@ -99,7 +101,7 @@ export class GameComponent implements AfterViewInit {
         self.camera.position.sub(_v);
     })
 
-    this.camera.position.set(0, 0, this.cameraZ);
+    this.camera.position.set(0, 100, this.cameraZ);
     this.controls.update();
   }
 
@@ -120,7 +122,7 @@ export class GameComponent implements AfterViewInit {
       skyMat,
       skyMat
     ]
-    const boxSize = 50000;
+    const boxSize = 5000;
     let skyboxGeo = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
     let skybox = new THREE.Mesh(skyboxGeo, materialArray);
     skybox.name = "skybox";
@@ -183,16 +185,6 @@ export class GameComponent implements AfterViewInit {
     }())
   }
 
-  private createVector(object: THREE.Mesh, camera:THREE.Camera, width:number, height:number) {
-    var widthHalf = width / 2, heightHalf = height / 2;
-    
-    var pos = object.position.clone();
-    pos.project(camera);
-    pos.x = ( pos.x * widthHalf ) + widthHalf;
-    pos.y = - ( pos.y * heightHalf ) + heightHalf;
-    return pos;
-  }
-
   public selectPlanet(planet: Planet, show: boolean = false): void {
     this.selectedPlanet = planet;
     if (this.selectedPlanet && show) {
@@ -207,7 +199,7 @@ export class GameComponent implements AfterViewInit {
       return
     }
 
-    const pos = this.createVector(
+    const pos = get2dPosition(
       planet,
       this.camera,
       this.canvas.clientWidth,

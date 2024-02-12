@@ -38,10 +38,14 @@ export class Planet extends THREE.Mesh {
 
   public planet:THREE.Mesh;
   public size: number;
+  public mass: number;
+  public velocity: THREE.Vector2 = new THREE.Vector2(0, 0);
   public rotationSpeedY: number = 0.01;
   public angle: number = 0;
   public orbit: number = 0;
   public orbitSpeed: number = 0;
+  public showOrbit: boolean = true;
+  public followOrbit: boolean = false;
 
   private planetTexture: string;
   public planetIcon: string;
@@ -51,6 +55,7 @@ export class Planet extends THREE.Mesh {
 
     this.size = props.size;
     this.name = props.name;
+    this.mass = props.mass;
     this.planetIcon = props.icon;
 
     this.rotationDir = props.rotation.dir || false;
@@ -79,7 +84,7 @@ export class Planet extends THREE.Mesh {
     if (props.name === 'Sun') {
       this.addLight()
     } else {
-      this.followOrbit({
+      this.setPositionToOrbit({
         position: {
           x: 0,
           y: 0,
@@ -92,7 +97,9 @@ export class Planet extends THREE.Mesh {
       this.addRings(props.ring);
     }
 
-    // this.addOrbitRing();
+    if (this.showOrbit) {
+      this.addOrbitRing();
+    }
 
   }
 
@@ -110,12 +117,16 @@ export class Planet extends THREE.Mesh {
       return;
     }
 
-    if (this.orbitRing) {
-      this.remove(this.orbitRing)
-    }
+    this.removeOrbitRing()
     
-    const orbitRad = this.orbit;
-    let orbitRingGeo = new THREE.RingGeometry(orbitRad-this.size / 2, orbitRad+this.size / 2, 60, 3, 0, Math.PI * 2);
+    let orbitRingGeo = new THREE.RingGeometry(
+      this.orbit - this.size / 2, 
+      this.orbit + this.size / 2,
+      120, 
+      3, 
+      0, 
+      Math.PI * 2
+    );
 
     const orbitRingMat = new THREE.MeshLambertMaterial({
       color: 0xFFFFFF,
@@ -123,12 +134,23 @@ export class Planet extends THREE.Mesh {
     })
     this.orbitRing = new THREE.Mesh(orbitRingGeo, orbitRingMat);
     this.orbitRing.rotation.x =  Math.PI * 0.5
+    this.orbitRing.position.y = - this.size - 0.1
     this.orbitRing.name = "orbitring";
-    this.add(this.orbitRing);
     this.orbitRing.geometry
+    this.add(this.orbitRing);
+
   }
 
-  public followOrbit(parent:any, timeScale: number) {
+  public toggleOrbit(show: boolean) {
+    this.showOrbit = show
+    if (show) {
+      this.addOrbitRing()
+    } else {
+      this.removeOrbitRing()
+    }
+  }
+
+  public setPositionToOrbit(parent:any, timeScale: number) {
     this.planet.position.x = parent.position.x + this.orbit * Math.cos(this.angle);
     this.planet.position.z = parent.position.y + this.orbit * Math.sin(this.angle);
     
@@ -156,37 +178,6 @@ export class Planet extends THREE.Mesh {
     this.planet.add(this.ring);
   }
 
-  distance(position0: THREE.Vector3, position1: THREE.Vector3) {
-    let d1 = Math.abs(position1.x - position0.x);
-    let d2 = Math.abs(position1.y - position0.y);
-    let d3 = Math.abs(position1.z - position0.z);
-    return d1 + d2 + d3;
-  }
-
-  // public accelerate_due_to_gravity(first: Planet) {
-    
-  //   const force = first.mass * this.mass / this.distance(first.position, this.position) * 2
-  //   const angle = first.position.angleTo(this.position)
-  //   let reverse = 1
-  //   let arr = []
-  //   arr.push(first);
-  //   arr.push(this);
-  //   arr.forEach((body: any) => {
-  //     const acceleration = force / body.mass
-  //     const acc_x = acceleration * Math.cos(this.degrees_to_radians(angle))
-  //     const acc_y = acceleration * Math.sin(this.degrees_to_radians(angle))
-  //     body.velocity = new THREE.Vector2(
-  //       body.velocity.x + (reverse * acc_x),
-  //       body.velocity.y + (reverse * acc_y),
-  //     )
-  //     reverse = -1
-  //   });
-  //   console.log(this.name, this.position.x , this.position.y)
-
-  //   this.position.x = this.position.x + this.velocity.x
-  //   this.position.y = this.position.y + this.velocity.y
-  // }
-
   public animate(sun: Planet, timeScale: number) {
 
     if (this.rotationDir) {
@@ -195,12 +186,15 @@ export class Planet extends THREE.Mesh {
       this.planet.rotation.y += this.rotationSpeedY * timeScale;
     }
 
-    if (this.name !== 'Sun') {
-      // this.followOrbit(sun, timeScale);
+    if (this.name !== 'Sun' && this.followOrbit) {
+      this.setPositionToOrbit(sun, timeScale);
     }
+
   }
 
-  public select() {
-    
+  public removeOrbitRing() {
+    if (this.orbitRing) {
+      this.remove(this.orbitRing)
+    }
   }
 }

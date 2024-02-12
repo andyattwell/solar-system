@@ -61,10 +61,10 @@ export class IOController {
       step = 5;
     }
 
-    if (deltaY < 0 && currentZ > 5) {
+    if (deltaY < 0 && currentZ > this.parent.planets[0].position.x) {
       this.parent.camera.translateZ( -step )
       this.parent.controls.update();
-    } else if ( currentZ < 2000) {
+    } else if ( currentZ < 3000) {
       this.parent.camera.translateZ( step )
       this.parent.controls.update();
     }

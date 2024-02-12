@@ -16,6 +16,20 @@
       Y:{{ position.y }} 
       Z:{{ position.z }}
     </mat-list-item>
+    <mat-list-item>
+      <mat-checkbox
+        [checked]="showOrbit"
+        (change)="setShowOrbit($event.checked)"
+      >Show orbit: 
+      </mat-checkbox>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-checkbox
+        [checked]="followOrbit"
+        (change)="setFollowOrbit($event.checked)"
+      >Follow orbit: 
+      </mat-checkbox>
+    </mat-list-item>
     <mat-list-item>Rotation speed: {{ rotation }}</mat-list-item>
     <mat-list-item>
       <mat-slider>

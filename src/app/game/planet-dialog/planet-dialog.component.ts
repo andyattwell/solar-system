@@ -1,4 +1,4 @@
-import { Component, Inject, AfterViewInit, EventEmitter, Output } from '@angular/core';
+import { Component, Inject, EventEmitter, Output } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogTitle,
@@ -11,6 +11,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSliderModule } from '@angular/material/slider';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { Planet } from '../Planet';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-planet-dialog',
@@ -23,12 +24,13 @@ import { Planet } from '../Planet';
     MatSliderModule, 
     MatButtonModule,
     MatIconModule,
+    MatCheckboxModule,
     CdkDrag
   ],
   templateUrl: './planet-dialog.component.html',
   styleUrl: './planet-dialog.component.scss',
 })
-export class PlanetDialogComponent implements AfterViewInit {
+export class PlanetDialogComponent {
   @Output() onClose = new EventEmitter<any>();
   constructor(@Inject(MAT_DIALOG_DATA) public data: Planet) {}
 
@@ -56,7 +58,29 @@ export class PlanetDialogComponent implements AfterViewInit {
     this.data.orbitSpeed = speed * 0.001
   }
 
-  ngAfterViewInit(): void {}
+  public get showOrbit() {
+    return this.data.showOrbit
+  }
+  
+  public set showOrbit(show:any) {
+    this.data.showOrbit = show
+  }
+
+  public get followOrbit() {
+    return this.data.followOrbit
+  }
+  
+  public set followOrbit(show:any) {
+    this.data.followOrbit = show
+  }
+
+  setShowOrbit(checked:boolean): void {
+    this.data.toggleOrbit(checked);
+  }
+  
+  setFollowOrbit(checked:boolean): void {
+    this.data.followOrbit = true;
+  }
 
   close(e:MouseEvent) {
     e.stopPropagation();
