@@ -7,6 +7,7 @@ export interface PlanetProps {
   orbit?: number;
   orbitSpeed?:number;
   texture: string;
+  icon: string;
   position: {
     x: number,
     y: number,
@@ -21,6 +22,10 @@ export interface PlanetProps {
     texture?: string,
     innerRadius: number,
     outerRadius: number
+  };
+  // Todo. Add actual data to show in dialog
+  facts?: {
+
   }
 }
 
@@ -44,7 +49,8 @@ export class Planet extends THREE.Mesh {
   private scaleSizeFactor: number = 1;
   private scaleDistanceFactor: number = 0.5;
 
-  private planetTexture: string;
+  public planetTexture: string;
+  public planetIcon: string;
 
   constructor(props: PlanetProps) {
     super(new THREE.SphereGeometry(0));
@@ -52,6 +58,7 @@ export class Planet extends THREE.Mesh {
     // this.mass = props.mass;
     this.size = props.size;
     this.name = props.name;
+    this.planetIcon = props.icon;
 
     this.rotationSpeedY = 1 / props.rotationSpeed.y;
     this.rotationSpeedX = 1 / props.rotationSpeed.x;
@@ -65,7 +72,7 @@ export class Planet extends THREE.Mesh {
       this.orbitSpeed = props.orbitSpeed * 0.001;
     }
 
-    const planetGeo = new THREE.SphereGeometry(this.size);
+    const planetGeo = new THREE.SphereGeometry(this.size, 64, 32);
     let planetMat;
     
     this.planetTexture = props.texture || '';

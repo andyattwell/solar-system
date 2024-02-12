@@ -1,19 +1,19 @@
 <div id="sidebar">
   <mat-sidenav-container class="example-container">
     <mat-sidenav mode="side" opened>
-      <app-action-nav 
-      (playEvent)="playGame()"
-      (pauseEvent)="pauseGame()"
-      (timeEvent)="changeSpeed($event)"
-      [timeScale]="timeScale"
-      [playing]="play"
-      />
       <app-sidebar 
         [planets]="planets" 
         (selectEvent)="selectPlanet($event, true)"
         ></app-sidebar>
     </mat-sidenav>
     <mat-sidenav-content class="game-container">
+      <app-action-nav 
+        (playEvent)="playGame()"
+        (pauseEvent)="pauseGame()"
+        (timeEvent)="changeSpeed($event)"
+        [timeScale]="timeScale"
+        [playing]="play"
+      />
       <canvas #canvas id="canvas"></canvas>
     </mat-sidenav-content>
   </mat-sidenav-container>

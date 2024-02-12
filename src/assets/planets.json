@@ -5,6 +5,7 @@
     "mass": 1987687,
     "orbit": 0,
     "texture": "/assets/sun-texture.jpg",
+    "icon": "/assets/icons/sun.jpg",
     "position": {
       "x": 0,
       "y": 0,
@@ -23,6 +24,7 @@
     "orbit": 32,
     "orbitSpeed": 47.9,
     "texture": "/assets/mercury-texture.png",
+    "icon": "/assets/icons/mercury.jpg",
     "position": {
       "x": 200,
       "y": 0,
@@ -41,6 +43,7 @@
     "orbit": 60,
     "orbitSpeed": 35.0,
     "texture": "/assets/venus-texture.jpg",
+    "icon": "/assets/icons/venus.jpg",
     "position": {
       "x": 159.2,
       "y": 0,
@@ -59,6 +62,7 @@
     "orbit": 100.6,
     "orbitSpeed": 29.8,
     "texture": "/assets/earth-texture.jpg",
+    "icon": "/assets/icons/earth.jpg",
     "position": {
       "x": 237.9,
       "y": 0,
@@ -77,6 +81,7 @@
     "orbit": 160.0,
     "orbitSpeed": 24.0,
     "texture": "/assets/mars-texture.jpg",
+    "icon": "/assets/icons/mars.jpg",
     "position": {
       "x": 788.6,
       "y": 0,
@@ -95,6 +100,7 @@
     "orbit": 240.3,
     "orbitSpeed": 13.1,
     "texture": "/assets/jupiter-texture.jpg",
+    "icon": "/assets/icons/jupiter.jpg",
     "position": {
       "x": 1453.5,
       "y": 0,
@@ -113,6 +119,7 @@
     "orbit": 320,
     "orbitSpeed": 9.69,
     "texture": "/assets/saturn-texture.jpg",
+    "icon": "/assets/icons/saturn.jpg",
     "position": {
       "x": 2882.5,
       "y": 0,
@@ -136,6 +143,7 @@
     "orbit": 400,
     "orbitSpeed": 6.81,
     "texture": "/assets/uranus-texture.jpg",
+    "icon": "/assets/icons/uranus.jpg",
     "position": {
       "x": 4505.1,
       "y": 0,
@@ -154,6 +162,7 @@
     "orbit": 480,
     "orbitSpeed": 5.43,
     "texture": "/assets/neptune-texture.jpg",
+    "icon": "/assets/icons/neptune.jpg",
     "position": {
       "x": 5837.8,
       "y": 0,

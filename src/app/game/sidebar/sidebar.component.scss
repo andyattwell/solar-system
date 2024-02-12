@@ -3,7 +3,18 @@
   &.active {
     background-color: rgba(236, 215, 26, 0.5);
   }
-  i {
+
+  .mat-mdc-list-item-icon {
+    display: block;
+    width: 50px;
+    height: 50px;
+    margin-right: 16px;
     background-color: red;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .mat-mdc-list-item-title{
+
   }
 }

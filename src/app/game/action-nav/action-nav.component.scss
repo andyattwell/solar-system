@@ -1,0 +1,21 @@
+.time-scale {
+  color: #ffffff;
+  margin: 0 10px;
+  position: relative;
+  // padding: 10px;
+  height: 48px;
+  width: 48px;
+  background-color: rgba(24, 26, 27, 0.718);
+  bottom: 10px;
+  span {
+    position: absolute;
+    top: 50%;
+    height: 24px;
+    left: 50%;
+    width: 24px;
+    transform: translate(-50%, -50%);
+    line-height: 24px;
+    font-size: 19px;
+    font-weight: bold;
+  }
+}

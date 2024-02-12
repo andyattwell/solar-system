@@ -6,9 +6,10 @@
         [class]="{active: selectedOpt === planet.name }"
         (click)="selectPlanet($event, planet)" 
         [href]="'#'+planet.name">
-        <i matListItemIcon></i>
+        <i matListItemIcon [style.background-image]="'url(' + planet.planetIcon + ')'"></i>
+        <!-- <span class="thumb"></span> -->
         <span matListItemTitle>{{ planet.name }}</span>
-        <span matListItemLine>Produced by a plant</span>
+        <!-- <span matListItemLine>Produced by a plant</span> -->
       </a>
     }
   }

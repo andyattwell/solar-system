@@ -5,8 +5,8 @@
   <button mat-mini-fab aria-label="Pause" (click)="pause()" [color]="!playing ? 'primary' : ''">
     <mat-icon>pause</mat-icon>
   </button>
-  <button mat-mini-fab aria-label="Time sace" disabled>
-    {{ timeScale }}
+  <button aria-label="Time scale" disabled class="time-scale">
+    <span>{{ timeScale }}</span>
   </button>
 
   <button mat-mini-fab aria-label="Play" (click)="play()" [color]="playing ? 'primary' : ''">
