@@ -24,13 +24,13 @@ export class IOController {
       }
     });
 
-    window.addEventListener("contextmenu", (e) => {
-      // if (self.parent.selectedPlanet) {
-      //   self.parent.selectedPlanet = null;
-      //   self.parent.camera.lookAt(0, 0, 0);
-      //   self.parent.controls.target = new THREE.Vector3(0,0,0);
-      // }
-    });
+    // window.addEventListener("contextmenu", (e) => {
+    //   if (self.parent.selectedPlanet) {
+    //     self.parent.selectedPlanet = null;
+    //     self.parent.camera.lookAt(0, 0, 0);
+    //     self.parent.controls.target = new THREE.Vector3(0,0,0);
+    //   }
+    // });
 
     window.addEventListener('click', (e) => {
       self.clickHandler(e);
@@ -90,9 +90,8 @@ export class IOController {
     }
   }
 
-
   clickHandler(e:MouseEvent) {
-    if (this.hovered?.parent) {
+    if (e.target === this.parent.canvas && this.hovered?.parent) {
       this.parent.selectPlanet(this.hovered.parent);
       this.hovered = null
     }
