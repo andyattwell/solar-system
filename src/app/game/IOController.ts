@@ -20,30 +20,7 @@ export class IOController {
     
     window.addEventListener( 'wheel', function(e:any){
       if (e.target === self.parent.canvas && self.parent.camera) {
-
-        const currentZ = Math.abs(self.parent.camera.position.z);
-        if (currentZ <= 0) {
-          return;
-        }
-        
-        let step = 1;
-        if (currentZ >= 2000) {
-          step = 500;
-        } else if (currentZ < 2000 && currentZ >= 500) {
-          step = 100;
-        } else if (currentZ < 500 && currentZ >= 100) {
-          step = 10;
-        } else {
-          step = 5;
-        }
-
-        if (e.deltaY < 0) {
-          self.parent.camera.translateZ( -step )
-          self.parent.controls.update();
-        } else {
-          self.parent.camera.translateZ( step )
-          self.parent.controls.update();
-        }
+        self.zoomHandler(e.deltaY);
       }
     });
 
@@ -64,6 +41,31 @@ export class IOController {
     });
   }
 
+  zoomHandler (deltaY: number) {
+    const currentZ = Math.abs(this.parent.camera.position.z);
+    if (currentZ <= 0) {
+      return;
+    }
+    
+    let step = 1;
+    if (currentZ >= 2000) {
+      step = 500;
+    } else if (currentZ < 2000 && currentZ >= 500) {
+      step = 100;
+    } else if (currentZ < 500 && currentZ >= 100) {
+      step = 10;
+    } else {
+      step = 5;
+    }
+
+    if (deltaY < 0 && currentZ > 5) {
+      this.parent.camera.translateZ( -step )
+      this.parent.controls.update();
+    } else if ( currentZ < 2000) {
+      this.parent.camera.translateZ( step )
+      this.parent.controls.update();
+    }
+  }
   mouseMoveHandler(e:MouseEvent):void {
     if (e.target !== this.parent.canvas) {
       return;

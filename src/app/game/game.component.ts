@@ -22,7 +22,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class GameComponent implements AfterViewInit {
   
   // Scene properties
-  @Input() public cameraZ: number = 5000;
+  @Input() public cameraZ: number = 2000;
   @Input() public fieldOfView: number = 1;
   @Input('nearClipping') public nearClippingPlane: number = 1;
   @Input('farClipping') public farClippingPlane: number = 80000;
@@ -69,6 +69,8 @@ export class GameComponent implements AfterViewInit {
       this.nearClippingPlane,
       this.farClippingPlane
     )
+
+    this.camera.position.z = 2000;
   
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas })
     this.setAspectRatio();
@@ -84,6 +86,20 @@ export class GameComponent implements AfterViewInit {
     this.controls.enableZoom = false;
     this.controls.enableRotate = false;
     this.controls.zoomToCursor = true;
+
+    this.camera.position.x = 30;
+    var minPan = new THREE.Vector3( 30, 0, 0);
+    var maxPan = new THREE.Vector3( 250, 0, 0);
+    var _v = new THREE.Vector3();
+    
+    const self = this;
+    this.controls.addEventListener("change", function() {
+        _v.copy(self.controls.target);
+        self.controls.target.clamp(minPan, maxPan);
+        _v.sub(self.controls.target);
+        self.camera.position.sub(_v);
+    })
+
     this.camera.position.set(0, 0, this.cameraZ);
     this.controls.update();
   }
@@ -150,6 +166,8 @@ export class GameComponent implements AfterViewInit {
         console.log({ error, props })
       }
     });
+    this.selectedPlanet = this.planets[1]
+    this.followPlanet()
 
   }
 

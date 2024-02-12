@@ -100,7 +100,7 @@ export class Planet extends THREE.Mesh {
       // this.addRings(props.ring);
     }
 
-    this.addOrbitRing();
+    // this.addOrbitRing();
 
   }
 

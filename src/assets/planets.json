@@ -1,7 +1,7 @@
 [
   {
     "name": "Sun",
-    "size": 10.391400,
+    "size": 20.391400,
     "mass": 1987687,
     "orbit": 0,
     "texture": "/assets/sun-texture.jpg",
@@ -20,11 +20,11 @@
     "name": "Mercury",
     "size": 0.4879,
     "mass": 0.330,
-    "orbit": 17.9,
+    "orbit": 32,
     "orbitSpeed": 47.9,
     "texture": "/assets/mercury-texture.png",
     "position": {
-      "x": 27.9,
+      "x": 200,
       "y": 0,
       "z": 0
     },
@@ -38,11 +38,11 @@
     "name": "Venus",
     "size": 1.2104,
     "mass": 108.2,
-    "orbit": 50.2,
+    "orbit": 60,
     "orbitSpeed": 35.0,
     "texture": "/assets/venus-texture.jpg",
     "position": {
-      "x": 108.2,
+      "x": 159.2,
       "y": 0,
       "z": 0
     },
@@ -60,7 +60,7 @@
     "orbitSpeed": 29.8,
     "texture": "/assets/earth-texture.jpg",
     "position": {
-      "x": 149.2,
+      "x": 237.9,
       "y": 0,
       "z": 0
     },
@@ -78,7 +78,7 @@
     "orbitSpeed": 24.0,
     "texture": "/assets/mars-texture.jpg",
     "position": {
-      "x": 227.9,
+      "x": 788.6,
       "y": 0,
       "z": 0
     },
@@ -96,7 +96,7 @@
     "orbitSpeed": 13.1,
     "texture": "/assets/jupiter-texture.jpg",
     "position": {
-      "x": 778.6,
+      "x": 1453.5,
       "y": 0,
       "z": 0
     },
@@ -114,7 +114,7 @@
     "orbitSpeed": 9.69,
     "texture": "/assets/saturn-texture.jpg",
     "position": {
-      "x": 1433.5,
+      "x": 2882.5,
       "y": 0,
       "z": 0
     },
@@ -137,7 +137,7 @@
     "orbitSpeed": 6.81,
     "texture": "/assets/uranus-texture.jpg",
     "position": {
-      "x": 2872.5,
+      "x": 4505.1,
       "y": 0,
       "z": 0
     },
@@ -155,7 +155,7 @@
     "orbitSpeed": 5.43,
     "texture": "/assets/neptune-texture.jpg",
     "position": {
-      "x": 4495.1,
+      "x": 5837.8,
       "y": 0,
       "z": 0
     },
