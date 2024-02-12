@@ -18,6 +18,19 @@
     </mat-list-item>
     <mat-list-item>
       <mat-checkbox
+        [checked]="rotationDir"
+        (change)="setRotationDir($event.checked)"
+      >Rotation Direction: 
+      </mat-checkbox>
+    </mat-list-item>
+    <mat-list-item>Rotation speed: {{ rotation }}</mat-list-item>
+    <mat-list-item>
+      <mat-slider>
+        <input matSliderThumb min="0" max="400" step="1" [(value)]="rotation">
+      </mat-slider>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-checkbox
         [checked]="showOrbit"
         (change)="setShowOrbit($event.checked)"
       >Show orbit: 
@@ -30,16 +43,10 @@
       >Follow orbit: 
       </mat-checkbox>
     </mat-list-item>
-    <mat-list-item>Rotation speed: {{ rotation }}</mat-list-item>
-    <mat-list-item>
-      <mat-slider>
-        <input matSliderThumb min="0" max="400" step="1" [(value)]="rotation">
-      </mat-slider>
-    </mat-list-item>
     <mat-list-item>Orbit speed: {{ orbitSpeed }}</mat-list-item>
     <mat-list-item>
       <mat-slider>
-        <input matSliderThumb min="0" max="100" step="1" [(value)]="orbitSpeed">
+        <input matSliderThumb min="0" max="1000" step="1" [(value)]="orbitSpeed">
       </mat-slider>
     </mat-list-item>
     <mat-list-item>Orbit: {{ data.orbit }}</mat-list-item>

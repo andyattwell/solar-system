@@ -42,6 +42,14 @@ export class PlanetDialogComponent {
     this.data.rotationSpeedY = speed * 0.005
   }
 
+  public get rotationDir () {
+    return this.data.rotationDir
+  }
+
+  public set rotationDir(dir:boolean) {
+    this.data.rotationDir = dir
+  }
+
   public get position () {
     return {
       x: this.data.planet.position.x.toFixed(2),
@@ -55,7 +63,7 @@ export class PlanetDialogComponent {
   }
 
   public set orbitSpeed(speed:any) {
-    this.data.orbitSpeed = speed * 0.001
+    this.data.orbitSpeed = speed * 0.01
   }
 
   public get showOrbit() {
@@ -79,7 +87,11 @@ export class PlanetDialogComponent {
   }
   
   setFollowOrbit(checked:boolean): void {
-    this.data.followOrbit = true;
+    this.data.followOrbit = checked;
+  }
+
+  setRotationDir(dir:boolean): void {
+    this.data.rotationDir = dir;
   }
 
   close(e:MouseEvent) {

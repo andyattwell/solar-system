@@ -34,7 +34,7 @@ export class Planet extends THREE.Mesh {
   private loader = new THREE.TextureLoader();
   private orbitRing!:THREE.Mesh;
   private ring!:THREE.Mesh;
-  private rotationDir: boolean = false;
+  public rotationDir: boolean = false;
 
   public planet:THREE.Mesh;
   public size: number;
