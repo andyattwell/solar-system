@@ -8,7 +8,6 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ActionNavComponent } from './action-nav/action-nav.component';
 import { PlanetDialogComponent } from './planet-dialog/planet-dialog.component';
-
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -147,16 +146,13 @@ export class GameComponent implements AfterViewInit {
       planet.animate(this.planets[0], this.timeScale);
     });
     // if (this.selectedPlanet) {
-    //   this.followPlanet()
+    //   this.lookAtPlanet()
     // }
     this.controls.update()
   }
 
   private createPlanets() {
-    // let planets:Array<PlanetProps> = PlanetsJson;
-
     const self = this;
-
     PlanetsJson.forEach(props => {
       try {
         let planet = new Planet(props);
@@ -166,9 +162,7 @@ export class GameComponent implements AfterViewInit {
         console.log({ error, props })
       }
     });
-    this.selectedPlanet = this.planets[1]
-    this.followPlanet()
-
+    this.lookAtPlanet(this.planets[1])
   }
 
   /**
@@ -189,49 +183,70 @@ export class GameComponent implements AfterViewInit {
     }())
   }
 
-  public selectPlanet(planet: Planet): void {
+  private createVector(object: THREE.Mesh, camera:THREE.Camera, width:number, height:number) {
+    var widthHalf = width / 2, heightHalf = height / 2;
+    
+    var pos = object.position.clone();
+    pos.project(camera);
+    pos.x = ( pos.x * widthHalf ) + widthHalf;
+    pos.y = - ( pos.y * heightHalf ) + heightHalf;
+    return pos;
+  }
+
+  public selectPlanet(planet: Planet, show: boolean = false): void {
     this.selectedPlanet = planet;
-    this.followPlanet();
-    // this.dialog.closeAll();
-    // this.dialog.ngOnDestroy()
+    if (this.selectedPlanet && show) {
+      this.lookAtPlanet(this.selectedPlanet.planet);
+      this.openDialog(this.selectedPlanet.planet);
+    }
+  }
+
+  public openDialog(planet: THREE.Mesh) {
+    
+    if (!planet.parent || this.dialog.getDialogById(planet.parent.name)) {
+      return
+    }
+
+    const pos = this.createVector(
+      planet,
+      this.camera,
+      this.canvas.clientWidth,
+      this.canvas.clientHeight
+    )    
 
     const dialogRef = this.dialog.open(PlanetDialogComponent, {
       height: '400px',
       width: '400px',
-      data: planet,
-      hasBackdrop: true,
+      data: planet.parent,
+      hasBackdrop: false,
+      disableClose: true,
+      id: planet.parent.name, 
+      position: {
+        left: pos.x + 'px', 
+        top: pos.y + 'px',
+      } 
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+    dialogRef.componentInstance.onClose.subscribe(() => {
+      dialogRef.close();
     });
+
+    // dialogRef.afterClosed().subscribe(result => {});
 
   }
 
-  private followPlanet(): void {
-    const offset = this.selectedPlanet.size / 2;
-    // const posX = this.selectedPlanet.position.x + this.selectedPlanet.size / 2 - offset;
-    const planetPos = this.selectedPlanet.planet.position;
-    // const posX = planetPos.x + this.selectedPlanet.size / 2 + offset;
-    // const posY = planetPos.y - this.selectedPlanet.size;
-    // const posZ = planetPos.z - this.selectedPlanet.size;
-
-    // this.camera.position.set(posX, posY, posZ);
+  private lookAtPlanet(planet: THREE.Mesh): void {
+    const planetPos = planet.position;
     this.camera.lookAt(planetPos.x, planetPos.y, planetPos.z);
     this.controls.target = new THREE.Vector3(planetPos.x, planetPos.y, planetPos.z);
-    // this.camera.position.z = planetPos.z - this.selectedPlanet.size * 2;
-    // this.camera.position.x = planetPos.x - this.selectedPlanet.size * 2;
-
     this.controls.update();
   }
 
   public pauseGame() {
-    console.log('pauseGame');
     this.play = false;
   }
 
   public playGame() {
-    console.log('playGame');
     this.play = true;
     this.timeScale = 1;
     this.startRenderingLoop();

@@ -10,7 +10,7 @@
       />
       <app-sidebar 
         [planets]="planets" 
-        (selectEvent)="selectPlanet($event)"
+        (selectEvent)="selectPlanet($event, true)"
         ></app-sidebar>
     </mat-sidenav>
     <mat-sidenav-content class="game-container">

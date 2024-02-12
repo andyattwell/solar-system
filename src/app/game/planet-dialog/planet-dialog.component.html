@@ -1,4 +1,13 @@
-<h1 mat-dialog-title>{{ data.name }}</h1>
+<h1 
+  mat-dialog-title
+  cdkDrag
+  cdkDragRootElement=".cdk-overlay-pane" 
+  cdkDragHandle
+  >{{ data.name }}
+  <button type="button" class="close-dialog" mat-mini-fab aria-label="Close" (click)="close($event)">
+    <mat-icon>close</mat-icon>
+  </button>
+</h1>
 <div mat-dialog-content>
   <mat-list>
     <mat-list-item>Size: {{ data.size }}</mat-list-item>
@@ -26,4 +35,7 @@
       </mat-slider>
     </mat-list-item>
   </mat-list>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close>Cerrar</button>
+  </mat-dialog-actions>
 </div>

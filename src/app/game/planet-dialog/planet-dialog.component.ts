@@ -1,24 +1,35 @@
-import { Component, Inject, AfterViewInit } from '@angular/core';
+import { Component, Inject, AfterViewInit, EventEmitter, Output } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogTitle,
   MatDialogContent,
+  MatDialogActions
 } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
-import {MatSliderModule} from '@angular/material/slider';
-
+import { MatSliderModule } from '@angular/material/slider';
+import { CdkDrag } from '@angular/cdk/drag-drop';
 import { Planet } from '../Planet';
-export interface DialogData {
-  animal: 'panda' | 'unicorn' | 'lion';
-}
+
 @Component({
   selector: 'app-planet-dialog',
   standalone: true,
-  imports: [MatDialogTitle, MatDialogContent, MatListModule, MatSliderModule],
+  imports: [
+    MatDialogTitle, 
+    MatDialogContent,
+    MatDialogActions,
+    MatListModule, 
+    MatSliderModule, 
+    MatButtonModule,
+    MatIconModule,
+    CdkDrag
+  ],
   templateUrl: './planet-dialog.component.html',
   styleUrl: './planet-dialog.component.scss',
 })
 export class PlanetDialogComponent implements AfterViewInit {
+  @Output() onClose = new EventEmitter<any>();
   constructor(@Inject(MAT_DIALOG_DATA) public data: Planet) {}
 
   public get rotation () {
@@ -29,7 +40,6 @@ export class PlanetDialogComponent implements AfterViewInit {
     this.data.rotationSpeedY = speed * 0.005
   }
 
-
   public get position () {
     return {
       x: this.data.planet.position.x.toFixed(2),
@@ -37,6 +47,7 @@ export class PlanetDialogComponent implements AfterViewInit {
       z: this.data.planet.position.z.toFixed(2),
     }
   }
+
   public get orbitSpeed() {
     return (this.data.orbitSpeed * 1000).toFixed(2)
   }
@@ -46,4 +57,9 @@ export class PlanetDialogComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {}
+
+  close(e:MouseEvent) {
+    e.stopPropagation();
+    this.onClose.emit();
+  }
 }

@@ -1,0 +1,13 @@
+$primary: rgb(23 99 143);
+
+h1 {
+  cursor: move;
+}
+.mat-mdc-dialog-title {
+  background-color: $primary;
+} 
+
+.close-dialog {
+  float: right;
+  margin: 15px 0 0 0;
+}

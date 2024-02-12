@@ -35,6 +35,9 @@ export class IOController {
     window.addEventListener('click', (e) => {
       self.clickHandler(e);
     })
+    window.addEventListener('dblclick', (e) => {
+      self.doubleClickHandler(e);
+    })
 
     window.addEventListener("pointermove", (e) => {
       self.mouseMoveHandler(e)
@@ -66,6 +69,7 @@ export class IOController {
       this.parent.controls.update();
     }
   }
+
   mouseMoveHandler(e:MouseEvent):void {
     if (e.target !== this.parent.canvas) {
       return;
@@ -90,11 +94,23 @@ export class IOController {
     }
   }
 
+  doubleClickHandler(e:MouseEvent): void {
+    if (e.target === this.parent.canvas && this.hovered?.parent) {
+      this.parent.selectPlanet(this.hovered.parent);
+      this.parent.openDialog(this.hovered.parent.planet);
+    }
+    e.stopPropagation();
+  }
+
   clickHandler(e:MouseEvent) {
     if (e.target === this.parent.canvas && this.hovered?.parent) {
       this.parent.selectPlanet(this.hovered.parent);
-      this.hovered = null
+      this.parent.lookAtPlanet(this.hovered.parent.planet);
     }
+  }
+
+  showDialog() : void {
+    
   }
 
 }
