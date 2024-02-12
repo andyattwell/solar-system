@@ -47,9 +47,11 @@ export class GameComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     // throw new Error('Method not implemented.');
+    this.createPlanets();
     this.createScene();
     this.crateSkyBox();
-    this.createPlanets();
+    this.addPlanetsToScene();
+    this.lookAtPlanet(this.planets[1]);
     this.playGame();
     this.cdRef.detectChanges(); 
   }
@@ -71,8 +73,8 @@ export class GameComponent implements AfterViewInit {
       this.farClippingPlane
     )
 
-    this.camera.position.z = 2000;
-  
+    this.camera.position.set(this.planets[0].position.x, 100, this.cameraZ);
+
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas })
     this.setAspectRatio();
     this.createControls();
@@ -85,12 +87,12 @@ export class GameComponent implements AfterViewInit {
   createControls() {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableZoom = false;
-    this.controls.enableRotate = false;
+    // this.controls.enableRotate = false;
     this.controls.zoomToCursor = true;
 
-    this.camera.position.x = 30;
-    var minPan = new THREE.Vector3( 30, 0, 0);
-    var maxPan = new THREE.Vector3( 250, 0, 0);
+    const pX = this.planets[this.planets.length-1].planet.position.x
+    var minPan = new THREE.Vector3( -pX, -10, 0);
+    var maxPan = new THREE.Vector3( pX, 10, 0);
     var _v = new THREE.Vector3();
     
     const self = this;
@@ -100,8 +102,7 @@ export class GameComponent implements AfterViewInit {
         _v.sub(self.controls.target);
         self.camera.position.sub(_v);
     })
-
-    this.camera.position.set(0, 100, this.cameraZ);
+    
     this.controls.update();
   }
 
@@ -159,12 +160,18 @@ export class GameComponent implements AfterViewInit {
       try {
         let planet = new Planet(props);
         self.planets.push(planet);
-        self.scene.add(planet);
       } catch (error) {
         console.log({ error, props })
       }
     });
-    this.lookAtPlanet(this.planets[1])
+    
+  }
+
+  private addPlanetsToScene() {
+    const self = this;
+    self.planets.forEach(planet => {
+      self.scene.add(planet);
+    });
   }
 
   /**
@@ -188,7 +195,7 @@ export class GameComponent implements AfterViewInit {
   public selectPlanet(planet: Planet, show: boolean = false): void {
     this.selectedPlanet = planet;
     if (this.selectedPlanet && show) {
-      this.lookAtPlanet(this.selectedPlanet.planet);
+      this.lookAtPlanet(this.selectedPlanet);
       this.openDialog(this.selectedPlanet.planet);
     }
   }
@@ -199,12 +206,19 @@ export class GameComponent implements AfterViewInit {
       return
     }
 
-    const pos = get2dPosition(
-      planet,
-      this.camera,
-      this.canvas.clientWidth,
-      this.canvas.clientHeight
-    )    
+    // const width = this.canvas.parentElement?.clientWidth || 1;
+    // const height = this.canvas.parentElement?.clientHeight || 1;
+
+    // const pos = get2dPosition(
+    //   planet,
+    //   this.camera,
+    //   width,
+    //   height
+    // )
+
+    // if (pos.x >= width) {
+    //   pos.x = width - 100;
+    // }
 
     const dialogRef = this.dialog.open(PlanetDialogComponent, {
       height: '400px',
@@ -214,9 +228,11 @@ export class GameComponent implements AfterViewInit {
       disableClose: true,
       id: planet.parent.name, 
       position: {
-        left: pos.x + 'px', 
-        top: pos.y + 'px',
-      } 
+        left: '300px', 
+        top: '50px',
+        // left: pos.x.toFixed(0) + 'px', 
+        // top: pos.y.toFixed(0) + 'px',
+      }
     });
 
     dialogRef.componentInstance.onClose.subscribe(() => {
@@ -227,9 +243,10 @@ export class GameComponent implements AfterViewInit {
 
   }
 
-  private lookAtPlanet(planet: THREE.Mesh): void {
-    const planetPos = planet.position;
+  private lookAtPlanet(planet: Planet): void {
+    const planetPos = planet.planet.position;
     this.camera.lookAt(planetPos.x, planetPos.y, planetPos.z);
+    this.camera.position.set(0, 0, 1000)
     this.controls.target = new THREE.Vector3(planetPos.x, planetPos.y, planetPos.z);
     this.controls.update();
   }

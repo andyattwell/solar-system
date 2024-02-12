@@ -105,7 +105,7 @@ export class IOController {
   clickHandler(e:MouseEvent) {
     if (e.target === this.parent.canvas && this.hovered?.parent) {
       this.parent.selectPlanet(this.hovered.parent);
-      this.parent.lookAtPlanet(this.hovered.parent.planet);
+      this.parent.lookAtPlanet(this.hovered.parent);
     }
   }
 
