@@ -1,4 +1,8 @@
 .planet-li {
+  transition: .3s background-color;
+  &.active {
+    background-color: rgba(236, 215, 26, 0.5);
+  }
   i {
     background-color: red;
   }

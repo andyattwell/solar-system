@@ -10,18 +10,16 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
-export class SidebarComponent implements AfterViewInit {
+export class SidebarComponent {
 
   @Input() public planets: Array<Planet> = [];
   @Output() selectEvent = new EventEmitter<any>();
 
-  ngAfterViewInit(): void {
-    // throw new Error('Method not implemented.');
-    console.log({planets: this.planets})
-  }
+  selectedOpt = '';
 
   selectPlanet(event:MouseEvent, planet: Planet) {
     event.preventDefault();
-    this.selectEvent.emit(planet);    
+    this.selectEvent.emit(planet);
+    this.selectedOpt = planet.name
   }
 }

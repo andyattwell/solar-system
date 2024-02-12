@@ -87,6 +87,7 @@ export class GameComponent implements AfterViewInit {
     // this.controls.minDistance = 50;
     // this.controls.enabled = true;
     this.controls.enableZoom = false;
+    this.controls.enableRotate = false;
     // this.controls.enablePan = true;
     // this.controls.enableDamping = true;
     // this.controls.zoomSpeed = 0.001;
@@ -180,6 +181,7 @@ export class GameComponent implements AfterViewInit {
         return;
       }
       requestAnimationFrame(render);
+      // component.Controller.updateIntersects();
       component.animateScene();
       component.renderer.render(component.scene, component.camera);
     }())
@@ -195,7 +197,7 @@ export class GameComponent implements AfterViewInit {
 
   public selectPlanet(planet:Planet):void {
     this.selectedPlanet = planet;
-    // this.followPlanet();
+    this.followPlanet();
     // this.dialog.closeAll();
     // this.dialog.ngOnDestroy()
     
