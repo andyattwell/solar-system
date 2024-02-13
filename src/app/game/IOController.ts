@@ -18,11 +18,11 @@ export class IOController {
       self.parent.setAspectRatio();
     })
     
-    window.addEventListener( 'wheel', function(e:any){
-      if (e.target === self.parent.canvas && self.parent.camera) {
-        self.zoomHandler(e.deltaY);
-      }
-    });
+    // window.addEventListener( 'wheel', function(e:any){
+    //   if (e.target === self.parent.canvas && self.parent.camera) {
+    //     self.zoomHandler(e.deltaY);
+    //   }
+    // });
 
     // window.addEventListener("contextmenu", (e) => {
     //   if (self.parent.selectedPlanet) {

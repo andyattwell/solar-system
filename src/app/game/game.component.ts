@@ -101,7 +101,7 @@ export class GameComponent implements AfterViewInit {
 
   createControls() {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.enableZoom = false;
+    this.controls.enableZoom = true;
     // this.controls.enableRotate = false;
     this.controls.zoomToCursor = true;
 
