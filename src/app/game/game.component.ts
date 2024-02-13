@@ -53,10 +53,10 @@ export class GameComponent implements AfterViewInit {
     this.createPlanets();
 
     this.createScene();
-    this.crateSkyBox();
+    // this.crateSkyBox();
 
     this.addPlanetsToScene();
-    this.lookAtPlanet(this.planets[1]);
+    this.lookAtPlanet(this.planets[3]);
 
     this.playGame();
 
@@ -80,13 +80,17 @@ export class GameComponent implements AfterViewInit {
       this.farClippingPlane
     )
 
-    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas })
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: this.canvas,
+      antialias: true
+    })
+    
     this.setAspectRatio();
     this.createControls();
 
-    const light = new THREE.AmbientLight(0x404040);
-    light.intensity = 10;
-    this.scene.add(light);
+    // const light = new THREE.AmbientLight(0x404040);
+    // light.intensity = 10;
+    // this.scene.add(light);
 
   }
 
@@ -141,7 +145,8 @@ export class GameComponent implements AfterViewInit {
     const width = this.canvas.parentElement?.clientWidth || 1;
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(width, height)
+    this.renderer.setSize(width, height);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
   }
 
   /**
@@ -252,9 +257,9 @@ export class GameComponent implements AfterViewInit {
   private lookAtPlanet(planet: Planet): void {
     const planetPos = planet.planet.position;
     
-    this.cameraX = 0
+    this.cameraX = planetPos.x + (planet.size * 200)
     this.cameraY = planetPos.y + 45
-    this.cameraZ = planetPos.z - (planet.size * 200)
+    this.cameraZ = planetPos.z + (planet.size * 200)
 
     this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
     this.camera.lookAt(planetPos.x, planetPos.y, planetPos.z);

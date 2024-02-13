@@ -18,6 +18,13 @@
     </mat-list-item>
     <mat-list-item>
       <mat-checkbox
+        [checked]="rotatationEnable"
+        (change)="setRotate($event.checked)"
+      >Rotate: 
+      </mat-checkbox>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-checkbox
         [checked]="rotationDir"
         (change)="setRotationDir($event.checked)"
       >Rotation Direction: 
@@ -52,7 +59,7 @@
     <mat-list-item>Orbit: {{ data.orbit }}</mat-list-item>
     <mat-list-item>
       <mat-slider>
-        <input matSliderThumb min="10" max="100" step="1" [(value)]="data.orbitRadius">
+        <input matSliderThumb min="10" max="100" step="1" [(value)]="data.orbit">
       </mat-slider>
     </mat-list-item>
   </mat-list>

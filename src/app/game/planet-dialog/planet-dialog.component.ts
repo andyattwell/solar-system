@@ -34,6 +34,14 @@ export class PlanetDialogComponent {
   @Output() onClose = new EventEmitter<any>();
   constructor(@Inject(MAT_DIALOG_DATA) public data: Planet) {}
 
+  public get rotatationEnable () {
+    return this.data.rotate;
+  }
+
+  public set rotatationEnable(r:boolean) {
+    this.data.rotate = r
+  }
+
   public get rotation () {
     return (this.data.rotationSpeedY * 1000).toFixed(2)
   }
@@ -92,6 +100,10 @@ export class PlanetDialogComponent {
 
   setRotationDir(dir:boolean): void {
     this.data.rotationDir = dir;
+  }
+
+  setRotate(r: boolean) {
+    this.data.rotate = true
   }
 
   close(e:MouseEvent) {

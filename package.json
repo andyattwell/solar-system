@@ -22,7 +22,8 @@
     "@angular/router": "^17.0.0",
     "@types/three": "^0.160.0",
     "rxjs": "~7.8.0",
-    "three": "^0.160.0",
+    "three": "^0.161.0",
+    "three-glow-mesh": "^0.1.2",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
   },
