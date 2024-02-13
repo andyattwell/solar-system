@@ -24,6 +24,9 @@ export class GameComponent implements AfterViewInit {
   
   // Scene properties
   @Input() public cameraZ: number = 2000;
+  @Input() public cameraY: number = 100;
+  @Input() public cameraX: number = 0;
+
   @Input() public fieldOfView: number = 1;
   @Input('nearClipping') public nearClippingPlane: number = 1;
   @Input('farClipping') public farClippingPlane: number = 80000;
@@ -46,13 +49,17 @@ export class GameComponent implements AfterViewInit {
   constructor(public dialog: MatDialog, private cdRef: ChangeDetectorRef) { }
 
   ngAfterViewInit(): void {
-    // throw new Error('Method not implemented.');
+
     this.createPlanets();
+
     this.createScene();
     this.crateSkyBox();
+
     this.addPlanetsToScene();
     this.lookAtPlanet(this.planets[1]);
+
     this.playGame();
+
     this.cdRef.detectChanges(); 
   }
 
@@ -73,8 +80,6 @@ export class GameComponent implements AfterViewInit {
       this.farClippingPlane
     )
 
-    this.camera.position.set(this.planets[0].position.x, 100, this.cameraZ);
-
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas })
     this.setAspectRatio();
     this.createControls();
@@ -82,6 +87,7 @@ export class GameComponent implements AfterViewInit {
     const light = new THREE.AmbientLight(0x404040);
     light.intensity = 10;
     this.scene.add(light);
+
   }
 
   createControls() {
@@ -245,8 +251,14 @@ export class GameComponent implements AfterViewInit {
 
   private lookAtPlanet(planet: Planet): void {
     const planetPos = planet.planet.position;
+    
+    this.cameraX = 0
+    this.cameraY = planetPos.y + 45
+    this.cameraZ = planetPos.z - (planet.size * 200)
+
+    this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
     this.camera.lookAt(planetPos.x, planetPos.y, planetPos.z);
-    this.camera.position.set(0, 0, 1000)
+
     this.controls.target = new THREE.Vector3(planetPos.x, planetPos.y, planetPos.z);
     this.controls.update();
   }
