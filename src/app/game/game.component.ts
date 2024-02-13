@@ -28,7 +28,7 @@ export class GameComponent implements AfterViewInit {
   @Input() public cameraX: number = 50;
 
   @Input() public fieldOfView: number = 1;
-  @Input('nearClipping') public nearClippingPlane: number = 1;
+  @Input('nearClipping') public nearClippingPlane: number = 10;
   @Input('farClipping') public farClippingPlane: number = 80000;
   @ViewChild('canvas')
   private canvasRef!: ElementRef;
@@ -217,24 +217,14 @@ export class GameComponent implements AfterViewInit {
   }
 
   public openDialog(planet: THREE.Mesh) {
-    
-    if (!planet.parent || this.dialog.getDialogById(planet.parent.name)) {
+
+    const dialogId = 'planet-info';
+    const _dialog = this.dialog.getDialogById(dialogId)
+    console.log(_dialog)
+    if (_dialog) {
+      _dialog.componentInstance.data = planet.parent;
       return
     }
-
-    // const width = this.canvas.parentElement?.clientWidth || 1;
-    // const height = this.canvas.parentElement?.clientHeight || 1;
-
-    // const pos = get2dPosition(
-    //   planet,
-    //   this.camera,
-    //   width,
-    //   height
-    // )
-
-    // if (pos.x >= width) {
-    //   pos.x = width - 100;
-    // }
 
     const dialogRef = this.dialog.open(PlanetDialogComponent, {
       height: '400px',
@@ -242,7 +232,7 @@ export class GameComponent implements AfterViewInit {
       data: planet.parent,
       hasBackdrop: false,
       disableClose: true,
-      id: planet.parent.name, 
+      id: dialogId,
       position: {
         left: '300px', 
         top: '50px',

@@ -175,8 +175,8 @@
     },
     "ring": {
       "texture": "/assets/satur-rings.png",
-      "innerRadius": 1.3,
-      "outerRadius": 2.8
+      "innerRadius": 3.3,
+      "outerRadius": 5.3
     }
   },
   {
