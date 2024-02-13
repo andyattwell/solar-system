@@ -23,9 +23,9 @@ import { get2dPosition } from '../../helpers'
 export class GameComponent implements AfterViewInit {
   
   // Scene properties
-  @Input() public cameraZ: number = 2000;
-  @Input() public cameraY: number = 100;
-  @Input() public cameraX: number = 0;
+  @Input() public cameraZ: number = 10000;
+  @Input() public cameraY: number = 0;
+  @Input() public cameraX: number = 50;
 
   @Input() public fieldOfView: number = 1;
   @Input('nearClipping') public nearClippingPlane: number = 1;
@@ -56,7 +56,11 @@ export class GameComponent implements AfterViewInit {
     // this.crateSkyBox();
 
     this.addPlanetsToScene();
-    this.lookAtPlanet(this.planets[3]);
+    // this.lookAtPlanet(this.planets[3]);
+    this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
+    // this.camera.lookAt(0, 0, 0);
+    this.controls.target = new THREE.Vector3(this.cameraX, this.cameraY, 0);
+    this.controls.update();
 
     this.playGame();
 
@@ -88,9 +92,10 @@ export class GameComponent implements AfterViewInit {
     this.setAspectRatio();
     this.createControls();
 
-    // const light = new THREE.AmbientLight(0x404040);
-    // light.intensity = 10;
-    // this.scene.add(light);
+    const light = new THREE.PointLight(0x404040, 1.0);
+    light.position.set(0.0, 0.0, 0.0);
+    light.intensity = 10;
+    this.scene.add(light);
 
   }
 

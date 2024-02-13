@@ -12,6 +12,7 @@ export interface PlanetProps {
   orbitSpeed?:number;
   texture: string;
   icon: string;
+  lightIntesity: number;
   position: {
     x: number,
     y: number,
@@ -56,6 +57,7 @@ export class Planet extends THREE.Mesh {
   public orbitSpeed: number = 0;
   public showOrbit: boolean = false;
   public followOrbit: boolean = false;
+  public lightIntesity: number = 0.3;
 
   private planetTexture: string;
   public color: THREE.Vector3;
@@ -69,6 +71,7 @@ export class Planet extends THREE.Mesh {
     this.mass = props.mass;
     this.planetIcon = props.icon;
     this.planetTexture = props.texture || '';
+    this.lightIntesity = props.lightIntesity;
     
     this.color = new THREE.Vector3(
       props.color.r, props.color.g, props.color.b
@@ -76,7 +79,7 @@ export class Planet extends THREE.Mesh {
 
     this.rotationDir = props.rotation.dir || false;
     this.rotationSpeedY = 1 / props.rotation.y;
-    this.orbit = props.orbit;
+    this.orbit = props.orbit !== 0 ? props.orbit : 0;
 
     if (props.orbitSpeed) {
       this.orbitSpeed = props.orbitSpeed * 0.001;
@@ -109,17 +112,37 @@ export class Planet extends THREE.Mesh {
   private createPlanet() {
     const planetGeo = new THREE.SphereGeometry(this.size, 64, 32);
 
+    const pointLightPosition = new THREE.Vector3(0, 0, 1);
+    const pointLightColor = new THREE.Color(0.001, 0.001, 0.001);
     const mat = new THREE.ShaderMaterial({
       fragmentShader: PlanetMaterial.fragmentShader,
       vertexShader: PlanetMaterial.vertexShader,
-      uniforms: {
-        globeTexture: {
-          value: new THREE.TextureLoader().load(this.planetTexture),
-        },
-        globeColor: {
-          value: this.color
+      lights: true,
+      uniforms: THREE.UniformsUtils.merge([
+        THREE.UniformsLib['lights'],
+        {
+          lightIntensity: {
+            value: this.lightIntesity * 0.001
+          },
+          textureSampler: {
+            value: new THREE.TextureLoader().load(this.planetTexture)
+          }
         }
-      }
+      ])
+      // uniforms: {
+      //   globeTexture: {
+      //     value: new THREE.TextureLoader().load(this.planetTexture),
+      //   },
+      //   globeColor: {
+      //     value: this.color
+      //   },
+      //   pointLightPosition: {
+      //     value: pointLightPosition
+      //   },
+      //   pointLightColor: {
+      //     value: pointLightColor
+      //   }
+      // }
     });
 
     this.planet = new THREE.Mesh(planetGeo, mat);
@@ -139,7 +162,8 @@ export class Planet extends THREE.Mesh {
       side: THREE.BackSide,
       uniforms: {
         globeColor: {
-          value: this.color
+          value: this.color,
+
         }
       }
     });
