@@ -15,7 +15,7 @@ varying vec3 vertexNormal;
 
 void main() {
   
-  float intensity = 0.9 - dot(
+  float intensity = 0.65 - dot(
     vertexNormal, 
     vec3(0.0, 0.0, 1.0)
   );
