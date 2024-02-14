@@ -9,7 +9,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { ActionNavComponent } from './action-nav/action-nav.component';
 import { PlanetDialogComponent } from './planet-dialog/planet-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-
+import { Player } from './Player';
 import { get2dPosition } from '../../helpers'
 
 @Component({
@@ -45,6 +45,7 @@ export class GameComponent implements AfterViewInit {
   private controls!: OrbitControls;
   private Controller: IOController = new IOController(this);
   private selectedPlanet!: Planet;
+  private player:Player|null = null;
 
   constructor(public dialog: MatDialog, private cdRef: ChangeDetectorRef) { }
 
@@ -56,11 +57,14 @@ export class GameComponent implements AfterViewInit {
     // this.crateSkyBox();
 
     this.addPlanetsToScene();
+    
     // this.lookAtPlanet(this.planets[3]);
-    this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
+    // this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
     // this.camera.lookAt(0, 0, 0);
-    this.controls.target = new THREE.Vector3(this.cameraX, this.cameraY, 0);
-    this.controls.update();
+    // this.controls.target = new THREE.Vector3(this.cameraX, this.cameraY, 0);
+    // this.controls.update();
+
+    this.player = new Player(this.camera, this.scene, this.renderer, this.controls)
 
     this.playGame();
 
@@ -99,11 +103,11 @@ export class GameComponent implements AfterViewInit {
 
   }
 
-  createControls() {
+  private createControls() {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.enableZoom = true;
+    this.controls.enableZoom = false;
     // this.controls.enableRotate = false;
-    this.controls.zoomToCursor = true;
+    this.controls.zoomToCursor = false;
 
     const pX = this.planets[this.planets.length-1].planet.position.x
     var minPan = new THREE.Vector3( -pX, -10, 0);
@@ -164,10 +168,11 @@ export class GameComponent implements AfterViewInit {
     this.planets.forEach(planet => {
       planet.animate(this.planets[0], this.timeScale);
     });
+    this.player?.animate();
     // if (this.selectedPlanet) {
     //   this.lookAtPlanet()
     // }
-    this.controls.update()
+    // this.controls.update()
   }
 
   private createPlanets() {
@@ -259,8 +264,8 @@ export class GameComponent implements AfterViewInit {
     this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
     this.camera.lookAt(planetPos.x, planetPos.y, planetPos.z);
 
-    this.controls.target = new THREE.Vector3(planetPos.x, planetPos.y, planetPos.z);
-    this.controls.update();
+    // this.controls.target = new THREE.Vector3(planetPos.x, planetPos.y, planetPos.z);
+    // this.controls.update();
   }
 
   public pauseGame() {
