@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import PlanetsJson from "../../assets/planets.json"
+import PlanetsJson from "../../assets/data/planets.json"
 import { IOController } from "./IOController";
 import { Planet } from "./Planet";
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -44,8 +44,12 @@ export class GameComponent implements AfterViewInit {
   public play: boolean = false;
   private controls!: OrbitControls;
   private Controller: IOController = new IOController(this);
-  private selectedPlanet!: Planet;
 
+  private selectedPlanet!: Planet|undefined;
+  public showOrbit: boolean = false;
+  public followOrbit: boolean = false;
+  public rotationEnabled: boolean = true;
+  
   constructor(public dialog: MatDialog, private cdRef: ChangeDetectorRef) { }
 
   ngAfterViewInit(): void {
@@ -56,11 +60,12 @@ export class GameComponent implements AfterViewInit {
     // this.crateSkyBox();
 
     this.addPlanetsToScene();
-    // this.lookAtPlanet(this.planets[3]);
-    this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
+    // this.lookAtPlanet(this.planets[8]);
+    this.lookAtSystem();
+    // this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
     // this.camera.lookAt(0, 0, 0);
-    this.controls.target = new THREE.Vector3(this.cameraX, this.cameraY, 0);
-    this.controls.update();
+    // this.controls.target = new THREE.Vector3(this.cameraX, this.cameraY, 0);
+    // this.controls.update();
 
     this.playGame();
 
@@ -94,7 +99,7 @@ export class GameComponent implements AfterViewInit {
 
     const light = new THREE.PointLight(0x404040, 1.0);
     light.position.set(0.0, 0.0, 0.0);
-    light.intensity = 10;
+    light.intensity = 20;
     this.scene.add(light);
 
   }
@@ -105,18 +110,18 @@ export class GameComponent implements AfterViewInit {
     // this.controls.enableRotate = false;
     this.controls.zoomToCursor = true;
 
-    const pX = this.planets[this.planets.length-1].planet.position.x
-    var minPan = new THREE.Vector3( -pX, -10, 0);
-    var maxPan = new THREE.Vector3( pX, 10, 0);
-    var _v = new THREE.Vector3();
+    // const pX = this.planets[this.planets.length-1].planet.position.x
+    // var minPan = new THREE.Vector3( -pX, -10, 0);
+    // var maxPan = new THREE.Vector3( pX, 10, 0);
+    // var _v = new THREE.Vector3();
     
-    const self = this;
-    this.controls.addEventListener("change", function() {
-        _v.copy(self.controls.target);
-        self.controls.target.clamp(minPan, maxPan);
-        _v.sub(self.controls.target);
-        self.camera.position.sub(_v);
-    })
+    // const self = this;
+    // this.controls.addEventListener("change", function() {
+    //     _v.copy(self.controls.target);
+    //     self.controls.target.clamp(minPan, maxPan);
+    //     _v.sub(self.controls.target);
+    //     self.camera.position.sub(_v);
+    // })
     
     this.controls.update();
   }
@@ -208,7 +213,12 @@ export class GameComponent implements AfterViewInit {
     }())
   }
 
-  public selectPlanet(planet: Planet, show: boolean = false): void {
+  public selectPlanet(planet?: Planet, show?: boolean): void {
+
+    if (!planet) {
+      return this.lookAtSystem();
+    }
+
     this.selectedPlanet = planet;
     if (this.selectedPlanet && show) {
       this.lookAtPlanet(this.selectedPlanet);
@@ -220,7 +230,6 @@ export class GameComponent implements AfterViewInit {
 
     const dialogId = 'planet-info';
     const _dialog = this.dialog.getDialogById(dialogId)
-    console.log(_dialog)
     if (_dialog) {
       _dialog.componentInstance.data = planet.parent;
       return
@@ -249,12 +258,48 @@ export class GameComponent implements AfterViewInit {
 
   }
 
+  private lookAtSystem(): void {
+
+    this.toggleOrbit(true);
+
+    this.cameraX = 0;
+    this.cameraY = 15000;
+    this.cameraZ = 0;
+
+    this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
+    this.camera.lookAt(0, 0, 0);
+
+    this.controls.target = new THREE.Vector3(0, 0, 0);
+    this.controls.update();
+  }
+
+  public toggleOrbit(show:boolean): void {
+    this.showOrbit = show;
+    this.planets.forEach(p => {
+      p.toggleOrbit(show);
+    });
+  }
+
+  public toggleFollowOrbit(follow:boolean): void {
+    this.followOrbit = follow;
+    this.planets.forEach(p => {
+      p.followOrbit = follow
+    })
+  }
+
+  public toggleRotation(rotate:boolean): void {
+    this.rotationEnabled = rotate
+    this.planets.forEach(p => {
+      p.rotate = rotate
+    })
+  }
+
   private lookAtPlanet(planet: Planet): void {
     const planetPos = planet.planet.position;
     
-    this.cameraX = planetPos.x + (planet.size * 200)
+    this.cameraX = planetPos.x + (planet.size * 120)
     this.cameraY = planetPos.y + 45
-    this.cameraZ = planetPos.z + (planet.size * 200)
+    this.cameraZ = planetPos.z + (planet.size * 120)
 
     this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
     this.camera.lookAt(planetPos.x, planetPos.y, planetPos.z);

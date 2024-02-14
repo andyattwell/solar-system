@@ -1,4 +1,11 @@
 <mat-action-list>
+  <a mat-list-item 
+    class="planet-li"
+    (click)="selectPlanet($event)" 
+    [href]="'#'">
+    <i matListItemIcon [style.background-image]="'url(../assets/icons/solar-system.jpg)'"></i>
+    <span matListItemTitle>System</span>
+  </a>
   @if(planets && planets.length) {
     @for (planet of planets; track planet) {
       <a mat-list-item 
@@ -7,9 +14,7 @@
         (click)="selectPlanet($event, planet)" 
         [href]="'#'+planet.name">
         <i matListItemIcon [style.background-image]="'url(' + planet.planetIcon + ')'"></i>
-        <!-- <span class="thumb"></span> -->
         <span matListItemTitle>{{ planet.name }}</span>
-        <!-- <span matListItemLine>Produced by a plant</span> -->
       </a>
     }
     <mat-list-item>
@@ -21,9 +26,16 @@
     </mat-list-item>
     <mat-list-item>
       <mat-checkbox
-        [checked]="orbitEnabled"
+        [checked]="followOrbit"
         (change)="toggleOrbit($event.checked)"
       >Orbit: 
+      </mat-checkbox>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-checkbox
+        [checked]="showOrbit"
+        (change)="toggleShowOrbit($event.checked)"
+      >Show orbit: 
       </mat-checkbox>
     </mat-list-item>
   }

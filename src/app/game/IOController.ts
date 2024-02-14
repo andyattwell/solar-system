@@ -19,8 +19,10 @@ export class IOController {
     })
     
     // window.addEventListener( 'wheel', function(e:any){
-    //   if (e.target === self.parent.canvas && self.parent.camera) {
-    //     self.zoomHandler(e.deltaY);
+    //   if (e.target === self.parent.canvas && self.parent.camera && self.hovered) {
+    //     // self.zoomHandler(e.deltaY);
+    //     // self.parent.controls.target = new THREE.Vector3(self.hovered.position.x, self.hovered.position.y, self.hovered.position.z);
+    //     // self.parent.controls.update();
     //   }
     // });
 
@@ -104,7 +106,7 @@ export class IOController {
 
   clickHandler(e:MouseEvent) {
     if (e.target === this.parent.canvas && this.hovered?.parent) {
-      // this.parent.selectPlanet(this.hovered.parent);
+      this.parent.selectPlanet(this.hovered.parent);
       // this.parent.lookAtPlanet(this.hovered.parent);
     }
   }

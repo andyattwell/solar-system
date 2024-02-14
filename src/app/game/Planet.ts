@@ -112,38 +112,14 @@ export class Planet extends THREE.Mesh {
   private createPlanet() {
     const planetGeo = new THREE.SphereGeometry(this.size, 64, 32);
 
-    const pointLightPosition = new THREE.Vector3(0, 0, 1);
-    const pointLightColor = new THREE.Color(0.001, 0.001, 0.001);
-    const mat = new THREE.ShaderMaterial({
-      fragmentShader: PlanetMaterial.fragmentShader,
-      vertexShader: PlanetMaterial.vertexShader,
-      lights: true,
-      uniforms: THREE.UniformsUtils.merge([
-        THREE.UniformsLib['lights'],
-        {
-          lightIntensity: {
-            value: this.lightIntesity * 0.001
-          },
-          textureSampler: {
-            value: new THREE.TextureLoader().load(this.planetTexture)
-          }
-        }
-      ])
-      // uniforms: {
-      //   globeTexture: {
-      //     value: new THREE.TextureLoader().load(this.planetTexture),
-      //   },
-      //   globeColor: {
-      //     value: this.color
-      //   },
-      //   pointLightPosition: {
-      //     value: pointLightPosition
-      //   },
-      //   pointLightColor: {
-      //     value: pointLightColor
-      //   }
-      // }
-    });
+    let mat;
+    if (this.name === 'Sun') {
+      mat = new THREE.MeshBasicMaterial();
+    } else {
+      mat = new THREE.MeshLambertMaterial();
+    }
+
+    mat.map = this.loader.load(this.planetTexture)
 
     this.planet = new THREE.Mesh(planetGeo, mat);
     this.planet.name = "planet";
@@ -196,17 +172,13 @@ export class Planet extends THREE.Mesh {
       0, 
       Math.PI * 2
     );
-
-    const mat = new THREE.ShaderMaterial({
-      fragmentShader: OrbitMaterial.fragmentShader,
-      vertexShader: OrbitMaterial.vertexShader,
-      side: THREE.DoubleSide,
-      uniforms: {
-        globeColor: {
-          value: new THREE.Vector3(0.4, 0.4, 0.4)
-        }
-      }
+    
+    // const orbitColor = "rgb("+ this.color.x + ", "+this.color.y+", "+this.color.z+")";
+    const mat = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(this.color.x, this.color.y, this.color.z),
+      side: THREE.DoubleSide
     });
+    mat.color.setRGB(this.color.x, this.color.y, this.color.z)
 
     this.orbitPath = new THREE.Mesh(orbitPathGeo, mat);
     this.orbitPath.rotation.x =  Math.PI * 0.5;
@@ -233,7 +205,7 @@ export class Planet extends THREE.Mesh {
 
   private addLight() {
     var light = new THREE.PointLight(0x404040, 10000, 800000);
-    light.intensity = 100000;
+    light.intensity = 500000;
     this.add(light);
   }
 

@@ -4,6 +4,16 @@
       <app-sidebar 
         [planets]="planets" 
         (selectEvent)="selectPlanet($event, true)"
+
+        [showOrbit]="showOrbit"
+        (orbitShowEvent)="toggleOrbit($event)"
+
+        [followOrbit]="followOrbit"
+        (orbitEvent)="toggleFollowOrbit($event)"
+
+        [rotationEnabled]="rotationEnabled"
+        (rotationEvent)="toggleRotation($event)"
+
         ></app-sidebar>
     </mat-sidenav>
     <mat-sidenav-content class="game-container">
