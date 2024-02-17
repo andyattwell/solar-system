@@ -1,11 +1,12 @@
 import { Component, Output, Input, EventEmitter } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-action-nav',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule],
+  imports: [MatButtonModule, MatIconModule,MatDividerModule],
   templateUrl: './action-nav.component.html',
   styleUrl: './action-nav.component.scss'
 })
@@ -15,9 +16,12 @@ export class ActionNavComponent {
   @Output() pauseEvent = new EventEmitter<any>();
   @Output() playEvent = new EventEmitter<any>();
   @Output() timeEvent = new EventEmitter<any>();
+  @Output() cameraEvent = new EventEmitter<any>();
   
   @Output() forwardEvent = new EventEmitter<any>();
   @Output() rewindEvent = new EventEmitter<any>();
+
+  public camera: string = 'system';
 
   play () {
     this.playEvent.emit()
@@ -58,5 +62,10 @@ export class ActionNavComponent {
       tS -= 10
     }
     this.timeEvent.emit(tS);
+  }
+
+  changeCamera(cameraType: string) {
+    this.camera = cameraType;
+    this.cameraEvent.emit(cameraType)
   }
 }

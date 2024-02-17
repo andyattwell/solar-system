@@ -11,6 +11,7 @@ import { PlanetDialogComponent } from './planet-dialog/planet-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Player } from './Player';
 import { get2dPosition } from '../../helpers'
+import { CharacterControls } from './CharacterControl';
 
 @Component({
   selector: 'app-game',
@@ -37,38 +38,62 @@ export class GameComponent implements AfterViewInit {
   }
 
   public camera!: THREE.PerspectiveCamera;
+  public activeCamera!: THREE.PerspectiveCamera;
   private renderer!: THREE.WebGLRenderer;
-  private scene!: THREE.Scene;
+  public scene!: THREE.Scene;
   public planets: Array<Planet> = [];
   public timeScale: number = 1;
-  public play: boolean = false;
-  private controls!: OrbitControls;
+  public isPlaying: boolean = false;
+  public controls!: OrbitControls;
   private Controller: IOController = new IOController(this);
   private selectedPlanet!: Planet;
   private player:Player|null = null;
+  private clock:THREE.Clock = new THREE.Clock();
 
-  constructor(public dialog: MatDialog, private cdRef: ChangeDetectorRef) { }
+  constructor(public dialog: MatDialog, private cdRef: ChangeDetectorRef) {
+    this.createPlanets();
+  }
 
   ngAfterViewInit(): void {
 
-    this.createPlanets();
 
     this.createScene();
+
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: this.canvas,
+      antialias: true
+    });
+
+    this.createSystemCamera();
+    this.createControls();
+    this.changeCamera('system');
+
+    this.setAspectRatio();
+
     // this.crateSkyBox();
 
     this.addPlanetsToScene();
-    
-    // this.lookAtPlanet(this.planets[3]);
-    // this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
-    // this.camera.lookAt(0, 0, 0);
-    // this.controls.target = new THREE.Vector3(this.cameraX, this.cameraY, 0);
-    // this.controls.update();
 
-    this.player = new Player(this.camera, this.scene, this.renderer, this.controls)
+    // this.lookAtPlanet(this.planets[3]);
+    
+    this.player = new Player(this)
+    this.scene.add( this.player.mesh );
+    this.changeCamera('player');
+
 
     this.playGame();
 
     this.cdRef.detectChanges(); 
+  }
+
+  private createSystemCamera() {
+    this.camera = new THREE.PerspectiveCamera(
+      this.fieldOfView,
+      this.canvas.clientWidth / this.canvas.clientHeight,
+      this.nearClippingPlane,
+      this.farClippingPlane
+    )
+    this.activeCamera = this.camera
   }
 
   /**
@@ -80,49 +105,32 @@ export class GameComponent implements AfterViewInit {
   private createScene() {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x000000);
-
-    this.camera = new THREE.PerspectiveCamera(
-      this.fieldOfView,
-      this.canvas.clientWidth / this.canvas.clientHeight,
-      this.nearClippingPlane,
-      this.farClippingPlane
-    )
-
-    this.renderer = new THREE.WebGLRenderer({
-      canvas: this.canvas,
-      antialias: true
-    })
-    
-    this.setAspectRatio();
-    this.createControls();
-
-    const light = new THREE.PointLight(0x404040, 1.0);
-    light.position.set(0.0, 0.0, 0.0);
-    light.intensity = 10;
-    this.scene.add(light);
-
   }
 
   private createControls() {
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.enableZoom = false;
+    if (!this.controls) {
+      this.controls = new OrbitControls(this.activeCamera, this.renderer.domElement);
+    }
+    // this.controls.object = camera;
+    // this.controls.enableZoom = true;
     // this.controls.enableRotate = false;
-    this.controls.zoomToCursor = false;
+    // this.controls.zoomToCursor = true;
+    // this.controls.target = new THREE.Vector3(this.cameraX, this.cameraY, 0);
 
-    const pX = this.planets[this.planets.length-1].planet.position.x
-    var minPan = new THREE.Vector3( -pX, -10, 0);
-    var maxPan = new THREE.Vector3( pX, 10, 0);
-    var _v = new THREE.Vector3();
+    // const pX = this.planets[this.planets.length-1].planet.position.x
+    // var minPan = new THREE.Vector3( -pX, -10, 0);
+    // var maxPan = new THREE.Vector3( pX, 10, 0);
+    // var _v = new THREE.Vector3();
     
-    const self = this;
-    this.controls.addEventListener("change", function() {
-        _v.copy(self.controls.target);
-        self.controls.target.clamp(minPan, maxPan);
-        _v.sub(self.controls.target);
-        self.camera.position.sub(_v);
-    })
+    // const self = this;
+    // this.controls.addEventListener("change", function() {
+    //     _v.copy(self.controls.target);
+    //     self.controls.target.clamp(minPan, maxPan);
+    //     _v.sub(self.controls.target);
+    //     self.camera.position.sub(_v);
+    // })
     
-    this.controls.update();
+    // this.controls.update();
   }
 
   private crateSkyBox(): void {
@@ -152,14 +160,14 @@ export class GameComponent implements AfterViewInit {
   private setAspectRatio(): void {
     const height = this.canvas.parentElement?.clientHeight || 1;
     const width = this.canvas.parentElement?.clientWidth || 1;
-    this.camera.aspect = width / height;
-    this.camera.updateProjectionMatrix();
+    this.activeCamera.aspect = width / height;
+    this.activeCamera.updateProjectionMatrix();
     this.renderer.setSize(width, height);
     this.renderer.setPixelRatio(window.devicePixelRatio);
   }
 
   /**
-   * Animate cube
+   * Animate Scene
    * 
    * @private
    * @memberof CubeComponent
@@ -168,11 +176,11 @@ export class GameComponent implements AfterViewInit {
     this.planets.forEach(planet => {
       planet.animate(this.planets[0], this.timeScale);
     });
-    this.player?.animate();
+    this.player?.animate(this.clock.getDelta());
     // if (this.selectedPlanet) {
     //   this.lookAtPlanet()
     // }
-    // this.controls.update()
+    this.controls.update()
   }
 
   private createPlanets() {
@@ -204,12 +212,12 @@ export class GameComponent implements AfterViewInit {
   private startRenderingLoop() {
     let component: GameComponent = this;
     (function render() {
-      if (!component.play) {
+      if (!component.isPlaying) {
         return;
       }
       requestAnimationFrame(render);
       component.animateScene();
-      component.renderer.render(component.scene, component.camera);
+      component.renderer.render(component.scene, component.activeCamera);
     }())
   }
 
@@ -256,7 +264,6 @@ export class GameComponent implements AfterViewInit {
 
   private lookAtPlanet(planet: Planet): void {
     const planetPos = planet.planet.position;
-    
     this.cameraX = planetPos.x + (planet.size * 200)
     this.cameraY = planetPos.y + 45
     this.cameraZ = planetPos.z + (planet.size * 200)
@@ -269,11 +276,11 @@ export class GameComponent implements AfterViewInit {
   }
 
   public pauseGame() {
-    this.play = false;
+    this.isPlaying = false;
   }
 
   public playGame() {
-    this.play = true;
+    this.isPlaying = true;
     this.timeScale = 1;
     this.startRenderingLoop();
   }
@@ -286,6 +293,44 @@ export class GameComponent implements AfterViewInit {
       this.playGame();
       this.timeScale = speed;
     }
+  }
+
+  private setSystemCamera() {
+    this.controls = new OrbitControls(this.activeCamera, this.renderer.domElement);
+    this.activeCamera = this.camera
+    this.controls.enableZoom = true;
+    this.controls.zoomToCursor = true;
+    this.controls.target = new THREE.Vector3(0, 0, 0);
+    this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
+    this.camera.lookAt(0, 0, 0);
+  }
+
+  setPlayerCamera() {
+
+    if (!this.player) {
+      return
+    }
+    console.log('ACA')
+    this.controls.dispose();
+    this.activeCamera = this.player.camera;
+    this.activeCamera.position.set(this.player.mesh.position.x, this.player.mesh.position.y, this.player.mesh.position.z-0.2)
+    this.controls = new OrbitControls(this.activeCamera, this.renderer.domElement);
+    this.controls.enableDamping = true
+    this.controls.minDistance = 0.01
+    this.controls.maxDistance = 0.1
+    this.controls.enablePan = false;
+    // this.controls.maxPolarAngle = Math.PI / 2 - 0.05
+    this.controls.target = this.player.mesh.position;
+    this.controls.update();
+  }
+
+  public changeCamera(cameraType: string) {
+    if (cameraType === 'system') {
+      this.setSystemCamera();
+    } else if (cameraType === 'player' && this.player) {
+      this.setPlayerCamera();
+    }
+    // this.createControls(this.activeCamera);
   }
 
 }

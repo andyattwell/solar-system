@@ -10,9 +10,10 @@
       <app-action-nav 
         (playEvent)="playGame()"
         (pauseEvent)="pauseGame()"
+        (cameraEvent)="changeCamera($event)"
         (timeEvent)="changeSpeed($event)"
         [timeScale]="timeScale"
-        [playing]="play"
+        [playing]="isPlaying"
       />
       <canvas #canvas id="canvas"></canvas>
     </mat-sidenav-content>

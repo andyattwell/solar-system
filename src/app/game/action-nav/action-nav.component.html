@@ -15,4 +15,12 @@
   <button mat-mini-fab aria-label="Fast forward" (click)="fastForward()" [color]="timeScale > 1 ? 'primary' : ''">
     <mat-icon>fast_forward</mat-icon>
   </button>
+  <div class="camera-selector">
+    <button mat-mini-fab aria-label="System view" (click)="changeCamera('system')" [color]="camera === 'system' ? 'primary' : ''">
+      <mat-icon>my_location</mat-icon>
+    </button>
+    <button mat-mini-fab aria-label="Third person" (click)="changeCamera('player')" [color]="camera === 'player' ? 'primary' : ''">
+      <mat-icon>person</mat-icon>
+    </button>
+  </div>
 </div>

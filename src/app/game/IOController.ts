@@ -62,10 +62,10 @@ export class IOController {
     }
 
     if (deltaY < 0 && currentZ > this.parent.planets[0].position.x) {
-      this.parent.camera.translateZ( -step )
+      this.parent.activeCamera.translateZ( -step )
       this.parent.controls.update();
     } else if ( currentZ < 3000) {
-      this.parent.camera.translateZ( step )
+      this.parent.activeCamera.translateZ( step )
       this.parent.controls.update();
     }
   }
@@ -107,10 +107,6 @@ export class IOController {
       // this.parent.selectPlanet(this.hovered.parent);
       // this.parent.lookAtPlanet(this.hovered.parent);
     }
-  }
-
-  showDialog() : void {
-    
   }
 
 }
