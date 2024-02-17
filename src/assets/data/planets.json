@@ -176,7 +176,7 @@
     "ring": {
       "texture": "/assets/textures/saturn-rings.png",
       "innerRadius": 6.6,
-      "outerRadius": 9
+      "outerRadius": 12
     }
   },
   {
