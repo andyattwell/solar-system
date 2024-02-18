@@ -13,6 +13,7 @@ import { MatDividerModule } from '@angular/material/divider';
 export class ActionNavComponent {
   @Input('timeScale') public timeScale: number = 1;
   @Input('playing') public playing: boolean = false;
+  @Input('selectedCamera') public selectedCamera: string = '';
   @Output() pauseEvent = new EventEmitter<any>();
   @Output() playEvent = new EventEmitter<any>();
   @Output() timeEvent = new EventEmitter<any>();
@@ -21,7 +22,19 @@ export class ActionNavComponent {
   @Output() forwardEvent = new EventEmitter<any>();
   @Output() rewindEvent = new EventEmitter<any>();
 
-  public camera: string = 'system';
+  cameras: Array<any> = [{
+    name: 'system',
+    label: 'System view',
+    icon: 'my_location'
+  },{
+    name: 'free',
+    label: 'Free roam',
+    icon: 'view_in_ar'
+  },{
+    name: 'player',
+    label: 'Player view',
+    icon: 'person'
+  }]
 
   play () {
     this.playEvent.emit()
@@ -65,7 +78,10 @@ export class ActionNavComponent {
   }
 
   changeCamera(cameraType: string) {
-    this.camera = cameraType;
     this.cameraEvent.emit(cameraType)
+  }
+
+  isSelected(cameraName: string) {
+    return this.selectedCamera === cameraName ? 'primary' : ''
   }
 }

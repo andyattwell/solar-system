@@ -24,9 +24,9 @@ import { CharacterControls } from './CharacterControl';
 export class GameComponent implements AfterViewInit {
   
   // Scene properties
-  @Input() public cameraZ: number = 10000;
-  @Input() public cameraY: number = 0;
-  @Input() public cameraX: number = 50;
+  @Input() public cameraZ: number = 0;
+  @Input() public cameraY: number = 10000;
+  @Input() public cameraX: number = 0;
 
   @Input() public fieldOfView: number = 1;
   @Input('nearClipping') public nearClippingPlane: number = 10;
@@ -38,6 +38,7 @@ export class GameComponent implements AfterViewInit {
   }
 
   public camera!: THREE.PerspectiveCamera;
+  public freeCamera!: THREE.PerspectiveCamera;
   public activeCamera!: THREE.PerspectiveCamera;
   private renderer!: THREE.WebGLRenderer;
   public scene!: THREE.Scene;
@@ -64,8 +65,10 @@ export class GameComponent implements AfterViewInit {
       antialias: true
     });
 
-    this.createSystemCamera();
-    this.createControls();
+    
+    this.activeCamera = this.camera
+    
+    // this.createControls();
     this.changeCamera('system');
 
     this.setAspectRatio();
@@ -93,9 +96,18 @@ export class GameComponent implements AfterViewInit {
       this.nearClippingPlane,
       this.farClippingPlane
     )
-    this.activeCamera = this.camera
+    this.camera.name = 'system'
   }
 
+  private createFreeCamera() {
+    this.freeCamera = new THREE.PerspectiveCamera(
+      50,
+      this.canvas.clientWidth / this.canvas.clientHeight,
+      this.nearClippingPlane,
+      this.farClippingPlane
+    )
+    this.freeCamera.name = 'free'
+  }
   /**
    * Create the scene
    * 
@@ -295,11 +307,44 @@ export class GameComponent implements AfterViewInit {
     }
   }
 
-  private setSystemCamera() {
+  private setFreeCamera() {
+    
+    if (!this.freeCamera) {
+      this.createFreeCamera();
+    }
+
+    const prevCamX = this.activeCamera.position.x
+    const prevCamY = this.activeCamera.position.y
+    const prevCamZ = this.activeCamera.position.z - 20
+
+    const prevTarget = this.controls.target;
+
+    console.log('setFreeCamera', this.activeCamera)
+    this.controls?.dispose();
+    
+    this.activeCamera = this.freeCamera;
     this.controls = new OrbitControls(this.activeCamera, this.renderer.domElement);
-    this.activeCamera = this.camera
     this.controls.enableZoom = true;
     this.controls.zoomToCursor = true;
+    this.controls.enablePan = true;
+    this.controls.enableRotate = true;
+    // this.activeCamera.position.set(500, 0, 300);
+    this.activeCamera.position.set(prevCamX, prevCamY, prevCamZ);
+    this.controls.target = prevTarget;
+    // this.camera.lookAt(0, 0, 0);
+  }
+
+  private setSystemCamera() {
+
+    if (!this.camera) {
+      this.createSystemCamera();
+    }
+    
+    this.controls?.dispose();
+    
+    this.activeCamera = this.camera;
+    this.controls = new OrbitControls(this.activeCamera, this.renderer.domElement);
+    this.controls.enableZoom = false;
     this.controls.target = new THREE.Vector3(0, 0, 0);
     this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
     this.camera.lookAt(0, 0, 0);
@@ -307,13 +352,13 @@ export class GameComponent implements AfterViewInit {
 
   setPlayerCamera() {
 
-    if (!this.player) {
-      return
-    }
-    console.log('ACA')
+    if (!this.player) return;
+
     this.controls.dispose();
+
     this.activeCamera = this.player.camera;
     this.activeCamera.position.set(this.player.mesh.position.x, this.player.mesh.position.y, this.player.mesh.position.z-0.2)
+    
     this.controls = new OrbitControls(this.activeCamera, this.renderer.domElement);
     this.controls.enableDamping = true
     this.controls.minDistance = 0.01
@@ -327,8 +372,10 @@ export class GameComponent implements AfterViewInit {
   public changeCamera(cameraType: string) {
     if (cameraType === 'system') {
       this.setSystemCamera();
-    } else if (cameraType === 'player' && this.player) {
+    } else if (cameraType === 'player') {
       this.setPlayerCamera();
+    } else if (cameraType === 'free') {
+      this.setFreeCamera();
     }
     // this.createControls(this.activeCamera);
   }

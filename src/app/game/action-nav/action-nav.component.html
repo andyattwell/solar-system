@@ -16,11 +16,26 @@
     <mat-icon>fast_forward</mat-icon>
   </button>
   <div class="camera-selector">
-    <button mat-mini-fab aria-label="System view" (click)="changeCamera('system')" [color]="camera === 'system' ? 'primary' : ''">
+    <!-- <button mat-mini-fab aria-label="System view" (click)="changeCamera('system')" [color]="selectedCamera === 'system' ? 'primary' : ''">
       <mat-icon>my_location</mat-icon>
     </button>
-    <button mat-mini-fab aria-label="Third person" (click)="changeCamera('player')" [color]="camera === 'player' ? 'primary' : ''">
-      <mat-icon>person</mat-icon>
+    <button mat-mini-fab aria-label="Free roam" (click)="changeCamera('free')" [color]="selectedCamera === 'free' ? 'primary' : ''">
+      <mat-icon>view_in_ar</mat-icon>
     </button>
+    <button mat-mini-fab aria-label="Third person" (click)="changeCamera('player')" [color]="selectedCamera === 'player' ? 'primary' : ''">
+      <mat-icon>person</mat-icon>
+    </button> -->
+    @for(camera of cameras; track camera.name) {
+      <button 
+        mat-mini-fab 
+        aria-label="Third person" 
+        (click)="changeCamera(camera.name)" 
+        [color]="isSelected(camera.name)"
+      >
+        <mat-icon> {{ camera.icon }} </mat-icon>
+      </button>
+    } @empty {
+      <li> There are no cameras. </li>
+    }
   </div>
 </div>
