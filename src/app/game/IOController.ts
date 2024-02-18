@@ -47,7 +47,7 @@ export class IOController {
   }
 
   zoomHandler (deltaY: number) {
-    const currentZ = Math.abs(this.parent.camera.position.z);
+    const currentZ = Math.abs(this.parent.activeCamera.position.z);
     if (currentZ <= 0) {
       return;
     }
@@ -82,7 +82,7 @@ export class IOController {
     const y = -(e.clientY / height) * 2 + 1
     
     this.mouse.set(x, y)
-    this.raycaster.setFromCamera(this.mouse, this.parent.camera)
+    this.raycaster.setFromCamera(this.mouse, this.parent.activeCamera)
     let planets = this.parent.planets.map((p:any) => {
       return p.planet
     })

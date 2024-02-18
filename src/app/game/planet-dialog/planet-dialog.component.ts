@@ -91,7 +91,7 @@ export class PlanetDialogComponent {
   }
 
   setShowOrbit(checked:boolean): void {
-    this.data.toggleOrbit(checked);
+    this.data.toggleShowOrbit(checked);
   }
   
   setFollowOrbit(checked:boolean): void {

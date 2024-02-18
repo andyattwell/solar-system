@@ -29,7 +29,7 @@ export class SidebarComponent {
     this.selectedOpt = planet?.name || ''
   }
 
-  toggleOrbit(enabled: boolean) {
+  toggleFollowOrbit(enabled: boolean) {
     this.orbitEvent.emit(enabled);
   }
 

@@ -148,7 +148,7 @@ export class Planet extends THREE.Mesh {
     this.planet.add(atmos)
   }
 
-  public toggleOrbit(show: boolean) {
+  public toggleShowOrbit(show: boolean) {
     this.showOrbit = show
     if (show) {
       this.addOrbitPath()

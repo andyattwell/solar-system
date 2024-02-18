@@ -6,7 +6,7 @@ import { Player } from './Player'
 export class CharacterControls {
 
     model: THREE.Mesh
-    orbitControl: OrbitControls
+    orbitControl: OrbitControls|undefined
     camera: THREE.PerspectiveCamera
 
     // state
@@ -24,8 +24,10 @@ export class CharacterControls {
     runVelocity = 5
     walkVelocity = 2
 
-    constructor(model: THREE.Mesh,
-        orbitControl: OrbitControls, camera: THREE.PerspectiveCamera,
+    constructor(
+        model: THREE.Mesh,
+        orbitControl: OrbitControls|undefined,
+        camera: THREE.PerspectiveCamera,
         currentAction: string) {
         this.model = model
         this.currentAction = currentAction
@@ -91,16 +93,11 @@ export class CharacterControls {
         this.camera.position.z += moveZ
         // this.camera.position.y += moveY
         this.camera.position.y = 0.03
-        
-        console.log({
-          camPos: this.camera.position,
-          meshPos: this.model.position
-        })
-
         // update camera target
         this.cameraTarget.x = this.model.position.x
         this.cameraTarget.y = this.model.position.y
         this.cameraTarget.z = this.model.position.z
+        if (!this.orbitControl) return;
         this.orbitControl.target = this.cameraTarget
         this.orbitControl.update();
     }

@@ -16,7 +16,7 @@ export class Player {
   private parent:GameComponent;
   public camera!:THREE.PerspectiveCamera;
   private keysPressed:any = {}
-  private size: number = 0.005
+  public size: number = 0.005
 
   constructor(parent:GameComponent) {
     this.parent = parent  
@@ -39,7 +39,7 @@ export class Player {
     var material = new THREE.MeshNormalMaterial();
     this.mesh = new THREE.Mesh( geometry, material );
     this.mesh.position.set(75,0,5);
-    this.characterControls = new CharacterControls(this.mesh, this.parent.controls, this.camera, 'Idle')
+    this.characterControls = new CharacterControls(this.mesh, this.parent.cameraManager.controls, this.camera, 'Idle')
 
     const self = this;
     document.addEventListener('keydown', (event) => {

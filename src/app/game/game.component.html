@@ -6,7 +6,7 @@
         (selectEvent)="selectPlanet($event, true)"
 
         [showOrbit]="showOrbit"
-        (orbitShowEvent)="toggleOrbit($event)"
+        (orbitShowEvent)="toggleShowOrbit($event)"
 
         [followOrbit]="followOrbit"
         (orbitEvent)="toggleFollowOrbit($event)"
@@ -20,10 +20,11 @@
       <app-action-nav 
         (playEvent)="playGame()"
         (pauseEvent)="pauseGame()"
-        (cameraEvent)="changeCamera($event)"
+        (cameraEvent)="setCamera($event)"
         (timeEvent)="changeSpeed($event)"
         [timeScale]="timeScale"
         [playing]="isPlaying"
+        [selectedCamera]="selectedCamera"
       />
       <canvas #canvas id="canvas"></canvas>
     </mat-sidenav-content>
