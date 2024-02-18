@@ -2,12 +2,12 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { A, D, DIRECTIONS, S, W, E, Q } from '../../helpers'
 import { Player } from './Player'
+import { CameraManager } from './CameraManager'
 
 export class CharacterControls {
 
     model: THREE.Mesh
-    orbitControl: OrbitControls|undefined
-    camera: THREE.PerspectiveCamera
+    cameraManager?: CameraManager
 
     // state
     toggleRun: boolean = true
@@ -26,22 +26,31 @@ export class CharacterControls {
 
     constructor(
         model: THREE.Mesh,
-        orbitControl: OrbitControls|undefined,
-        camera: THREE.PerspectiveCamera,
+        cameraManager: CameraManager,
         currentAction: string) {
         this.model = model
         this.currentAction = currentAction
-        this.orbitControl = orbitControl
-        this.camera = camera
-        
-        // this.updateCameraTarget(this.model.position.x, this.model.position.z + 0.1)
+        this.cameraManager = cameraManager        
     }
 
     public switchRunToggle() {
         this.toggleRun = !this.toggleRun
     }
 
+    public rotateModel(target:any, directionOffset:number = Math.PI / 4) {
+        // calculate towards camera direction
+        var angleYCameraDirection = Math.atan2(
+            (target.position.x - this.model.position.x), 
+            (target.position.z - this.model.position.z)
+        )
+        
+        // rotate model
+        this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, angleYCameraDirection + directionOffset)
+        this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.1)
+    }
+
     public update(delta: number, keysPressed: any) {
+        if (!this.cameraManager) return;
         const directionPressed = DIRECTIONS.some(key => keysPressed[key] == true)
 
         if (directionPressed && this.toggleRun) {
@@ -53,19 +62,12 @@ export class CharacterControls {
         }
 
         if (this.currentAction == 'Run' || this.currentAction == 'Walk') {
-            // calculate towards camera direction
-            var angleYCameraDirection = Math.atan2(
-                    (this.camera.position.x - this.model.position.x), 
-                    (this.camera.position.z - this.model.position.z))
             // diagonal movement angle offset
             var directionOffset = this.directionOffset(keysPressed)
-            
-            // rotate model
-            this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, angleYCameraDirection + directionOffset)
-            // this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.2)
+            this.rotateModel(this.cameraManager.camera, directionOffset);
 
             // calculate direction
-            this.camera.getWorldDirection(this.walkDirection)
+            this.cameraManager.camera.getWorldDirection(this.walkDirection)
             this.walkDirection.y = 0
             this.walkDirection.normalize()
             this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset)
@@ -88,18 +90,18 @@ export class CharacterControls {
     }
 
     public updateCameraTarget(moveX: number, moveZ: number, moveY:number) {
+        if (!this.cameraManager?.controls) return;
         // move camera
-        this.camera.position.x += moveX
-        this.camera.position.z += moveZ
+        this.cameraManager.camera.position.x += moveX
+        this.cameraManager.camera.position.z += moveZ
         // this.camera.position.y += moveY
-        this.camera.position.y = 0.03
+        this.cameraManager.camera.position.y = 0.03
         // update camera target
         this.cameraTarget.x = this.model.position.x
         this.cameraTarget.y = this.model.position.y
         this.cameraTarget.z = this.model.position.z
-        if (!this.orbitControl) return;
-        this.orbitControl.target = this.cameraTarget
-        this.orbitControl.update();
+        this.cameraManager.controls.target = this.cameraTarget
+        this.cameraManager?.controls.update();
     }
 
     private directionOffset(keysPressed: any) {

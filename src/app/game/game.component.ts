@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import * as THREE from 'three';
 import PlanetsJson from "../../assets/data/planets.json"
 import { IOController } from "./IOController";

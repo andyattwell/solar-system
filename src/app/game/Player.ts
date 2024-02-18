@@ -1,18 +1,10 @@
 import * as THREE from 'three';
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GameComponent } from './game.component';
 import { CharacterControls } from './CharacterControl';
-
-interface PlayerPos {
-  x: number;
-  y: number;
-  z: number
-}
 
 export class Player {
   public characterControls!:CharacterControls;
   public mesh: THREE.Mesh = new THREE.Mesh();
-  private group: THREE.Group;
   private parent:GameComponent;
   public camera!:THREE.PerspectiveCamera;
   private keysPressed:any = {}
@@ -20,7 +12,6 @@ export class Player {
 
   constructor(parent:GameComponent) {
     this.parent = parent  
-    this.group = new THREE.Group();
     this.init();
   }
 
@@ -33,13 +24,13 @@ export class Player {
   }
 
   private init() {
-    this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 1000);
+    // this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 1000);
     
     var geometry = new THREE.BoxGeometry( this.size, this.size, this.size );
     var material = new THREE.MeshNormalMaterial();
     this.mesh = new THREE.Mesh( geometry, material );
     this.mesh.position.set(75,0,5);
-    this.characterControls = new CharacterControls(this.mesh, this.parent.cameraManager.controls, this.camera, 'Idle')
+    this.characterControls = new CharacterControls(this.mesh, this.parent.cameraManager, 'Idle')
 
     const self = this;
     document.addEventListener('keydown', (event) => {

@@ -1,6 +1,5 @@
-import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
+import { PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { Player } from './Player';
 import { Planet } from './Planet';
 import { GameComponent } from './game.component';
 
@@ -63,15 +62,18 @@ export class CameraManager {
   }
 
   public setPlayerCamera() {
-    this.parent.toggleShowOrbit(false);
 
     if (!this.parent.player) return;
 
-    this.controls?.dispose();
+    this.camera = new PerspectiveCamera();
+    this.camera.name = 'player'
+    this.camera.aspect = this.parent.canvas.clientWidth / this.parent.canvas.clientHeight
+    this.camera.near = 0.01;
+    this.camera.far = 1000;
+    this.camera.fov = 45;
 
-    this.camera = this.parent.player.camera;
+    this.controls?.dispose();
     // this.camera.position.set(this.player.mesh.position.x, this.player.mesh.position.y, this.player.mesh.position.z-0.2)
-    this.camera.name = 'player';
 
     this.controls = new OrbitControls(this.camera, this.parent.renderer.domElement);
     this.controls.enableDamping = true
@@ -82,7 +84,7 @@ export class CameraManager {
     this.controls.target = this.parent.player.mesh.position;
     this.controls.update();
 
-    // this.toggleShowOrbit(false);
+    this.parent.toggleShowOrbit(false);
 
   }
 
@@ -102,19 +104,18 @@ export class CameraManager {
       this.controls.update();
 
     } else if (this.camera.name === 'player') {
-
-      this.parent.player?.mesh.position.set(planetPos.x, planetPos.y, planetPos.z + planet.size * 2);
-
-      var angleYCameraDirection = Math.atan2(
-        (this.camera.position.x - planet.position.x), 
-        (this.camera.position.z - planet.position.z))
-
-      this.camera.rotateOnAxis( new Vector3( 0, 1, 0 ), angleYCameraDirection );
-
-      // this.activeCamera.lookAt(planetPos.x, planetPos.y, planetPos.z);
-
-      // this.activeCamera.rot
-      // this.player.characterControls.cameraTarget
+      if (!this.parent.player) return;
+      this.parent.player?.mesh.position.set(
+        planetPos.x - planet.size / 2,
+        planetPos.y + planet.size / 2,
+        planetPos.z + planet.size * 2
+      );
+      this.camera.position.set(
+        this.parent.player?.mesh.position.x,
+        this.parent.player?.mesh.position.y + 0.5,
+        this.parent.player?.mesh.position.z + 2,
+      )
+      this.camera.lookAt(planet.position)
       if (!this.controls) return;
       this.controls.update();
 
