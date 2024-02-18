@@ -15,7 +15,7 @@ export class IOController {
   init () {
     const self = this;
     window.addEventListener('resize', () => {
-      self.parent.setAspectRatio();
+      self.parent.cameraManager.setAspectRatio();
     })
     
     // window.addEventListener( 'wheel', function(e:any){
