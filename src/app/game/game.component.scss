@@ -23,6 +23,12 @@
     height: 100%; 
     width: 100%;
     z-index: 1;
+    transition: all 0.5s;
+    opacity: 1;
+
+    &.loading {
+      opacity: 0;
+    }
   }
 }
 app-action-nav {

@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { ActionNavComponent } from './action-nav/action-nav.component';
 import { PlanetDialogComponent } from './planet-dialog/planet-dialog.component';
+import { LoaderComponent } from './loader/loader.component';
 
 import { Planet } from "./Planet";
 import { Player } from './Player';
@@ -15,7 +16,12 @@ import PlanetsJson from "../../assets/data/planets.json"
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [MatSidenavModule, SidebarComponent, ActionNavComponent],
+  imports: [
+    MatSidenavModule, 
+    SidebarComponent, 
+    ActionNavComponent,
+    LoaderComponent
+  ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
@@ -37,6 +43,7 @@ export class GameComponent implements AfterViewInit {
   public planets: Array<Planet> = [];
   public timeScale: number = 1;
   public isPlaying: boolean = false;
+  public isLoading: boolean = true;
 
   private Controller: IOController = new IOController(this);
   private selectedPlanet!: Planet;
@@ -56,7 +63,10 @@ export class GameComponent implements AfterViewInit {
   }
   
   ngAfterViewInit(): void {
-    this.newGame();
+    this.isLoading = true;
+    setTimeout(() => {
+      this.newGame();
+    }, 500)
     this.cdRef.detectChanges(); 
   }
 
@@ -67,13 +77,13 @@ export class GameComponent implements AfterViewInit {
    * @memberof CubeComponent
    */
   private newGame() {
-    this.canvas.style.display = 'none';
     this.createScene();
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
       antialias: true
     });
+
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1;
 
@@ -91,7 +101,7 @@ export class GameComponent implements AfterViewInit {
     this.cameraManager.lookAtPlanet(this.planets[3]);
     this.playGame();
     setTimeout(() => {
-      this.canvas.style.display = 'block';
+      self.isLoading = false;
     },1000)
   }
 

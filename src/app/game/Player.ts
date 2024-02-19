@@ -47,17 +47,19 @@ export class Player {
     
     document.addEventListener('keydown', (event) => {
       if (!self.characterControls || self.parent.cameraManager.camera.name !== 'player') return;
-        if (event.shiftKey) {
-          self.characterControls.switchRunToggle()
-        } else if (event.ctrlKey) {
-          self.characterControls.switchHyperToggle()
-        } else {
-          (self.keysPressed as any)[event.key.toLowerCase()] = true
-        }
+      
+      if (event.shiftKey) {
+        self.characterControls.switchRunToggle()
+      } else if (event.ctrlKey) {
+        self.characterControls.switchHyperToggle()
+      } else {
+        (self.keysPressed as any)[event.key.toLowerCase()] = true
+      }
     }, false);
 
     document.addEventListener('keyup', (event) => {
       if (!self.characterControls || self.parent.cameraManager.camera.name !== 'player') return;
+      
       (self.keysPressed as any)[event.key.toLowerCase()] = false
     }, false);
 

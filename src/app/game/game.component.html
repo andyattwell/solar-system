@@ -1,6 +1,6 @@
 <div id="sidebar">
   <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav mode="side" opened>
+    <mat-sidenav mode="side" [opened]="!isLoading">
       <app-sidebar 
         [planets]="planets" 
         (selectEvent)="selectPlanet($event, true)"
@@ -17,16 +17,21 @@
         ></app-sidebar>
     </mat-sidenav>
     <mat-sidenav-content class="game-container">
-      <app-action-nav 
-        (playEvent)="playGame()"
-        (pauseEvent)="pauseGame()"
-        (cameraEvent)="setCamera($event)"
-        (timeEvent)="changeSpeed($event)"
-        [timeScale]="timeScale"
-        [playing]="isPlaying"
-        [selectedCamera]="selectedCamera"
-      />
-      <canvas #canvas id="canvas"></canvas>
+      <canvas #canvas id="canvas" [class.loading]="isLoading"></canvas>
+
+      @if(isLoading) {
+        <app-loader></app-loader>
+      } @else {
+        <app-action-nav 
+          (playEvent)="playGame()"
+          (pauseEvent)="pauseGame()"
+          (cameraEvent)="setCamera($event)"
+          (timeEvent)="changeSpeed($event)"
+          [timeScale]="timeScale"
+          [playing]="isPlaying"
+          [selectedCamera]="selectedCamera"
+        />
+      }
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
