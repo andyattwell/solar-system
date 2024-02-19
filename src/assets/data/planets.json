@@ -17,7 +17,7 @@
       "y": 0,
       "z": 0
     },
-    "rotationSpeed": 720
+    "rotationSpeed": 7.20
   },
   {
     "name": "Mercury",
@@ -38,7 +38,7 @@
       "y": 0,
       "z": 0
     },
-    "rotationSpeed": 1392
+    "rotationSpeed": 13.92
   },
   {
     "name": "Venus",
@@ -59,7 +59,7 @@
       "y": 0,
       "z": 0
     },
-    "rotationSpeed": 5832,
+    "rotationSpeed": 58.32,
     "rotationDir": true
   },
   {
@@ -108,7 +108,7 @@
     "name": "Jupiter",
     "size": 7,
     "mass": 1898,
-    "orbit": 140,
+    "orbit": 160,
     "orbitSpeed": 13.1,
     "texture": "/assets/textures/jupiter-texture.jpg",
     "icon": "/assets/icons/jupiter.jpg",
@@ -129,7 +129,7 @@
     "name": "Saturn",
     "size": 6,
     "mass": 568,
-    "orbit": 180,
+    "orbit": 280,
     "orbitSpeed": 9.69,
     "texture": "/assets/textures/saturn-texture.jpg",
     "icon": "/assets/icons/saturn.jpg",
@@ -155,7 +155,7 @@
     "name": "Uranus",
     "size": 3,
     "mass": 86.8,
-    "orbit": 200,
+    "orbit": 380,
     "orbitSpeed": 6.81,
     "texture": "/assets/textures/uranus-texture.jpg",
     "icon": "/assets/icons/uranus.jpg",
@@ -177,7 +177,7 @@
     "name": "Neptune",
     "size": 2.7,
     "mass": 102,
-    "orbit": 230,
+    "orbit": 480,
     "orbitSpeed": 5.43,
     "texture": "/assets/textures/neptune-texture.jpg",
     "icon": "/assets/icons/neptune.jpg",

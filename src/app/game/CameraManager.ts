@@ -8,9 +8,7 @@ export class CameraManager {
   public camera:THREE.PerspectiveCamera = new PerspectiveCamera();
   public controls?:OrbitControls;
 
-  constructor(
-    parent: GameComponent
-  ) {
+  constructor(parent: GameComponent) {
     this.parent = parent;
   }
 
@@ -19,23 +17,20 @@ export class CameraManager {
     this.camera = new PerspectiveCamera();
     this.camera.name = 'free'
     this.camera.aspect = this.parent.canvas.clientWidth / this.parent.canvas.clientHeight
-    this.camera.near = 1;
+    this.camera.near = 0.1;
     this.camera.far = 8000;
     this.camera.fov = 45;
+    this.camera.position.set(0, 100, 0);
 
     this.controls?.dispose();
-    
     this.controls = new OrbitControls(this.camera, this.parent.renderer.domElement);
     this.controls.enableZoom = true;
     this.controls.zoomToCursor = true;
     this.controls.enablePan = true;
     this.controls.enableRotate = true;
-    this.controls.maxDistance = 100000;
-    this.controls.minDistance = 0;
+    this.controls.maxDistance = 1700;
+    this.controls.minDistance = 1;
     this.controls.target = new Vector3(0, 0, 0);
-
-    this.camera.position.set(0, 100, 0);
-    // this.activeCamera.lookAt(0, 0, 0);
   }
 
   public setSystemCamera() {
@@ -44,15 +39,14 @@ export class CameraManager {
     this.camera.name = 'system'
     this.camera.aspect = this.parent.canvas.clientWidth / this.parent.canvas.clientHeight
     this.camera.near = 1;
-    this.camera.far = 80000;
+    this.camera.far = 8000;
     this.camera.fov = 10;
     
     this.controls?.dispose();
     this.controls = new OrbitControls(this.camera, this.parent.renderer.domElement);
     this.controls.enableZoom = true;
-    this.controls.maxDistance = 10000;
+    this.controls.maxDistance = 1700;
     this.controls.minDistance = 10;
-
     this.controls.enableRotate = false;
     this.controls.target = new Vector3(0, 0, 0);
     this.camera.position.set(0, 1000, 0);
@@ -68,19 +62,16 @@ export class CameraManager {
     this.camera = new PerspectiveCamera();
     this.camera.name = 'player'
     this.camera.aspect = this.parent.canvas.clientWidth / this.parent.canvas.clientHeight
-    this.camera.near = 0.01;
-    this.camera.far = 1000;
+    this.camera.near = 0.001;
+    this.camera.far = 8000;
     this.camera.fov = 45;
 
     this.controls?.dispose();
-    // this.camera.position.set(this.player.mesh.position.x, this.player.mesh.position.y, this.player.mesh.position.z-0.2)
-
     this.controls = new OrbitControls(this.camera, this.parent.renderer.domElement);
     this.controls.enableDamping = true
-    this.controls.minDistance = 0.02
-    this.controls.maxDistance = 0.1
+    this.controls.minDistance = 0.005
+    this.controls.maxDistance = 0.01
     this.controls.enablePan = false;
-    // this.controls.maxPolarAngle = Math.PI / 2 - 0.05
     this.controls.target = this.parent.player.mesh.position;
     this.controls.update();
 
@@ -105,10 +96,16 @@ export class CameraManager {
 
     } else if (this.camera.name === 'player') {
       if (!this.parent.player) return;
+      let xOffset = -planet.size;
+      let zOffset = planet.size * 2;
+      if (planet.name === 'Sun') {
+        xOffset = planet.size;
+        zOffset = 5;
+      }
       this.parent.player.mesh.position.set(
-        planetPos.x - planet.size / 2,
+        planetPos.x + xOffset,
         0,
-        planetPos.z + planet.size * 2
+        planetPos.z + zOffset
       );
       this.parent.player.mesh.rotateY(90)
       this.parent.player?.characterControls?.updateCameraTarget(planetPos.x, planetPos.z, 0);

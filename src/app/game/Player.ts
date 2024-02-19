@@ -9,13 +9,11 @@ export class Player {
   public characterControls!:CharacterControls;
   public mesh: THREE.Mesh = new THREE.Mesh();
   private parent:GameComponent;
-  public camera!:THREE.PerspectiveCamera;
   private keysPressed: any = {};
-  public size: number = 0.005;
+  public size: number = 0.001;
 
   constructor(parent:GameComponent) {
     this.parent = parent  
-    // this.init();
   }
 
   public get position() {
@@ -34,26 +32,13 @@ export class Player {
 
       const model = gltf.scene.children[0].children[0].children[0].children[0].children[0]
       model.rotateZ(90)
-      const scaleFactor = 0.005
-      model.scale.set(scaleFactor,scaleFactor,scaleFactor)
-
-      // self.mesh.position.set(75,0,5);
-      self.mesh.layers.set(1);
+      model.scale.set(self.size, self.size, self.size)
       self.mesh.add(model)
+      self.mesh.layers.set(1);
       await self.parent.renderer.compileAsync( self.mesh, self.parent.cameraManager.camera, self.parent.scene );
-
-      // const light_2 = new THREE.DirectionalLight(0xFFFFFF);
-      // light_2.position.set(0.1, 0.1, 0.1)
-      // light_2.intensity = 3
-      // light_2.castShadow = true;
-      // self.mesh.add(light_2)
-
+      
       self.parent.scene.add( self.mesh );
-
-
       self.characterControls = new CharacterControls(self.mesh, self.parent.cameraManager, 'Idle')
-
-    
     },
     function ( xhr ) { /*called while loading is progressing */ }, 
     function ( error ) {
@@ -61,15 +46,21 @@ export class Player {
     });
     
     document.addEventListener('keydown', (event) => {
-        if (event.shiftKey && self.characterControls) {
-            self.characterControls.switchRunToggle()
+      if (!self.characterControls || self.parent.cameraManager.camera.name !== 'player') return;
+        if (event.shiftKey) {
+          self.characterControls.switchRunToggle()
+        } else if (event.ctrlKey) {
+          self.characterControls.switchHyperToggle()
         } else {
-            (self.keysPressed as any)[event.key.toLowerCase()] = true
+          (self.keysPressed as any)[event.key.toLowerCase()] = true
         }
     }, false);
+
     document.addEventListener('keyup', (event) => {
-        (self.keysPressed as any)[event.key.toLowerCase()] = false
+      if (!self.characterControls || self.parent.cameraManager.camera.name !== 'player') return;
+      (self.keysPressed as any)[event.key.toLowerCase()] = false
     }, false);
+
   }
 
 

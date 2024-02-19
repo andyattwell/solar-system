@@ -74,12 +74,10 @@ export class Planet extends THREE.Mesh {
     )
 
     this.rotationDir = props.rotationDir || false;
-    this.rotationSpeed = 1 / props.rotationSpeed;
-    this.orbit = props.orbit !== 0 ? props.orbit : 0;
+    this.rotationSpeed = props.rotationSpeed / 60 / 60 / 10;
 
-    if (props.orbitSpeed) {
-      this.orbitSpeed = props.orbitSpeed * 0.001;
-    }
+    this.orbit = props.orbit !== 0 ? props.orbit : 0;
+    this.orbitSpeed = props.orbitSpeed ? props.orbitSpeed * 0.001 : 0;
 
     this.createPlanet();
     

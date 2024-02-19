@@ -49,11 +49,25 @@ export class GameComponent implements AfterViewInit {
 
   public cameraManager: CameraManager = new CameraManager(this);
   
+  private skybox: THREE.Mesh = new THREE.Mesh;
+  
   constructor(public dialog: MatDialog, private cdRef: ChangeDetectorRef) {
     this.createPlanets();
   }
   
   ngAfterViewInit(): void {
+    this.newGame();
+    this.cdRef.detectChanges(); 
+  }
+
+  /**
+   * Create the scene
+   * 
+   * @private
+   * @memberof CubeComponent
+   */
+  private newGame() {
+    this.canvas.style.display = 'none';
     this.createScene();
 
     this.renderer = new THREE.WebGLRenderer({
@@ -63,26 +77,24 @@ export class GameComponent implements AfterViewInit {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1;
 
-    this.cameraManager = new CameraManager(this)
+    this.cameraManager = new CameraManager(this);
     
-    // this.crateSkyBox();
-    
+    this.crateSkyBox();
     this.addPlanetsToScene();
     
     this.player = new Player(this)
 
     this.setCamera('player');
     this.player.init();
-    // this.cameraManager.lookAtPlanet(this.planets[3]);
     
     const self = this;
+    this.cameraManager.lookAtPlanet(this.planets[3]);
+    this.playGame();
     setTimeout(() => {
-      self.cameraManager.lookAtPlanet(this.planets[3]);
-      self.playGame();
+      this.canvas.style.display = 'block';
     },1000)
-
-    this.cdRef.detectChanges(); 
   }
+
   /**
    * Create the scene
    * 
@@ -96,27 +108,15 @@ export class GameComponent implements AfterViewInit {
 
 
   private crateSkyBox(): void {
-    const skyTexture = new THREE.TextureLoader().load("/assets/big-skybox-back.png");
-    skyTexture.wrapS = THREE.MirroredRepeatWrapping;
-    skyTexture.wrapT = THREE.MirroredRepeatWrapping;
-    skyTexture.repeat.set(64, 64);
-
-    const skyMat = new THREE.MeshBasicMaterial({
-      map: skyTexture, side: THREE.BackSide,
+    const skyTexture = new THREE.TextureLoader().load("/assets/textures/milky-way.jpg");
+    const material = new THREE.MeshPhongMaterial({ 
+      map: skyTexture,
+      side: THREE.BackSide
     });
-    const materialArray: Array<THREE.MeshBasicMaterial> = [
-      skyMat,
-      skyMat,
-      skyMat,
-      skyMat,
-      skyMat,
-      skyMat
-    ]
-    const boxSize = 5000;
-    let skyboxGeo = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
-    let skybox = new THREE.Mesh(skyboxGeo, materialArray);
-    skybox.name = "skybox";
-    this.scene.add(skybox);
+    const skyGeo = new THREE.SphereGeometry(600, 25, 25); 
+    this.skybox = new THREE.Mesh(skyGeo, material);
+    this.skybox.name = "skybox";
+    this.scene.add(this.skybox);
   }
 
 
