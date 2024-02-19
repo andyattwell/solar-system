@@ -65,7 +65,8 @@
     "mass": 5.97,
     "orbit": 1.00,
     "orbitSpeed": 2.98,
-    "texture": "/assets/textures/earth-texture.jpg",
+    "texture": "/assets/textures/worldColour.5400x2700.jpg",
+    "bump": "/assets/textures/earth_normalmap_2048x1024.jpg",
     "icon": "/assets/icons/earth.jpg",
     "color": {
       "r": 0.0,

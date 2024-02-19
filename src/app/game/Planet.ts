@@ -11,6 +11,7 @@ export interface PlanetProps {
   orbit: number;
   orbitSpeed?:number;
   texture: string;
+  bump?: string;
   icon: string;
   position: {
     x: number,
@@ -54,6 +55,7 @@ export class Planet extends THREE.Mesh {
   public followOrbit: boolean = false;
 
   private planetTexture: string;
+  private planetBump: string;
   public color: THREE.Vector3;
   public planetIcon: string;
 
@@ -65,7 +67,7 @@ export class Planet extends THREE.Mesh {
     this.mass = props.mass;
     this.planetIcon = props.icon;
     this.planetTexture = props.texture || '';
-    
+    this.planetBump = props.bump || '';
     this.color = new THREE.Vector3(
       props.color.r, props.color.g, props.color.b
     )
@@ -108,10 +110,14 @@ export class Planet extends THREE.Mesh {
       mat = new THREE.MeshBasicMaterial();
     } else {
       mat = new THREE.MeshLambertMaterial();
+      if (this.planetBump) {
+        const normalTexture = new THREE.TextureLoader().load(this.planetBump)
+        mat.normalMap = normalTexture
+        mat.normalScale.set(0.5, 0.5)
+      }
     }
 
     mat.map = this.loader.load(this.planetTexture)
-
     this.planet = new THREE.Mesh(planetGeo, mat);
     this.planet.name = "planet";
     this.add(this.planet);

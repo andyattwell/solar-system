@@ -17,7 +17,7 @@ export class CameraManager {
     this.camera = new PerspectiveCamera();
     this.camera.name = 'free'
     this.camera.aspect = this.parent.canvas.clientWidth / this.parent.canvas.clientHeight
-    this.camera.near = 0.1;
+    this.camera.near = 0.01;
     this.camera.far = 8000;
     this.camera.fov = 45;
     this.camera.position.set(0, 100, 0);
