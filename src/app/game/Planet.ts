@@ -18,12 +18,8 @@ export interface PlanetProps {
     y: number,
     z: number
   };
-  rotation: {
-    x: number,
-    y: number,
-    z: number,
-    dir?: boolean
-  };
+  rotationSpeed: number;
+  rotationDir?: boolean;
   ring?: {
     texture?: string,
     innerRadius: number,
@@ -50,7 +46,7 @@ export class Planet extends THREE.Mesh {
   public mass: number;
   public velocity: THREE.Vector2 = new THREE.Vector2(0, 0);
   public rotate: boolean = true;
-  public rotationSpeedY: number = 0.01;
+  public rotationSpeed: number = 0.01;
   public rotationDir: boolean = false;
   public angle: number = 0;
   public orbit: number = 0;
@@ -77,8 +73,8 @@ export class Planet extends THREE.Mesh {
       props.color.r, props.color.g, props.color.b
     )
 
-    this.rotationDir = props.rotation.dir || false;
-    this.rotationSpeedY = 1 / props.rotation.y;
+    this.rotationDir = props.rotationDir || false;
+    this.rotationSpeed = 1 / props.rotationSpeed;
     this.orbit = props.orbit !== 0 ? props.orbit : 0;
 
     if (props.orbitSpeed) {
@@ -210,19 +206,29 @@ export class Planet extends THREE.Mesh {
   }
 
   private addRings(props: any) {
-    let ringGeo = new THREE.RingGeometry(props.innerRadius + 0.1, props.outerRadius + 0.1, 20, 3, 0, Math.PI * 2);
-    
-    const mat = new THREE.ShaderMaterial({
-      fragmentShader: RingMaterial.fragmentShader,
-      vertexShader: RingMaterial.vertexShader,
-      blending: THREE.NormalBlending,
-      side: THREE.DoubleSide,
-      uniforms: {
-        ringTexture: {
-          value: new THREE.TextureLoader().load(props.texture),
-        }
-      }
-    });
+    let ringGeo = new THREE.RingGeometry(
+      props.innerRadius + 0.1,
+      props.outerRadius + 0.1, 
+      32, 
+      1, 
+      0, 
+      Math.PI * 2
+    );
+    const mat = new THREE.MeshLambertMaterial();
+    mat.map = this.loader.load(props.texture)
+    mat.side = THREE.DoubleSide;
+
+    // const mat = new THREE.ShaderMaterial({
+    //   fragmentShader: RingMaterial.fragmentShader,
+    //   vertexShader: RingMaterial.vertexShader,
+    //   blending: THREE.NormalBlending,
+    //   side: THREE.DoubleSide,
+    //   uniforms: {
+    //     ringTexture: {
+    //       value: new THREE.TextureLoader().load(props.texture),
+    //     }
+    //   }
+    // });
     this.ring = new THREE.Mesh(ringGeo, mat);
     this.ring.rotation.x =  Math.PI * 0.5 + 0.05
     this.ring.rotation.y = 0.05;
@@ -235,9 +241,9 @@ export class Planet extends THREE.Mesh {
 
     if (this.rotate) {
       if (this.rotationDir) {
-        this.planet.rotation.y -= this.rotationSpeedY * timeScale;
+        this.planet.rotation.y -= this.rotationSpeed * timeScale;
       } else {
-        this.planet.rotation.y += this.rotationSpeedY * timeScale;
+        this.planet.rotation.y += this.rotationSpeed * timeScale;
       }
     }
 

@@ -5,10 +5,8 @@ export const W = 'w'
 export const A = 'a'
 export const S = 's'
 export const D = 'd'
-export const Q = 'q'
-export const E = 'e'
 export const SHIFT = 'shift'
-export const DIRECTIONS = [W, A, S, D, Q, E]
+export const DIRECTIONS = [W, A, S, D]
 
 export function get2dPosition(object: THREE.Mesh, camera:THREE.Camera, width:number, height:number) {
   var widthHalf = width / 2, heightHalf = height / 2;

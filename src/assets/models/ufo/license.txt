@@ -1,0 +1,8 @@
+Model Information:
+* title:	UFO
+* source:	https://sketchfab.com/3d-models/ufo-ec394a37678a4bb39f386a4c34099bc2
+* author:	Tiko (https://sketchfab.com/tikoavp)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

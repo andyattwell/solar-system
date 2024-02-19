@@ -1,16 +1,17 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
-import * as THREE from 'three';
-import PlanetsJson from "../../assets/data/planets.json"
-import { IOController } from "./IOController";
-import { Planet } from "./Planet";
-import { SidebarComponent } from './sidebar/sidebar.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDialog } from '@angular/material/dialog';
+import * as THREE from 'three';
+import { SidebarComponent } from './sidebar/sidebar.component';
 import { ActionNavComponent } from './action-nav/action-nav.component';
 import { PlanetDialogComponent } from './planet-dialog/planet-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+
+import { Planet } from "./Planet";
 import { Player } from './Player';
+import { IOController } from "./IOController";
 import { CameraManager } from './CameraManager';
 
+import PlanetsJson from "../../assets/data/planets.json"
 @Component({
   selector: 'app-game',
   standalone: true,
@@ -59,6 +60,8 @@ export class GameComponent implements AfterViewInit {
       canvas: this.canvas,
       antialias: true
     });
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1;
 
     this.cameraManager = new CameraManager(this)
     
@@ -67,11 +70,16 @@ export class GameComponent implements AfterViewInit {
     this.addPlanetsToScene();
     
     this.player = new Player(this)
-    this.scene.add( this.player.mesh );
 
     this.setCamera('player');
-
-    this.playGame();
+    this.player.init();
+    // this.cameraManager.lookAtPlanet(this.planets[3]);
+    
+    const self = this;
+    setTimeout(() => {
+      self.cameraManager.lookAtPlanet(this.planets[3]);
+      self.playGame();
+    },1000)
 
     this.cdRef.detectChanges(); 
   }
@@ -126,6 +134,7 @@ export class GameComponent implements AfterViewInit {
     // if (this.selectedPlanet) {
     //   this.lookAtPlanet()
     // }
+    this.camera?.layers.set(0);
     if (!this.cameraManager.controls) return;
     this.cameraManager.controls.update()
   }
@@ -146,6 +155,7 @@ export class GameComponent implements AfterViewInit {
   private addPlanetsToScene() {
     const self = this;
     self.planets.forEach(planet => {
+      planet.layers.set(2);
       self.scene.add(planet);
     });
   }

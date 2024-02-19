@@ -17,11 +17,7 @@
       "y": 0,
       "z": 0
     },
-    "rotation": {
-      "x": 0,
-      "y": 720,
-      "z": 0
-    }
+    "rotationSpeed": 720
   },
   {
     "name": "Mercury",
@@ -42,11 +38,7 @@
       "y": 0,
       "z": 0
     },
-    "rotation": {
-      "x": 0,
-      "y": 1392,
-      "z": 0
-    }
+    "rotationSpeed": 1392
   },
   {
     "name": "Venus",
@@ -67,12 +59,8 @@
       "y": 0,
       "z": 0
     },
-    "rotation": {
-      "x": 0,
-      "y": 5832,
-      "z": 0,
-      "dir": true
-    }
+    "rotationSpeed": 5832,
+    "rotationDir": true
   },
   {
     "name": "Earth",
@@ -93,11 +81,7 @@
       "y": 0,
       "z": 0
     },
-    "rotation": {
-      "x": 0,
-      "y": 24,
-      "z": 0
-    }
+    "rotationSpeed": 24
   },
   {
     "name": "Mars",
@@ -118,11 +102,7 @@
       "y": 0,
       "z": 0
     },
-    "rotation": {
-      "x": 0,
-      "y": 24.5,
-      "z": 0
-    }
+    "rotationSpeed": 24.5
   },
   {
     "name": "Jupiter",
@@ -143,11 +123,7 @@
       "y": 0,
       "z": 0
     },
-    "rotation": {
-      "x": 0,
-      "y": 10,
-      "z": 0
-    }
+    "rotationSpeed": 10
   },
   {
     "name": "Saturn",
@@ -168,11 +144,7 @@
       "y": 0,
       "z": 0
     },
-    "rotation": {
-      "x": 0,
-      "y": 10.5,
-      "z": 0
-    },
+    "rotationSpeed": 10.5,
     "ring": {
       "texture": "/assets/textures/saturn-rings.png",
       "innerRadius": 6.6,
@@ -198,12 +170,8 @@
       "y": 0,
       "z": 0
     },
-    "rotation": {
-      "x": 0,
-      "y": 17,
-      "z": 0,
-      "dir": true
-    }
+    "rotationSpeed": 17,
+    "rotationDir": true
   },
   {
     "name": "Neptune",
@@ -224,10 +192,6 @@
       "y": 0,
       "z": 0
     },
-    "rotation": {
-      "x": 0,
-      "y": 16,
-      "z": 0
-    }
+    "rotationSpeed": 16
   }
 ]

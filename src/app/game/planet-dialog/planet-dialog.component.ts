@@ -43,11 +43,11 @@ export class PlanetDialogComponent {
   }
 
   public get rotation () {
-    return (this.data.rotationSpeedY * 1000).toFixed(2)
+    return (this.data.rotationSpeed * 1000).toFixed(2)
   }
 
   public set rotation(speed:any) {
-    this.data.rotationSpeedY = speed * 0.005
+    this.data.rotationSpeed = speed * 0.005
   }
 
   public get rotationDir () {

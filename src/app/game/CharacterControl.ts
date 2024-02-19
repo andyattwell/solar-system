@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { A, D, DIRECTIONS, S, W, E, Q } from '../../helpers'
+import { A, D, DIRECTIONS, S, W } from '../../helpers'
 import { Player } from './Player'
 import { CameraManager } from './CameraManager'
 
@@ -45,18 +45,33 @@ export class CharacterControls {
         )
         
         // rotate model
-        this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, angleYCameraDirection + directionOffset)
+        this.rotateQuarternion.setFromAxisAngle(
+            this.rotateAngle, 
+            angleYCameraDirection + directionOffset
+        )
         this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.1)
+        // this.model.rotateX(90)
     }
 
     public update(delta: number, keysPressed: any) {
         if (!this.cameraManager) return;
         const directionPressed = DIRECTIONS.some(key => keysPressed[key] == true)
+        console.log(keysPressed)
 
         if (directionPressed && this.toggleRun) {
           this.currentAction = 'Run'
         } else if (directionPressed) {
           this.currentAction = 'Walk'
+        } else if (keysPressed.e) {
+            this.model.position.y += 0.01
+            this.updateCameraTarget(0, 0, 0.01)
+
+            // this.currentAction = 'Walk'
+        } else if (keysPressed.q) {
+            this.model.position.y -= 0.01
+            this.updateCameraTarget(0, 0, 0.01)
+
+            // this.currentAction = 'Walk'
         } else {
           this.currentAction = 'Idle'
         }
@@ -68,7 +83,7 @@ export class CharacterControls {
 
             // calculate direction
             this.cameraManager.camera.getWorldDirection(this.walkDirection)
-            this.walkDirection.y = 0
+            // this.walkDirection.y = 0
             this.walkDirection.normalize()
             this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset)
 
@@ -95,10 +110,10 @@ export class CharacterControls {
         this.cameraManager.camera.position.x += moveX
         this.cameraManager.camera.position.z += moveZ
         // this.camera.position.y += moveY
-        this.cameraManager.camera.position.y = 0.03
+        // this.cameraManager.camera.position.y = 0.03
         // update camera target
         this.cameraTarget.x = this.model.position.x
-        this.cameraTarget.y = this.model.position.y
+        // this.cameraTarget.y = this.model.position.y
         this.cameraTarget.z = this.model.position.z
         this.cameraManager.controls.target = this.cameraTarget
         this.cameraManager?.controls.update();

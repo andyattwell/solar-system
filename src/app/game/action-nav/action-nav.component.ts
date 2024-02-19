@@ -62,7 +62,6 @@ export class ActionNavComponent {
 
   rewindGame() {
     let tS = this.timeScale;
-    console.log({tS})
     if (tS === 0) {
       tS = -1;
     } else if (tS === 1) {

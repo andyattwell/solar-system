@@ -77,7 +77,7 @@ export class CameraManager {
 
     this.controls = new OrbitControls(this.camera, this.parent.renderer.domElement);
     this.controls.enableDamping = true
-    this.controls.minDistance = 0.01
+    this.controls.minDistance = 0.02
     this.controls.maxDistance = 0.1
     this.controls.enablePan = false;
     // this.controls.maxPolarAngle = Math.PI / 2 - 0.05
@@ -105,15 +105,17 @@ export class CameraManager {
 
     } else if (this.camera.name === 'player') {
       if (!this.parent.player) return;
-      this.parent.player?.mesh.position.set(
+      this.parent.player.mesh.position.set(
         planetPos.x - planet.size / 2,
-        planetPos.y + planet.size / 2,
+        0,
         planetPos.z + planet.size * 2
       );
+      this.parent.player.mesh.rotateY(90)
+      this.parent.player?.characterControls?.updateCameraTarget(planetPos.x, planetPos.z, 0);
       this.camera.position.set(
         this.parent.player?.mesh.position.x,
-        this.parent.player?.mesh.position.y + 0.5,
-        this.parent.player?.mesh.position.z + 2,
+        this.parent.player?.mesh.position.y + 0.005,
+        this.parent.player?.mesh.position.z + 0.02,
       )
       this.camera.lookAt(planet.position)
       if (!this.controls) return;
