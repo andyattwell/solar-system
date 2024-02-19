@@ -23,7 +23,7 @@
     "size": 0.03,
     "mass": 0.330,
     "orbit": 0.39,
-    "orbitSpeed": 47.9,
+    "orbitSpeed": 4.79,
     "texture": "/assets/textures/mercury-texture.png",
     "icon": "/assets/icons/mercury.jpg",
     "color": {
@@ -43,7 +43,7 @@
     "size": 0.07,
     "mass": 108.2,
     "orbit": 0.72,
-    "orbitSpeed": 35.0,
+    "orbitSpeed": 3.50,
     "texture": "/assets/textures/venus-texture.jpg",
     "icon": "/assets/icons/venus.jpg",
     "color": {
@@ -64,7 +64,7 @@
     "size": 0.1,
     "mass": 5.97,
     "orbit": 1.00,
-    "orbitSpeed": 29.8,
+    "orbitSpeed": 2.98,
     "texture": "/assets/textures/earth-texture.jpg",
     "icon": "/assets/icons/earth.jpg",
     "color": {
@@ -84,7 +84,7 @@
     "size": 0.09,
     "mass": 0.642,
     "orbit": 1.52,
-    "orbitSpeed": 24.0,
+    "orbitSpeed": 2.40,
     "texture": "/assets/textures/mars-texture.jpg",
     "icon": "/assets/icons/mars.png",
     "color": {
@@ -104,7 +104,7 @@
     "size": 0.7,
     "mass": 1898,
     "orbit": 3.0,
-    "orbitSpeed": 13.1,
+    "orbitSpeed": 1.31,
     "texture": "/assets/textures/jupiter-texture.jpg",
     "icon": "/assets/icons/jupiter.jpg",
     "color": {
@@ -124,7 +124,7 @@
     "size": 0.6,
     "mass": 568,
     "orbit": 6.54,
-    "orbitSpeed": 9.69,
+    "orbitSpeed": 0.969,
     "texture": "/assets/textures/saturn-texture.jpg",
     "icon": "/assets/icons/saturn.jpg",
     "color": {
@@ -149,7 +149,7 @@
     "size": 0.3,
     "mass": 86.8,
     "orbit": 10,
-    "orbitSpeed": 6.81,
+    "orbitSpeed": 0.681,
     "texture": "/assets/textures/uranus-texture.jpg",
     "icon": "/assets/icons/uranus.jpg",
     "color": {
@@ -170,7 +170,7 @@
     "size": 0.27,
     "mass": 102,
     "orbit": 15,
-    "orbitSpeed": 5.43,
+    "orbitSpeed": 0.543,
     "texture": "/assets/textures/neptune-texture.jpg",
     "icon": "/assets/icons/neptune.jpg",
     "color": {
@@ -190,7 +190,7 @@
     "size": 0.005,
     "mass": 30,
     "orbit": 20,
-    "orbitSpeed": 4.74,
+    "orbitSpeed": 0.574,
     "texture": "/assets/textures/pluto-texture.jpg",
     "icon": "/assets/icons/pluto.jpg",
     "color": {

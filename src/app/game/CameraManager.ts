@@ -29,7 +29,7 @@ export class CameraManager {
     this.controls.enablePan = true;
     this.controls.enableRotate = true;
     this.controls.maxDistance = 1700;
-    this.controls.minDistance = 1;
+    this.controls.minDistance = 0.1;
     this.controls.target = new Vector3(0, 0, 0);
   }
 
@@ -38,15 +38,15 @@ export class CameraManager {
     this.camera = new PerspectiveCamera();
     this.camera.name = 'system'
     this.camera.aspect = this.parent.canvas.clientWidth / this.parent.canvas.clientHeight
-    this.camera.near = 1;
+    this.camera.near = 0.1;
     this.camera.far = 8000;
     this.camera.fov = 10;
     
     this.controls?.dispose();
     this.controls = new OrbitControls(this.camera, this.parent.renderer.domElement);
     this.controls.enableZoom = true;
-    this.controls.maxDistance = 1700;
-    this.controls.minDistance = 10;
+    this.controls.maxDistance = 170;
+    this.controls.minDistance = 0.1;
     this.controls.enableRotate = false;
     this.controls.target = new Vector3(0, 0, 0);
     this.camera.position.set(0, 1000, 0);
