@@ -1,69 +1,33 @@
 <div>
-  <!-- <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav mode="side" [opened]="!isLoading">
-      <app-sidebar 
-        [planets]="planets" 
-        (selectEvent)="selectPlanet($event, true)"
-
-        [showOrbit]="showOrbit"
-        (orbitShowEvent)="toggleShowOrbit($event)"
-
-        [followOrbit]="followOrbit"
-        (orbitEvent)="toggleFollowOrbit($event)"
-
-        [rotationEnabled]="rotationEnabled"
-        (rotationEvent)="toggleRotation($event)"
-
-        ></app-sidebar>
-    </mat-sidenav>
-    <mat-sidenav-content class="game-container">
-      <canvas #canvas id="canvas" [class.loading]="isLoading"></canvas>
-
-      @if(isLoading) {
-        <app-loader></app-loader>
-      } @else {
-        <app-action-nav 
-          (playEvent)="playGame()"
-          (pauseEvent)="pauseGame()"
-          (cameraEvent)="setCamera($event)"
-          (timeEvent)="changeSpeed($event)"
-          [timeScale]="timeScale"
-          [playing]="isPlaying"
-          [selectedCamera]="selectedCamera"
-        />
-      }
-    </mat-sidenav-content>
-  </mat-sidenav-container> -->
   <div class="game-container">
-    <canvas #canvas id="canvas" [class.loading]="isLoading"></canvas>
-
     @if(isLoading) {
       <app-loader></app-loader>
-    } @else {
-      <app-action-nav 
-        (playEvent)="playGame()"
-        (pauseEvent)="pauseGame()"
-        (cameraEvent)="setCamera($event)"
-        (timeEvent)="changeSpeed($event)"
-        [timeScale]="timeScale"
-        [playing]="isPlaying"
-        [selectedCamera]="selectedCamera"
-      />
     }
+    <canvas #canvas id="canvas" [class.loading]="isLoading"></canvas>
+    <app-action-nav 
+      (playEvent)="playGame()"
+      (pauseEvent)="pauseGame()"
+      (cameraEvent)="setCamera($event)"
+      (timeEvent)="changeSpeed($event)"
+      [timeScale]="timeScale"
+      [playing]="isPlaying"
+      [selectedCamera]="selectedCamera"
+      [style.opacity]="!isLoading ? 1 : 0 "
+    />
+    <app-sidebar 
+      id="sidebar"
+      [style.opacity]="!isLoading ? 1 : 0 "
+      [planets]="planets" 
+      (selectEvent)="selectPlanet($event, true)"
+
+      [showOrbit]="showOrbit"
+      (orbitShowEvent)="toggleShowOrbit()"
+
+      [followOrbit]="followOrbit"
+      (orbitEvent)="toggleFollowOrbit()"
+
+      [rotationEnabled]="rotationEnabled"
+      (rotationEvent)="toggleRotation()"
+    ></app-sidebar>
   </div>
-  <app-sidebar 
-    id="sidebar"
-    [planets]="planets" 
-    (selectEvent)="selectPlanet($event, true)"
-
-    [showOrbit]="showOrbit"
-    (orbitShowEvent)="toggleShowOrbit()"
-
-    [followOrbit]="followOrbit"
-    (orbitEvent)="toggleFollowOrbit()"
-
-    [rotationEnabled]="rotationEnabled"
-    (rotationEvent)="toggleRotation()"
-
-  ></app-sidebar>
 </div>
