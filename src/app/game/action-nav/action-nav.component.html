@@ -1,34 +1,50 @@
 <div>
-  <button mat-mini-fab aria-label="Fast rewind" (click)="rewindGame()" [color]="timeScale < 0 ? 'primary' : ''">
+  <button 
+    mat-mini-fab aria-label="Rewind" 
+    title="Rewind"
+    (click)="rewindGame()" 
+    [color]="timeScale < 0 ? 'primary' : ''"
+  >
     <mat-icon>fast_rewind</mat-icon>
   </button>
-  <button mat-mini-fab aria-label="Pause" (click)="pause()" [color]="!playing ? 'primary' : ''">
+
+  <button 
+    mat-mini-fab aria-label="Pause" 
+    title="Pause"
+    (click)="pause()" 
+    [color]="!playing ? 'primary' : ''"
+  >
     <mat-icon>pause</mat-icon>
   </button>
+  
   <button aria-label="Time scale" disabled class="time-scale">
     <span>{{ timeScale }}</span>
   </button>
 
-  <button mat-mini-fab aria-label="Play" (click)="play()" [color]="playing ? 'primary' : ''">
+  <button 
+    mat-mini-fab aria-label="Play"
+    title="Play"
+    (click)="play()" [color]="playing ? 'primary' : ''"
+  >
     <mat-icon>play_arrow</mat-icon>
   </button>
-  <button mat-mini-fab aria-label="Fast forward" (click)="fastForward()" [color]="timeScale > 1 ? 'primary' : ''">
+
+  <button 
+    mat-mini-fab 
+    aria-label="Fast forward" 
+    title="Fast forward" 
+    (click)="fastForward()" 
+    [color]="timeScale > 1 ? 'primary' : ''"
+  >
     <mat-icon>fast_forward</mat-icon>
   </button>
+
   <div class="camera-selector">
-    <!-- <button mat-mini-fab aria-label="System view" (click)="changeCamera('system')" [color]="selectedCamera === 'system' ? 'primary' : ''">
-      <mat-icon>my_location</mat-icon>
-    </button>
-    <button mat-mini-fab aria-label="Free roam" (click)="changeCamera('free')" [color]="selectedCamera === 'free' ? 'primary' : ''">
-      <mat-icon>view_in_ar</mat-icon>
-    </button>
-    <button mat-mini-fab aria-label="Third person" (click)="changeCamera('player')" [color]="selectedCamera === 'player' ? 'primary' : ''">
-      <mat-icon>person</mat-icon>
-    </button> -->
     @for(camera of cameras; track camera.name) {
       <button 
         mat-mini-fab 
-        aria-label="Third person" 
+        aria-label="Camera view"
+        [title]="camera.label"
         (click)="changeCamera(camera.name)" 
         [color]="isSelected(camera.name)"
       >

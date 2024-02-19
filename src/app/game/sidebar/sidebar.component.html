@@ -1,10 +1,10 @@
-<mat-action-list>
+<mat-action-list class="planets-menu">
   <a mat-list-item 
     class="planet-li"
     (click)="selectPlanet($event)" 
-    [href]="'#'">
-    <i matListItemIcon [style.background-image]="'url(../assets/icons/solar-system.jpg)'"></i>
-    <span matListItemTitle>System</span>
+    [href]="'#'"
+    [style.background-image]="'url(../assets/icons/solar-system.jpg)'"
+    >
   </a>
   @if(planets && planets.length) {
     @for (planet of planets; track planet) {
@@ -12,31 +12,49 @@
         class="planet-li" 
         [class]="{active: selectedOpt === planet.name }"
         (click)="selectPlanet($event, planet)" 
-        [href]="'#'+planet.name">
-        <i matListItemIcon [style.background-image]="'url(' + planet.planetIcon + ')'"></i>
-        <span matListItemTitle>{{ planet.name }}</span>
+        [href]="'#'+planet.name"
+        [title]="planet.name"
+        [style.background-image]="'url(' + planet.planetIcon + ')'"
+        >
       </a>
     }
-    <mat-list-item>
-      <mat-checkbox
-        [checked]="rotationEnabled"
-        (change)="toggleRotation($event.checked)"
-      >Rotate: 
-      </mat-checkbox>
-    </mat-list-item>
-    <mat-list-item>
-      <mat-checkbox
-        [checked]="followOrbit"
-        (change)="toggleFollowOrbit($event.checked)"
-      >Follow Orbit: 
-      </mat-checkbox>
-    </mat-list-item>
-    <mat-list-item>
-      <mat-checkbox
-        [checked]="showOrbit"
-        (change)="toggleShowOrbit($event.checked)"
-      >Show orbit: 
-      </mat-checkbox>
-    </mat-list-item>
+
+    <div class="planets-confg">
+      <mat-list-item class="planets-opt">
+        <button 
+          mat-mini-fab 
+          aria-label="Toggle planet rotation"
+          title="Toggle planet rotation"
+          (click)="toggleRotation()" 
+          [color]="rotationEnabled ? 'primary' : ''"
+        >
+          <mat-icon> public </mat-icon>
+        </button>
+      </mat-list-item>
+  
+      <mat-list-item class="planets-opt">
+        <button 
+          mat-mini-fab 
+          aria-label="Toggle planet rotation"
+          title="Toggle planet orbit"
+          (click)="toggleFollowOrbit()" 
+          [color]="followOrbit ? 'primary' : ''"
+        >
+          <mat-icon> settings_backup_restore </mat-icon>
+        </button>
+      </mat-list-item>
+  
+      <mat-list-item class="planets-opt">
+        <button 
+          mat-mini-fab 
+          aria-label="Toggle show orbit path"
+          title="Show orbit"
+          (click)="toggleShowOrbit()" 
+          [color]="showOrbit ? 'primary' : ''"
+        >
+          <mat-icon>trip_origin</mat-icon>
+        </button>
+      </mat-list-item>
+    </div>
   }
 </mat-action-list>

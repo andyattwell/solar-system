@@ -232,24 +232,24 @@ export class GameComponent implements AfterViewInit {
     // dialogRef.afterClosed().subscribe(result => {});
 
   }
-  public toggleShowOrbit(show:boolean): void {
-    this.showOrbit = show;
+  public toggleShowOrbit(showOrbit?:boolean): void {
+    this.showOrbit = showOrbit ? showOrbit : !this.showOrbit;
     this.planets.forEach(p => {
-      p.toggleShowOrbit(show);
+      p.toggleShowOrbit(this.showOrbit);
     });
   }
 
-  public toggleFollowOrbit(follow:boolean): void {
-    this.followOrbit = follow;
+  public toggleFollowOrbit(): void {
+    this.followOrbit = !this.followOrbit;
     this.planets.forEach(p => {
-      p.followOrbit = follow
+      p.followOrbit = this.followOrbit
     })
   }
 
-  public toggleRotation(rotate:boolean): void {
-    this.rotationEnabled = rotate
+  public toggleRotation(): void {
+    this.rotationEnabled = !this.rotationEnabled;
     this.planets.forEach(p => {
-      p.rotate = rotate
+      p.rotate = this.rotationEnabled
     })
   }
 

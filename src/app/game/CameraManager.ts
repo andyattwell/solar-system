@@ -52,7 +52,8 @@ export class CameraManager {
     this.camera.position.set(0, 1000, 0);
     this.camera.lookAt(0, 0, 0);
 
-    this.parent.toggleShowOrbit(true);
+    this.parent.showOrbit = false;
+    this.parent.toggleShowOrbit();
   }
 
   public setPlayerCamera() {
@@ -75,7 +76,8 @@ export class CameraManager {
     this.controls.target = this.parent.player.mesh.position;
     this.controls.update();
 
-    this.parent.toggleShowOrbit(false);
+    this.parent.showOrbit = true;
+    this.parent.toggleShowOrbit();
 
   }
 

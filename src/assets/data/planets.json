@@ -90,7 +90,7 @@
     "orbit": 100,
     "orbitSpeed": 24.0,
     "texture": "/assets/textures/mars-texture.jpg",
-    "icon": "/assets/icons/mars.jpg",
+    "icon": "/assets/icons/mars.png",
     "lightIntesity": 0.2,
     "color": {
       "r": 0.2,

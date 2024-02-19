@@ -3,10 +3,12 @@ import { Planet } from "../Planet";
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [MatListModule, MatButtonModule, MatCheckboxModule],
+  imports: [MatListModule, MatButtonModule, MatCheckboxModule, MatIconModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
@@ -29,15 +31,15 @@ export class SidebarComponent {
     this.selectedOpt = planet?.name || ''
   }
 
-  toggleFollowOrbit(enabled: boolean) {
-    this.orbitEvent.emit(enabled);
+  toggleFollowOrbit() {
+    this.orbitEvent.emit();
   }
 
-  toggleRotation(enabled: boolean) {
-    this.rotationEvent.emit(enabled);
+  toggleRotation() {
+    this.rotationEvent.emit();
   }
 
-  toggleShowOrbit(enabled: boolean) {
-    this.orbitShowEvent.emit(enabled);
+  toggleShowOrbit() {
+    this.orbitShowEvent.emit();
   }
 }
