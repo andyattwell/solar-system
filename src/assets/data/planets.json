@@ -1,12 +1,11 @@
 [
   {
     "name": "Sun",
-    "size": 20.391400,
+    "size": 2.0391400,
     "mass": 1987687,
     "orbit": 0,
     "texture": "/assets/textures/sun-texture.jpg",
     "icon": "/assets/icons/sun.jpg",
-    "lightIntesity": 1,
     "color": {
       "r": 0.8,
       "g": 0.4,
@@ -21,13 +20,12 @@
   },
   {
     "name": "Mercury",
-    "size": 0.3,
+    "size": 0.03,
     "mass": 0.330,
-    "orbit": 40,
+    "orbit": 0.39,
     "orbitSpeed": 47.9,
     "texture": "/assets/textures/mercury-texture.png",
     "icon": "/assets/icons/mercury.jpg",
-    "lightIntesity": 1,
     "color": {
       "r": 0.2,
       "g": 0.2,
@@ -42,13 +40,12 @@
   },
   {
     "name": "Venus",
-    "size": 0.7,
+    "size": 0.07,
     "mass": 108.2,
-    "orbit": 50,
+    "orbit": 0.72,
     "orbitSpeed": 35.0,
     "texture": "/assets/textures/venus-texture.jpg",
     "icon": "/assets/icons/venus.jpg",
-    "lightIntesity": 0.5,
     "color": {
       "r": 0.2,
       "g": 0.1,
@@ -64,13 +61,12 @@
   },
   {
     "name": "Earth",
-    "size": 1,
+    "size": 0.1,
     "mass": 5.97,
-    "orbit": 75,
+    "orbit": 1.00,
     "orbitSpeed": 29.8,
     "texture": "/assets/textures/earth-texture.jpg",
     "icon": "/assets/icons/earth.jpg",
-    "lightIntesity": 0.3,
     "color": {
       "r": 0.0,
       "g": 0.1,
@@ -85,13 +81,12 @@
   },
   {
     "name": "Mars",
-    "size": 0.9,
+    "size": 0.09,
     "mass": 0.642,
-    "orbit": 100,
+    "orbit": 1.52,
     "orbitSpeed": 24.0,
     "texture": "/assets/textures/mars-texture.jpg",
     "icon": "/assets/icons/mars.png",
-    "lightIntesity": 0.2,
     "color": {
       "r": 0.2,
       "g": 0.1,
@@ -106,13 +101,12 @@
   },
   {
     "name": "Jupiter",
-    "size": 7,
+    "size": 0.7,
     "mass": 1898,
-    "orbit": 160,
+    "orbit": 3.0,
     "orbitSpeed": 13.1,
     "texture": "/assets/textures/jupiter-texture.jpg",
     "icon": "/assets/icons/jupiter.jpg",
-    "lightIntesity": 0.1,
     "color": {
       "r": 0.1,
       "g": 0.1,
@@ -127,13 +121,12 @@
   },
   {
     "name": "Saturn",
-    "size": 6,
+    "size": 0.6,
     "mass": 568,
-    "orbit": 280,
+    "orbit": 6.54,
     "orbitSpeed": 9.69,
     "texture": "/assets/textures/saturn-texture.jpg",
     "icon": "/assets/icons/saturn.jpg",
-    "lightIntesity": 0.08,
     "color": {
       "r": 0.1,
       "g": 0.1,
@@ -147,19 +140,18 @@
     "rotationSpeed": 10.5,
     "ring": {
       "texture": "/assets/textures/saturn-rings.png",
-      "innerRadius": 6.6,
-      "outerRadius": 12
+      "innerRadius": 0.66,
+      "outerRadius": 1.2
     }
   },
   {
     "name": "Uranus",
-    "size": 3,
+    "size": 0.3,
     "mass": 86.8,
-    "orbit": 380,
+    "orbit": 10,
     "orbitSpeed": 6.81,
     "texture": "/assets/textures/uranus-texture.jpg",
     "icon": "/assets/icons/uranus.jpg",
-    "lightIntesity": 0.07,
     "color": {
       "r": 0.0,
       "g": 0.1,
@@ -175,13 +167,32 @@
   },
   {
     "name": "Neptune",
-    "size": 2.7,
+    "size": 0.27,
     "mass": 102,
-    "orbit": 480,
+    "orbit": 15,
     "orbitSpeed": 5.43,
     "texture": "/assets/textures/neptune-texture.jpg",
     "icon": "/assets/icons/neptune.jpg",
-    "lightIntesity": 0.06,
+    "color": {
+      "r": 0.0,
+      "g": 0.1,
+      "b": 0.2
+    },
+    "position": {
+      "x": 5837.8,
+      "y": 0,
+      "z": 0
+    },
+    "rotationSpeed": 16
+  },
+  {
+    "name": "Pluto",
+    "size": 0.005,
+    "mass": 30,
+    "orbit": 20,
+    "orbitSpeed": 4.74,
+    "texture": "/assets/textures/pluto-texture.jpg",
+    "icon": "/assets/icons/pluto.jpg",
     "color": {
       "r": 0.0,
       "g": 0.1,

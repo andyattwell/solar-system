@@ -119,7 +119,7 @@ export class GameComponent implements AfterViewInit {
 
   private crateSkyBox(): void {
     const skyTexture = new THREE.TextureLoader().load("/assets/textures/milky-way-2.jpg");
-    const material = new THREE.MeshPhongMaterial({ 
+    const material = new THREE.MeshBasicMaterial({ 
       map: skyTexture,
       side: THREE.BackSide
     });

@@ -12,7 +12,6 @@ export interface PlanetProps {
   orbitSpeed?:number;
   texture: string;
   icon: string;
-  lightIntesity: number;
   position: {
     x: number,
     y: number,
@@ -53,7 +52,6 @@ export class Planet extends THREE.Mesh {
   public orbitSpeed: number = 0;
   public showOrbit: boolean = false;
   public followOrbit: boolean = false;
-  public lightIntesity: number = 0.3;
 
   private planetTexture: string;
   public color: THREE.Vector3;
@@ -67,7 +65,6 @@ export class Planet extends THREE.Mesh {
     this.mass = props.mass;
     this.planetIcon = props.icon;
     this.planetTexture = props.texture || '';
-    this.lightIntesity = props.lightIntesity;
     
     this.color = new THREE.Vector3(
       props.color.r, props.color.g, props.color.b
@@ -76,7 +73,7 @@ export class Planet extends THREE.Mesh {
     this.rotationDir = props.rotationDir || false;
     this.rotationSpeed = props.rotationSpeed / 60 / 60 / 10;
 
-    this.orbit = props.orbit !== 0 ? props.orbit : 0;
+    this.orbit = props.orbit !== 0 ? props.orbit * 10 + 15 : 0;
     this.orbitSpeed = props.orbitSpeed ? props.orbitSpeed * 0.001 : 0;
 
     this.createPlanet();
@@ -199,7 +196,7 @@ export class Planet extends THREE.Mesh {
 
   private addLight() {
     var light = new THREE.PointLight(0x404040, 10000, 800000);
-    light.intensity = 500000;
+    light.intensity = 50000;
     this.add(light);
   }
 

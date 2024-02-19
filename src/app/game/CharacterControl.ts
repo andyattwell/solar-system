@@ -22,7 +22,7 @@ export class CharacterControls {
   fadeDuration: number = 0.2
   runVelocity = 1
   HyperVelocity = 10
-  walkVelocity = 0.2
+  walkVelocity = 0.05
 
   constructor(
     model: THREE.Mesh,
@@ -67,14 +67,6 @@ export class CharacterControls {
       this.currentAction = 'Hyper'
     } else if (directionPressed) {
       this.currentAction = 'Walk'
-    } else if (keysPressed.e) {
-      this.model.position.y += 0.01
-      this.updateCameraTarget(0, 0, 0.01)
-      // this.currentAction = 'Walk'
-    } else if (keysPressed.q) {
-      this.model.position.y -= 0.01
-      this.updateCameraTarget(0, 0, 0.01)
-      // this.currentAction = 'Walk'
     } else {
       this.currentAction = 'Idle'
     }
