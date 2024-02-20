@@ -11,11 +11,6 @@
       "g": 0.4,
       "b": 0.1
     },
-    "position": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
     "rotationSpeed": 7.20
   },
   {
@@ -31,11 +26,6 @@
       "g": 0.2,
       "b": 0.1
     },
-    "position": {
-      "x": 230,
-      "y": 0,
-      "z": 0
-    },
     "rotationSpeed": 13.92
   },
   {
@@ -50,11 +40,6 @@
       "r": 0.2,
       "g": 0.1,
       "b": 0.0
-    },
-    "position": {
-      "x": 159.2,
-      "y": 0,
-      "z": 0
     },
     "rotationSpeed": 58.32,
     "rotationDir": true
@@ -73,11 +58,6 @@
       "g": 0.1,
       "b": 0.2
     },
-    "position": {
-      "x": 237.9,
-      "y": 0,
-      "z": 0
-    },
     "rotationSpeed": 24
   },
   {
@@ -92,11 +72,6 @@
       "r": 0.2,
       "g": 0.1,
       "b": 0.0
-    },
-    "position": {
-      "x": 788.6,
-      "y": 0,
-      "z": 0
     },
     "rotationSpeed": 24.5
   },
@@ -113,11 +88,6 @@
       "g": 0.1,
       "b": 0.0
     },
-    "position": {
-      "x": 1453.5,
-      "y": 0,
-      "z": 0
-    },
     "rotationSpeed": 10
   },
   {
@@ -132,11 +102,6 @@
       "r": 0.1,
       "g": 0.1,
       "b": 0.0
-    },
-    "position": {
-      "x": 2882.5,
-      "y": 0,
-      "z": 0
     },
     "rotationSpeed": 10.5,
     "ring": {
@@ -158,11 +123,6 @@
       "g": 0.1,
       "b": 0.1
     },
-    "position": {
-      "x": 4505.1,
-      "y": 0,
-      "z": 0
-    },
     "rotationSpeed": 17,
     "rotationDir": true
   },
@@ -179,11 +139,6 @@
       "g": 0.1,
       "b": 0.2
     },
-    "position": {
-      "x": 5837.8,
-      "y": 0,
-      "z": 0
-    },
     "rotationSpeed": 16
   },
   {
@@ -191,18 +146,13 @@
     "size": 0.005,
     "mass": 30,
     "orbit": 20,
-    "orbitSpeed": 0.574,
+    "orbitSpeed": 0.174,
     "texture": "/assets/textures/pluto-texture.jpg",
     "icon": "/assets/icons/pluto.jpg",
     "color": {
       "r": 0.0,
       "g": 0.1,
       "b": 0.2
-    },
-    "position": {
-      "x": 5837.8,
-      "y": 0,
-      "z": 0
     },
     "rotationSpeed": 16
   }

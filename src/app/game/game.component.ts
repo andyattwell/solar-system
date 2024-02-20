@@ -34,7 +34,6 @@ export class GameComponent implements AfterViewInit {
     return this.canvasRef?.nativeElement;
   }
 
-  public camera!: THREE.PerspectiveCamera;
   public freeCamera!: THREE.PerspectiveCamera;
   public activeCamera!: THREE.PerspectiveCamera;
   public selectedCamera: string = '';
@@ -141,10 +140,11 @@ export class GameComponent implements AfterViewInit {
       planet.animate(this.planets[0], this.timeScale);
     });
     this.player?.animate(this.clock.getDelta(), this.Controller.keysPressed);
-    // if (this.selectedPlanet) {
-    //   this.lookAtPlanet()
-    // }
-    this.camera?.layers.set(0);
+    
+    if (this.cameraManager.camera.name === 'system' &&this.selectedPlanet) {
+      this.cameraManager.lookAtPlanet(this.selectedPlanet)
+    }
+
     if (!this.cameraManager.controls) return;
     this.cameraManager.controls.update()
   }

@@ -79,9 +79,10 @@ export class CharacterControls {
 
       // calculate direction
       this.cameraManager.camera.getWorldDirection(this.walkDirection)
-      // this.walkDirection.y = 0
+
       this.walkDirection.normalize()
       this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset)
+
       // run/walk velocity
       let velocity = this.walkVelocity;
       if (this.currentAction === 'Run') {
@@ -95,7 +96,7 @@ export class CharacterControls {
       const moveZ = this.walkDirection.z * velocity * delta
       let moveY = 0
 
-      if (this.walkDirection.y <= -0.3 || this.walkDirection.y >= 0.3) {
+      if (this.walkDirection.y <= -0.2 || this.walkDirection.y >= 0.05) {
         moveY = this.walkDirection.y * velocity * delta
       }
 

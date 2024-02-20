@@ -13,11 +13,6 @@ export interface PlanetProps {
   texture: string;
   bump?: string;
   icon: string;
-  position: {
-    x: number,
-    y: number,
-    z: number
-  };
   rotationSpeed: number;
   rotationDir?: boolean;
   ring?: {
@@ -164,7 +159,7 @@ export class Planet extends THREE.Mesh {
     let orbitPathGeo = new THREE.RingGeometry(
       this.orbit - this.size / 2, 
       this.orbit + this.size / 2,
-      120, 
+      240, 
       3, 
       0, 
       Math.PI * 2
@@ -179,7 +174,7 @@ export class Planet extends THREE.Mesh {
 
     this.orbitPath = new THREE.Mesh(orbitPathGeo, mat);
     this.orbitPath.rotation.x =  Math.PI * 0.5;
-    this.orbitPath.position.y = - this.size - 0.2;
+    this.orbitPath.position.y = - this.size - 0.001;
     this.orbitPath.name = "orbitPath";
     this.orbitPath.geometry;
     this.add(this.orbitPath);

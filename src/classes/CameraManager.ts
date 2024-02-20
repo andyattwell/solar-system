@@ -124,7 +124,7 @@ export class CameraManager {
       // this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
       this.camera.position.setX(planetPos.x);
       this.camera.position.setZ(planetPos.z);
-      this.camera.position.setY(planetPos.y + planet.size * 24);
+      // this.camera.position.setY(planetPos.y + planet.size * 24);
       this.camera.lookAt(planetPos.x, planetPos.y, planetPos.z);
       if (!this.controls) return;
       this.controls.target = new Vector3(planetPos.x, planetPos.y, planetPos.z);
