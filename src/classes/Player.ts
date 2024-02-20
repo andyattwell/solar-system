@@ -9,7 +9,7 @@ export class Player {
   public characterControls!:CharacterControls;
   public mesh: THREE.Mesh = new THREE.Mesh();
   private parent:GameComponent;
-  private keysPressed: any = {};
+  
   public size: number = 0.001;
 
   constructor(parent:GameComponent) {
@@ -45,28 +45,11 @@ export class Player {
       console.error( error );
     });
     
-    document.addEventListener('keydown', (event) => {
-      if (!self.characterControls || self.parent.cameraManager.camera.name !== 'player') return;
-      
-      if (event.shiftKey) {
-        self.characterControls.switchRunToggle()
-      } else if (event.ctrlKey) {
-        self.characterControls.switchHyperToggle()
-      } else {
-        (self.keysPressed as any)[event.key.toLowerCase()] = true
-      }
-    }, false);
-
-    document.addEventListener('keyup', (event) => {
-      if (!self.characterControls || self.parent.cameraManager.camera.name !== 'player') return;
-      
-      (self.keysPressed as any)[event.key.toLowerCase()] = false
-    }, false);
 
   }
 
 
-  public animate(updateDelta:number) {
-    this.characterControls?.update(updateDelta, this.keysPressed);
+  public animate(updateDelta:number, keysPressed:any) {
+    this.characterControls?.update(updateDelta, keysPressed);
   }
 }

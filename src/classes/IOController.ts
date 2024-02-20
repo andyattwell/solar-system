@@ -6,6 +6,7 @@ export class IOController {
   private hovered:any = {};
   private raycaster:THREE.Raycaster = new THREE.Raycaster();
   private mouse:THREE.Vector2 = new THREE.Vector2();
+  public keysPressed: any = {};
 
   constructor(parent:any) {
     this.parent = parent
@@ -28,6 +29,25 @@ export class IOController {
     window.addEventListener("pointermove", (e) => {
       self.mouseMoveHandler(e)
     });
+
+    
+    window.addEventListener('keydown', (event) => {
+      if (!self.parent.player.characterControls || self.parent.cameraManager.camera.name !== 'player') return;
+      
+      if (event.shiftKey) {
+        self.parent.player.characterControls.switchRunToggle()
+      } else if (event.ctrlKey) {
+        self.parent.player.characterControls.switchHyperToggle()
+      } else {
+        (self.keysPressed as any)[event.key.toLowerCase()] = true
+      }
+    }, false);
+
+    window.addEventListener('keyup', (event) => {
+      if (!self.parent.player.characterControls || self.parent.cameraManager.camera.name !== 'player') return;
+      
+      (self.keysPressed as any)[event.key.toLowerCase()] = false
+    }, false);
   }
 
   mouseMoveHandler(e:MouseEvent):void {

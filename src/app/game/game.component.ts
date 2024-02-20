@@ -140,7 +140,7 @@ export class GameComponent implements AfterViewInit {
     this.planets.forEach(planet => {
       planet.animate(this.planets[0], this.timeScale);
     });
-    this.player?.animate(this.clock.getDelta());
+    this.player?.animate(this.clock.getDelta(), this.Controller.keysPressed);
     // if (this.selectedPlanet) {
     //   this.lookAtPlanet()
     // }
