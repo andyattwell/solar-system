@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { A, D, DIRECTIONS, S, W } from '../../helpers'
+import { A, D, DIRECTIONS, S, W } from '../helpers'
 import { CameraManager } from './CameraManager'
 
 export class CharacterControls {

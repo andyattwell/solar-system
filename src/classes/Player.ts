@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GameComponent } from './game.component';
+import { GameComponent } from '../app/game/game.component';
 import { CharacterControls } from './CharacterControl';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 

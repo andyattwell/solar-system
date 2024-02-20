@@ -1,5 +1,5 @@
 import { Component, Input, Output, AfterViewInit, EventEmitter, Inject } from '@angular/core';
-import { Planet } from "../Planet";
+import { Planet } from "../../../classes/Planet";
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';

@@ -1,8 +1,8 @@
 import * as THREE from 'three';
-import PlanetMaterial from '../../shaders/PlanetMaterial';
-import AtmosMaterial from '../../shaders/AtmosMaterial';
-import OrbitMaterial from '../../shaders/OrbitMaterial';
-import RingMaterial from '../../shaders/RingMaterial';
+import PlanetMaterial from '../shaders/PlanetMaterial';
+import AtmosMaterial from '../shaders/AtmosMaterial';
+import OrbitMaterial from '../shaders/OrbitMaterial';
+import RingMaterial from '../shaders/RingMaterial';
 
 export interface PlanetProps {
   name: string;

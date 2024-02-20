@@ -1,7 +1,7 @@
 import { PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Planet } from './Planet';
-import { GameComponent } from './game.component';
+import { GameComponent } from '../app/game/game.component';
 
 export class CameraManager {
   private parent:GameComponent;

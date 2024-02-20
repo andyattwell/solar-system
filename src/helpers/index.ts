@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Planet } from '../app/game/Planet';
+import { Planet } from '../classes/Planet';
 
 export const W = 'w'
 export const A = 'a'

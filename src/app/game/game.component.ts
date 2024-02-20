@@ -7,10 +7,10 @@ import { ActionNavComponent } from './action-nav/action-nav.component';
 import { PlanetDialogComponent } from './planet-dialog/planet-dialog.component';
 import { LoaderComponent } from './loader/loader.component';
 
-import { Planet } from "./Planet";
-import { Player } from './Player';
-import { IOController } from "./IOController";
-import { CameraManager } from './CameraManager';
+import { Planet } from "../../classes/Planet";
+import { Player } from '../../classes/Player';
+import { IOController } from "../../classes/IOController";
+import { CameraManager } from '../../classes/CameraManager';
 
 import PlanetsJson from "../../assets/data/planets.json"
 @Component({

@@ -10,7 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatSliderModule } from '@angular/material/slider';
 import { CdkDrag } from '@angular/cdk/drag-drop';
-import { Planet } from '../Planet';
+import { Planet } from '../../../classes/Planet';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @Component({
