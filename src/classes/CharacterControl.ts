@@ -45,13 +45,16 @@ export class CharacterControls {
   public update(delta: number, keysPressed: any) {
     if (!this.cameraManager) return;
     const directionPressed = DIRECTIONS.some(key => keysPressed[key] == true)
+    // console.log(keysPressed)
 
-    if (directionPressed && this.toggleRun) {
-      this.currentAction = 'Run'
-    } else if (directionPressed && this.toggleHyper) {
-      this.currentAction = 'Hyper'
-    } else if (directionPressed) {
-      this.currentAction = 'Walk'
+    if (directionPressed) {
+      if (keysPressed.control) {
+        this.currentAction = 'Hyper'
+      } else if (this.toggleRun) {
+        this.currentAction = 'Run'
+      } else {
+        this.currentAction = 'Walk'
+      } 
     } else {
       this.currentAction = 'Idle'
     }

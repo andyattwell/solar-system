@@ -22,6 +22,7 @@ export class IOController {
     window.addEventListener('click', (e) => {
       self.clickHandler(e);
     })
+    
     window.addEventListener('dblclick', (e) => {
       self.doubleClickHandler(e);
     })
@@ -32,22 +33,27 @@ export class IOController {
 
     
     window.addEventListener('keydown', (event) => {
-      if (!self.parent.player.characterControls || self.parent.cameraManager.camera.name !== 'player') return;
-      
-      if (event.shiftKey) {
-        self.parent.player.characterControls.switchRunToggle()
-      } else if (event.ctrlKey) {
-        self.parent.player.characterControls.switchHyperToggle()
-      } else {
-        (self.keysPressed as any)[event.key.toLowerCase()] = true
+      if (self.parent.cameraManager.camera.name === 'player') {
+        self.playerMovementHandler(event);
       }
+
     }, false);
 
     window.addEventListener('keyup', (event) => {
-      if (!self.parent.player.characterControls || self.parent.cameraManager.camera.name !== 'player') return;
-      
-      (self.keysPressed as any)[event.key.toLowerCase()] = false
+      if (self.parent.cameraManager.camera.name === 'player') {
+        if (!self.parent.player.characterControls) { return; }
+        (self.keysPressed as any)[event.key.toLowerCase()] = false
+      }
     }, false);
+  }
+
+  private playerMovementHandler(event:any) {
+    if (!this.parent.player.characterControls) return;
+    if (event.shiftKey) {
+      this.parent.player.characterControls.switchRunToggle()
+    } else {
+      (this.keysPressed as any)[event.key.toLowerCase()] = true
+    }
   }
 
   mouseMoveHandler(e:MouseEvent):void {
