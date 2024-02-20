@@ -82,18 +82,26 @@ export class CameraManager {
   }
 
   public lookAtPlanet(planet: Planet): void {
-    const planetPos = planet.planet.position;
-    
+    let planetPosX = planet.planet.position.x;
+    let planetPosY = planet.planet.position.y;
+    let planetPosZ = planet.planet.position.z;
+
+    if (planet.orbitCenter) {
+      planetPosX += planet.orbitCenter.planet.position.x;
+      planetPosY += planet.orbitCenter.planet.position.y;
+      planetPosZ += planet.orbitCenter.planet.position.z;
+    }
+
     if (this.camera.name === 'free') {
       
       this.camera.position.set(
-        planetPos.x - (planet.size * 3),
-        planetPos.y + planet.size * 2,
-        planetPos.z + (planet.size * 3)
+        planetPosX - (planet.size * 3),
+        planetPosY + planet.size * 2,
+        planetPosZ + (planet.size * 3)
       );
-      this.camera.lookAt(planetPos.x, planetPos.y, planetPos.z);
+      this.camera.lookAt(planetPosX, planetPosY, planetPosZ);
       if (!this.controls) return;
-      this.controls.target = new Vector3(planetPos.x, planetPos.y, planetPos.z);
+      this.controls.target = new Vector3(planetPosX, planetPosY, planetPosZ);
       this.controls.update();
 
     } else if (this.camera.name === 'player') {
@@ -105,12 +113,12 @@ export class CameraManager {
         zOffset = 5;
       }
       this.parent.player.mesh.position.set(
-        planetPos.x + xOffset,
+        planetPosX + xOffset,
         0,
-        planetPos.z + zOffset
+        planetPosZ + zOffset
       );
       this.parent.player.mesh.rotateY(90)
-      this.parent.player?.characterControls?.updateCameraTarget(planetPos.x, planetPos.z, 0);
+      this.parent.player?.characterControls?.updateCameraTarget(planetPosX, planetPosZ, 0);
       this.camera.position.set(
         this.parent.player?.mesh.position.x,
         this.parent.player?.mesh.position.y + 0.005,
@@ -122,12 +130,12 @@ export class CameraManager {
 
     } else if (this.camera.name === 'system') {
       // this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
-      this.camera.position.setX(planetPos.x);
-      this.camera.position.setZ(planetPos.z);
+      this.camera.position.setX(planetPosX);
+      this.camera.position.setZ(planetPosZ);
       // this.camera.position.setY(planetPos.y + planet.size * 24);
-      this.camera.lookAt(planetPos.x, planetPos.y, planetPos.z);
+      this.camera.lookAt(planetPosX, planetPosY, planetPosZ);
       if (!this.controls) return;
-      this.controls.target = new Vector3(planetPos.x, planetPos.y, planetPos.z);
+      this.controls.target = new Vector3(planetPosX, planetPosY, planetPosZ);
       this.controls.update();
 
     }

@@ -44,7 +44,7 @@ export class GameComponent implements AfterViewInit {
   public isPlaying: boolean = false;
   public isLoading: boolean = true;
 
-  private Controller: IOController = new IOController(this);
+  private Controller: IOController;
   private selectedPlanet!: Planet;
   public player:Player|null = null;
   private clock:THREE.Clock = new THREE.Clock();
@@ -59,6 +59,7 @@ export class GameComponent implements AfterViewInit {
   
   constructor(public dialog: MatDialog, private cdRef: ChangeDetectorRef) {
     this.createPlanets();
+    this.Controller = new IOController(this);
   }
   
   ngAfterViewInit(): void {
@@ -137,7 +138,7 @@ export class GameComponent implements AfterViewInit {
    */
   private animateScene() {
     this.planets.forEach(planet => {
-      planet.animate(this.planets[0], this.timeScale);
+      planet.animate(this.timeScale);
     });
     this.player?.animate(this.clock.getDelta(), this.Controller.keysPressed);
     
@@ -151,9 +152,13 @@ export class GameComponent implements AfterViewInit {
 
   private createPlanets() {
     const self = this;
+    let sun:Planet;
     PlanetsJson.forEach(props => {
       try {
-        let planet = new Planet(props);
+        let planet = new Planet(props, sun);
+        if (props.name === 'Sun'){
+          sun = planet;
+        }
         self.planets.push(planet);
       } catch (error) {
         console.log({ error, props })
@@ -240,9 +245,16 @@ export class GameComponent implements AfterViewInit {
   }
 
   public toggleFollowOrbit(): void {
+    const self = this;
     this.followOrbit = !this.followOrbit;
-    this.planets.forEach(p => {
-      p.followOrbit = this.followOrbit
+    this.planets.forEach((_planet:Planet) => {
+      _planet.followOrbit = self.followOrbit
+      
+      if (_planet.moons?.length) {
+        _planet.moons.forEach((_moon:Planet) => {
+          _moon.followOrbit = self.followOrbit
+        })
+      }
     })
   }
 

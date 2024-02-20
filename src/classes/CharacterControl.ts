@@ -45,7 +45,6 @@ export class CharacterControls {
   public update(delta: number, keysPressed: any) {
     if (!this.cameraManager) return;
     const directionPressed = DIRECTIONS.some(key => keysPressed[key] == true)
-    // console.log(keysPressed)
 
     if (directionPressed) {
       if (keysPressed.control) {

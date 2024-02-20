@@ -81,7 +81,6 @@ export class ActionNavComponent {
   }
 
   isSelected(cameraName: string) {
-    // console.log('isSelected', cameraName, this.selectedCamera)
     return this.selectedCamera === cameraName ? 'primary' : ''
   }
 }

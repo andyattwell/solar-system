@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { Planet } from './Planet';
 
 export class IOController {
   public parent:any;
@@ -7,9 +8,18 @@ export class IOController {
   private raycaster:THREE.Raycaster = new THREE.Raycaster();
   private mouse:THREE.Vector2 = new THREE.Vector2();
   public keysPressed: any = {};
+  private planets: Array<any> = [];
 
   constructor(parent:any) {
     this.parent = parent
+    const self = this;
+    this.parent.planets.forEach((_planet:any) => {
+      self.planets.push(_planet.planet)
+      _planet?.moons?.forEach((_moon: Planet) => {
+        self.planets.push(_moon.planet)
+      });
+    });
+
     this.init();
   }
 
@@ -67,12 +77,8 @@ export class IOController {
     
     this.mouse.set(x, y)
     this.raycaster.setFromCamera(this.mouse, this.parent.activeCamera)
-    let planets = this.parent.planets.map((p:any) => {
-      return p.planet
-    })
+    this.intersects = this.raycaster.intersectObjects(this.planets, true)
 
-    this.intersects = this.raycaster.intersectObjects(planets, true)
-    
     if (this.intersects.length > 0) {
       this.hovered = this.intersects[0].object
     } else {
