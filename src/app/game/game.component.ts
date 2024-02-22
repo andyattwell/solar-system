@@ -239,12 +239,11 @@ export class GameComponent implements AfterViewInit {
 
   public changeSpeed(speed: number) {
     this.timeScale = speed;
-    if (speed === 0) {
-      this.pauseGame();
-    } else {
-      this.playGame();
-      this.timeScale = speed;
-    }
+    // if (speed === 0) {
+    //   this.pauseGame();
+    // } else {
+    //   this.playGame();
+    // }
   }
 
 

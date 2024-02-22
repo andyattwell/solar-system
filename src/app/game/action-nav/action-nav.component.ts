@@ -22,6 +22,10 @@ export class ActionNavComponent {
   @Output() forwardEvent = new EventEmitter<any>();
   @Output() rewindEvent = new EventEmitter<any>();
 
+  steps = [-100 , -10, -1, -0.1, 0, 0.1, 1, 10, 100];
+  currentStepIndex = 6;
+  currentStep = this.steps[this.currentStepIndex]
+
   cameras: Array<any> = [{
     name: 'system',
     label: 'System view',
@@ -45,35 +49,19 @@ export class ActionNavComponent {
   }
 
   fastForward() {
-    let tS = this.timeScale;
-    if (tS === 0) {
-      tS = 1;
-    } else if (tS === -1) {
-      tS = 0;
-    } else if (tS === -10) {
-      tS = -1;
-    } else if (tS > 0 && tS < 10) {
-      tS = 10;
-    } else {
-      tS += 10
+    if (this.currentStepIndex < this.steps.length - 1) {
+      this.currentStepIndex++;
+      this.currentStep = this.steps[this.currentStepIndex];
+      this.timeEvent.emit(this.currentStep);
     }
-    this.timeEvent.emit(tS);
   }
 
   rewindGame() {
-    let tS = this.timeScale;
-    if (tS === 0) {
-      tS = -1;
-    } else if (tS === 1) {
-      tS = 0;
-    } else if (tS === 10) {
-      tS = 1;
-    } else if (tS < 0 && tS > -10) {
-      tS = -10;
-    } else {
-      tS -= 10
+    if (this.currentStepIndex > 0) {
+      this.currentStepIndex--;
+      this.currentStep = this.steps[this.currentStepIndex];
+      this.timeEvent.emit(this.currentStep);
     }
-    this.timeEvent.emit(tS);
   }
 
   changeCamera(cameraType: string) {
