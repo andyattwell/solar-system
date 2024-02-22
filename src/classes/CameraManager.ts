@@ -39,13 +39,13 @@ export class CameraManager {
     this.camera.name = 'system'
     this.camera.aspect = this.parent.canvas.clientWidth / this.parent.canvas.clientHeight
     this.camera.near = 0.1;
-    this.camera.far = 8000;
-    this.camera.fov = 10;
+    this.camera.far = 10000;
+    this.camera.fov = 5;
     
     this.controls?.dispose();
     this.controls = new OrbitControls(this.camera, this.parent.renderer.domElement);
     this.controls.enableZoom = true;
-    this.controls.maxDistance = 170;
+    this.controls.maxDistance = 2000;
     this.controls.minDistance = 0.1;
     this.controls.enableRotate = false;
     this.controls.target = new Vector3(0, 0, 0);
@@ -129,10 +129,8 @@ export class CameraManager {
       this.controls.update();
 
     } else if (this.camera.name === 'system') {
-      // this.camera.position.set(this.cameraX, this.cameraY, this.cameraZ);
       this.camera.position.setX(planetPosX);
       this.camera.position.setZ(planetPosZ);
-      // this.camera.position.setY(planetPos.y + planet.size * 24);
       this.camera.lookAt(planetPosX, planetPosY, planetPosZ);
       if (!this.controls) return;
       this.controls.target = new Vector3(planetPosX, planetPosY, planetPosZ);

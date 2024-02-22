@@ -143,7 +143,7 @@ export class GameComponent implements AfterViewInit {
     });
     this.player?.animate(this.clock.getDelta(), this.Controller.keysPressed);
     
-    if (this.cameraManager.camera.name === 'system' &&this.selectedPlanet) {
+    if (this.cameraManager.camera.name === 'system' && this.selectedPlanet) {
       this.cameraManager.lookAtPlanet(this.selectedPlanet)
     }
 
