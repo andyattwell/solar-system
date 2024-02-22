@@ -27,7 +27,6 @@ export class SidebarComponent {
 
   selectPlanet(event:MouseEvent, planet?: Planet) {
     event.preventDefault();
-    console.log({planet})
     this.selectEvent.emit(planet);
     this.selectedOpt = planet?.name || ''
   }

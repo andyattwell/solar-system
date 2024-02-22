@@ -36,11 +36,11 @@ export interface PlanetProps {
   }
 }
 
-export class Planet {
+export class Planet extends THREE.Object3D {
   private loader = new THREE.TextureLoader();
   private orbitPath!:THREE.Mesh;
   private ring!:THREE.Mesh;
-  public name: string = '';
+  // public name: string = '';
   public container:THREE.Object3D = new THREE.Object3D();
   public planet:THREE.Mesh = new THREE.Mesh();
   public size: number;
@@ -64,6 +64,7 @@ export class Planet {
   public moons?: Array<Planet>;
 
   constructor(props: PlanetProps, orbitCenter: THREE.Object3D) {
+    super();
 
     this.orbitCenter = orbitCenter;
     
@@ -124,7 +125,8 @@ export class Planet {
     }
 
     this.addAtmosphere();
-    this.container.add(this.planet);
+    this.add(this.planet);
+    this.container.add(this);
     this.orbitCenter.add(this.container);
   }
 

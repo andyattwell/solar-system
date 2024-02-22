@@ -13,13 +13,12 @@ export class IOController {
   constructor(parent:any) {
     this.parent = parent
     const self = this;
-    this.parent.planets.forEach((_planet:any) => {
+    this.parent.starSystem.planets.forEach((_planet:any) => {
       self.planets.push(_planet)
       _planet?.moons?.forEach((_moon: Planet) => {
         self.planets.push(_moon)
       });
     });
-
     this.init();
   }
 
