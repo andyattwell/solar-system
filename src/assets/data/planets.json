@@ -92,7 +92,7 @@
           "size": 0.05,
           "orbit": 6,
           "orbitSpeed": 4,
-          "rotationSpeed": 2,
+          "rotationSpeed": 10,
           "texture": "/assets/textures/phobos-texture.jpg",
           "color": {
             "r": 0.6,
@@ -110,7 +110,7 @@
           "size": 0.03,
           "orbit": 3,
           "orbitSpeed": 10,
-          "rotationSpeed": 2,
+          "rotationSpeed": 15,
           "texture": "/assets/textures/deimos-texture.jpg",
           "color": {
             "r": 0.74,

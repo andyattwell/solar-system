@@ -8,22 +8,23 @@ export class IOController {
   private raycaster:THREE.Raycaster = new THREE.Raycaster();
   private mouse:THREE.Vector2 = new THREE.Vector2();
   public keysPressed: any = {};
-  private planets: Array<any> = [];
+  private targets: Array<any> = [];
 
   constructor(parent:any) {
-    this.parent = parent
-    const self = this;
-    this.parent.starSystem.planets.forEach((_planet:any) => {
-      self.planets.push(_planet)
-      _planet?.moons?.forEach((_moon: Planet) => {
-        self.planets.push(_moon)
-      });
-    });
+    this.parent = parent;
     this.init();
   }
 
   init () {
     const self = this;
+    
+    this.parent.planets.forEach((_planet:any) => {
+      self.targets.push(_planet)
+      _planet?.moons?.forEach((_moon: Planet) => {
+        self.targets.push(_moon)
+      });
+    });
+    
     window.addEventListener('resize', () => {
       self.parent.cameraManager.setAspectRatio();
     })
@@ -76,7 +77,7 @@ export class IOController {
     
     this.mouse.set(x, y)
     this.raycaster.setFromCamera(this.mouse, this.parent.activeCamera)
-    this.intersects = this.raycaster.intersectObjects(this.planets, true)
+    this.intersects = this.raycaster.intersectObjects(this.targets, true)
 
     if (this.intersects.length > 0) {
       this.hovered = this.intersects[0].object

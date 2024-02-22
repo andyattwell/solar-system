@@ -53,8 +53,8 @@ export class GameComponent implements AfterViewInit {
   private clock:THREE.Clock = new THREE.Clock();
 
   public starSystem = new System(SystemData);
-  
-  public planets: Array<Planet> = [];
+  // public planets: Array<Planet> = [];
+
   public followOrbit: boolean = false;
   public rotationEnabled: boolean = true;
 
@@ -62,6 +62,10 @@ export class GameComponent implements AfterViewInit {
   
   constructor(public dialog: MatDialog, private cdRef: ChangeDetectorRef) {
     this.Controller = new IOController(this);
+  }
+
+  public get planets () {
+    return [this.starSystem.star].concat(this.starSystem.planets);
   }
 
   public get showOrbit () {
@@ -98,7 +102,8 @@ export class GameComponent implements AfterViewInit {
     this.renderer.toneMappingExposure = 1;
 
     this.cameraManager = new CameraManager(this);
-    this.planets = this.starSystem.planets;
+    // this.planets = this.planets.concat(this.starSystem.planets);
+    // console.log(this.planets)
     
     this.starSystem.startScene(this.scene);
     
