@@ -12,7 +12,9 @@ import { Player } from '../../classes/Player';
 import { IOController } from "../../classes/IOController";
 import { CameraManager } from '../../classes/CameraManager';
 
-import PlanetsJson from "../../assets/data/planets.json"
+import SystemData from "../../assets/data/planets.json";
+import { System } from '../../classes/StarSystem';
+
 @Component({
   selector: 'app-game',
   standalone: true,
@@ -39,7 +41,8 @@ export class GameComponent implements AfterViewInit {
   public selectedCamera: string = '';
   public renderer!: THREE.WebGLRenderer;
   public scene!: THREE.Scene;
-  public planets: Array<Planet> = [];
+  
+
   public timeScale: number = 1;
   public isPlaying: boolean = false;
   public isLoading: boolean = true;
@@ -49,17 +52,24 @@ export class GameComponent implements AfterViewInit {
   public player:Player|null = null;
   private clock:THREE.Clock = new THREE.Clock();
 
-  public showOrbit: boolean = false;
+  public starSystem = new System(SystemData);
+  
+  public planets: Array<Planet> = [];
   public followOrbit: boolean = false;
   public rotationEnabled: boolean = true;
 
   public cameraManager: CameraManager = new CameraManager(this);
   
-  private skybox: THREE.Mesh = new THREE.Mesh;
-  
   constructor(public dialog: MatDialog, private cdRef: ChangeDetectorRef) {
-    this.createPlanets();
     this.Controller = new IOController(this);
+  }
+
+  public get showOrbit () {
+    return this.starSystem.showOrbit;
+  }
+
+  public set showOrbit (show: boolean) {
+    this.starSystem.showOrbit = show;
   }
   
   ngAfterViewInit(): void {
@@ -88,20 +98,20 @@ export class GameComponent implements AfterViewInit {
     this.renderer.toneMappingExposure = 1;
 
     this.cameraManager = new CameraManager(this);
+    this.planets = this.starSystem.planets;
     
-    this.crateSkyBox();
-    this.addPlanetsToScene();
+    this.starSystem.startScene(this.scene);
     
     this.player = new Player(this)
 
     this.setCamera('player');
     this.player.init();
     
+    this.cameraManager.lookAtPlanet(this.planets[2]);
+    
     const self = this;
-    this.cameraManager.lookAtPlanet(this.planets[3]);
-    this.playGame();
     setTimeout(() => {
-      self.isLoading = false;
+      self.playGame();
     },1000)
   }
 
@@ -116,20 +126,6 @@ export class GameComponent implements AfterViewInit {
     this.scene.background = new THREE.Color(0x000000);
   }
 
-
-  private crateSkyBox(): void {
-    const skyTexture = new THREE.TextureLoader().load("/assets/textures/milky-way-2.jpg");
-    const material = new THREE.MeshBasicMaterial({ 
-      map: skyTexture,
-      side: THREE.BackSide
-    });
-    const skyGeo = new THREE.SphereGeometry(600, 25, 25); 
-    this.skybox = new THREE.Mesh(skyGeo, material);
-    this.skybox.name = "skybox";
-    this.scene.add(this.skybox);
-  }
-
-
   /**
    * Animate Scene
    * 
@@ -137,7 +133,7 @@ export class GameComponent implements AfterViewInit {
    * @memberof CubeComponent
    */
   private animateScene() {
-    this.planets.forEach(planet => {
+    this.starSystem.planets.forEach(planet => {
       planet.animate(this.timeScale);
     });
     this.player?.animate(this.clock.getDelta(), this.Controller.keysPressed);
@@ -148,31 +144,6 @@ export class GameComponent implements AfterViewInit {
 
     if (!this.cameraManager.controls) return;
     this.cameraManager.controls.update()
-  }
-
-  private createPlanets() {
-    const self = this;
-    let sun:Planet;
-    PlanetsJson.forEach(props => {
-      try {
-        let planet = new Planet(props, sun);
-        if (props.name === 'Sun'){
-          sun = planet;
-        }
-        self.planets.push(planet);
-      } catch (error) {
-        console.log({ error, props })
-      }
-    });
-    
-  }
-
-  private addPlanetsToScene() {
-    const self = this;
-    self.planets.forEach(planet => {
-      planet.layers.set(2);
-      self.scene.add(planet);
-    });
   }
 
   /**
@@ -202,23 +173,23 @@ export class GameComponent implements AfterViewInit {
     this.selectedPlanet = planet;
     if (this.selectedPlanet && show) {
       this.cameraManager.lookAtPlanet(this.selectedPlanet);
-      this.openDialog(this.selectedPlanet.planet);
+      this.openDialog(this.selectedPlanet);
     }
   }
 
-  public openDialog(planet: THREE.Mesh) {
+  public openDialog(planet: Planet) {
 
     const dialogId = 'planet-info';
     const _dialog = this.dialog.getDialogById(dialogId)
     if (_dialog) {
-      _dialog.componentInstance.data = planet.parent;
+      _dialog.componentInstance.data = planet;
       return
     }
 
     const dialogRef = this.dialog.open(PlanetDialogComponent, {
       height: '400px',
       width: '400px',
-      data: planet.parent,
+      data: planet,
       hasBackdrop: false,
       disableClose: true,
       id: dialogId,
@@ -237,40 +208,25 @@ export class GameComponent implements AfterViewInit {
     // dialogRef.afterClosed().subscribe(result => {});
 
   }
+
   public toggleShowOrbit(showOrbit?:boolean): void {
-    this.showOrbit = showOrbit ? showOrbit : !this.showOrbit;
-    this.planets.forEach(p => {
-      p.toggleShowOrbit(this.showOrbit);
-    });
+    this.starSystem.toggleShowOrbit(showOrbit)
   }
 
   public toggleFollowOrbit(): void {
-    const self = this;
-    this.followOrbit = !this.followOrbit;
-    this.planets.forEach((_planet:Planet) => {
-      _planet.followOrbit = self.followOrbit
-      
-      if (_planet.moons?.length) {
-        _planet.moons.forEach((_moon:Planet) => {
-          _moon.followOrbit = self.followOrbit
-        })
-      }
-    })
+    this.starSystem.toggleFollowOrbit();
   }
 
   public toggleRotation(): void {
-    this.rotationEnabled = !this.rotationEnabled;
-    this.planets.forEach(p => {
-      p.rotate = this.rotationEnabled
-    })
+    this.starSystem.toggleRotation();
   }
-
 
   public pauseGame() {
     this.isPlaying = false;
   }
 
   public playGame() {
+    this.isLoading = false;
     this.isPlaying = true;
     this.timeScale = 1;
     this.startRenderingLoop();

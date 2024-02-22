@@ -52,7 +52,7 @@ export class CameraManager {
     this.camera.position.set(0, 1000, 0);
     this.camera.lookAt(0, 0, 0);
 
-    this.parent.showOrbit = false;
+    this.parent.starSystem.showOrbit = false;
     this.parent.toggleShowOrbit();
   }
 
@@ -76,20 +76,20 @@ export class CameraManager {
     this.controls.target = this.parent.player.mesh.position;
     this.controls.update();
 
-    this.parent.showOrbit = true;
-    this.parent.toggleShowOrbit();
+    this.parent.starSystem.showOrbit = true;
+    // this.parent.toggleShowOrbit();
 
   }
 
   public lookAtPlanet(planet: Planet): void {
-    let planetPosX = planet.planet.position.x;
-    let planetPosY = planet.planet.position.y;
-    let planetPosZ = planet.planet.position.z;
+    let planetPosX = planet.container.position.x;
+    let planetPosY = planet.container.position.y;
+    let planetPosZ = planet.container.position.z;
 
     if (planet.orbitCenter) {
-      planetPosX += planet.orbitCenter.planet.position.x;
-      planetPosY += planet.orbitCenter.planet.position.y;
-      planetPosZ += planet.orbitCenter.planet.position.z;
+      planetPosX += planet.orbitCenter.position.x;
+      planetPosY += planet.orbitCenter.position.y;
+      planetPosZ += planet.orbitCenter.position.z;
     }
 
     if (this.camera.name === 'free') {
@@ -124,7 +124,7 @@ export class CameraManager {
         this.parent.player?.mesh.position.y + 0.005,
         this.parent.player?.mesh.position.z + 0.02,
       )
-      this.camera.lookAt(planet.position)
+      this.camera.lookAt(planet.container.position)
       if (!this.controls) return;
       this.controls.update();
 

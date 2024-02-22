@@ -14,9 +14,9 @@ export class IOController {
     this.parent = parent
     const self = this;
     this.parent.planets.forEach((_planet:any) => {
-      self.planets.push(_planet.planet)
+      self.planets.push(_planet)
       _planet?.moons?.forEach((_moon: Planet) => {
-        self.planets.push(_moon.planet)
+        self.planets.push(_moon)
       });
     });
 
@@ -89,7 +89,7 @@ export class IOController {
   doubleClickHandler(e:MouseEvent): void {
     if (e.target === this.parent.canvas && this.hovered?.parent) {
       this.parent.selectPlanet(this.hovered.parent);
-      this.parent.openDialog(this.hovered.parent.planet);
+      this.parent.openDialog(this.hovered.parent);
       this.parent.cameraManager.lookAtPlanet(this.hovered.parent);
     }
     e.stopPropagation();

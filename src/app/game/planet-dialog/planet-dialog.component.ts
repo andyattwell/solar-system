@@ -59,6 +59,7 @@ export class PlanetDialogComponent {
   }
 
   public get position () {
+    console.log({data:this.data})
     return {
       x: this.data.planet.position.x.toFixed(2),
       y: this.data.planet.position.y.toFixed(2),
