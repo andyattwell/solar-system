@@ -1,42 +1,131 @@
+$hoveredColor: rgba(194, 24, 91, 0.5);
+$normalColor: rgba(0, 0, 0, 0.5);
+
+@keyframes moonHoverIn {
+  from {
+    background-color: $normalColor;
+    opacity: 0;
+    display: none;
+  }
+  to {
+    background-color: $hoveredColor;
+    opacity: 1;
+    display: block;
+  }
+}
+
+@keyframes moonHoverOut {
+  from {
+    background-color: $hoveredColor;
+    opacity: 1;
+    display: block;
+  }
+  to {
+    background-color: $normalColor;
+    opacity: 0;
+    display: none;
+  }
+}
+@keyframes hoverIn {
+  from {
+    background-color: $normalColor;
+  }
+  to {
+    background-color: $hoveredColor;
+  }
+}
+
+@keyframes hoverOut {
+  from {
+    background-color: $hoveredColor;
+  }
+  to {
+    background-color: $normalColor;
+  }
+}
+
 .planets-menu {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
-}
 
-.planet-li {
-  width: 65px;
-  height: 65px !important;
-  margin: 0 10px;
-  display: inline-block;
-  padding: 0;
-  border-radius: 100px;
-  background-color: red;
-  
-  background-size: cover;
-  // background-size: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 50px;
-
-  &.active {
-    background-color: rgba(236, 215, 26, 0.5);
-  }
-
-}
-
-.planets-confg {
-  // width: 300px;
-  position: absolute;
-  right: 20px;
-  bottom: 10px;
-
-  .planets-opt {
+  .planet-li {
+    position: relative;
     display: inline-block;
-    padding: 0;
-    width: auto;
-    margin: 0 5px;
+    padding: 10px;
+    animation: hoverOut .5s forwards;
+    background-color: $normalColor;
+    
+    &.active {
+      background-color: rgba(12, 158, 255, 0.614) !important;
+    }
+
+    &:hover {
+      animation: hoverIn .5s forwards;
+
+      .moon-select {
+        animation: moonHoverIn .5s forwards;
+      }
+    }
+  
+    .planet-icon {
+      display: block;
+      width: 65px;
+      height: 65px;
+      border-radius: 100px;
+      background-color: #fff;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-radius: 50px;
+    }
+  
+    .moon-select {
+      position: absolute;
+      bottom: 85px;
+      left: 0;
+      background-color: $hoveredColor;
+      color: #fff;
+      width: 120px;
+      padding: 10px 5px 5px;
+      animation: moonHoverOut .5s forwards;
+
+      .moon-li {
+        width: 100%;
+        float: left;
+        color: white;
+        display: table;
+        margin-bottom: 10px;
+
+        .planet-icon {
+          width: 35px;
+          height: 35px;
+          display: table-cell;
+
+        }
+        .moon-name {
+          display: table-cell;
+          vertical-align: middle;
+          padding-left: 10px;
+        }
+      }
+      
+    }
+  }
+  
+  .planets-confg {
+    // width: 300px;
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+
+    .planets-opt {
+      display: inline-block;
+      padding: 0;
+      width: auto;
+      margin: 0 5px;
+    }
   }
 }

@@ -1,26 +1,54 @@
-<mat-action-list class="planets-menu">
-  <a mat-list-item 
-    class="planet-li"
-    (click)="selectPlanet($event)" 
-    [href]="'#'"
-    [style.background-image]="'url(../assets/icons/solar-system.jpg)'"
-    >
-  </a>
+<div class="planets-menu">
+  <div class="planet-li">
+    <a 
+      class="planet-icon"
+      (click)="selectPlanet($event)" 
+      [href]="'#'"
+      [style.background-image]="'url(../assets/icons/solar-system.jpg)'"
+      >
+    </a>
+  </div>
   @if(planets && planets.length) {
     @for (planet of planets; track planet) {
-      <a mat-list-item 
+      <div 
         class="planet-li" 
-        [class]="{active: selectedOpt === planet.name }"
-        (click)="selectPlanet($event, planet)" 
-        [href]="'#'+planet.name"
-        [title]="planet.name"
-        [style.background-image]="'url(' + planet.planetIcon + ')'"
+        [class]="{ active: selectedOpt === planet.name }"
+        [style.background]="'rgba('+planet.color.x+', '+planet.color.y+', '+planet.color.z+', 0.5)'"
         >
-      </a>
+        <a
+          class="planet-icon" 
+          (click)="selectPlanet($event, planet)" 
+          [href]="'#'+planet.name"
+          [title]="planet.name"
+          [style.background-image]="'url(' + planet.planetIcon + ')'"
+          >
+        </a>
+        @if(planet.moons && planet.moons.length) {
+          <div class="moon-select">
+          @for (moon of planet.moons; track moon) {
+            <a
+              class="moon-li"
+              [class]="{ active: selectedOpt === moon.name }"
+              (click)="selectPlanet($event, moon)" 
+              [href]="'#'+moon.name"
+              [title]="moon.name"
+              
+              >
+              <span
+                class="planet-icon"
+                [style.background-image]="'url(' + moon.planetIcon + ')'"
+              ></span>
+              <span class="moon-name">{{ moon.name }}</span>
+            </a>
+          }
+          </div>
+        }
+      </div>
     }
+    
 
     <div class="planets-confg">
-      <mat-list-item class="planets-opt">
+      <div class="planets-opt">
         <button 
           mat-mini-fab 
           aria-label="Toggle planet rotation"
@@ -30,9 +58,9 @@
         >
           <mat-icon> public </mat-icon>
         </button>
-      </mat-list-item>
+      </div>
   
-      <mat-list-item class="planets-opt">
+      <div class="planets-opt">
         <button 
           mat-mini-fab 
           aria-label="Toggle planet rotation"
@@ -42,9 +70,9 @@
         >
           <mat-icon> settings_backup_restore </mat-icon>
         </button>
-      </mat-list-item>
+      </div>
   
-      <mat-list-item class="planets-opt">
+      <div class="planets-opt">
         <button 
           mat-mini-fab 
           aria-label="Toggle show orbit path"
@@ -54,7 +82,7 @@
         >
           <mat-icon>trip_origin</mat-icon>
         </button>
-      </mat-list-item>
+      </div>
     </div>
   }
-</mat-action-list>
+</div>
