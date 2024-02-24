@@ -1,10 +1,9 @@
 :host {
-  position: fixed;
+  position: relative;
+  display: block;
   width: calc(100% - 40px);
-  top: 10px;
-  left: 20px;
-  right: 20px;
   z-index: 100;
+  margin: 10px 20px;
 }
 
 .time-scale {
@@ -30,7 +29,9 @@
 }
 
 .camera-selector {
-  float:inline-end;
+  position: absolute;
+  right: 0;
+  top: 0;
   button {
     margin: 0 5px;
   }

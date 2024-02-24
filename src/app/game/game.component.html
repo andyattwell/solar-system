@@ -1,10 +1,11 @@
-<div>
+<div class="app-container">
   <div class="game-container">
     @if(isLoading) {
       <app-loader></app-loader>
     }
     <canvas #canvas id="canvas" [class.loading]="isLoading"></canvas>
-    <app-action-nav 
+    <app-action-nav
+      class="action-nav"
       (playEvent)="playGame()"
       (pauseEvent)="pauseGame()"
       (cameraEvent)="setCamera($event)"
@@ -14,20 +15,24 @@
       [selectedCamera]="selectedCamera"
       [style.opacity]="!isLoading ? 1 : 0 "
     />
-    <app-sidebar 
-      id="sidebar"
+    <app-planet-selector 
       [style.opacity]="!isLoading ? 1 : 0 "
       [planets]="planets" 
       (selectEvent)="selectPlanet($event, true)"
-
-      [showOrbit]="showOrbit"
-      (orbitShowEvent)="toggleShowOrbit()"
-
+  
+      (orbitShowEvent)="toggleShowOrbit($event)"
+  
       [followOrbit]="followOrbit"
       (orbitEvent)="toggleFollowOrbit()"
-
+  
       [rotationEnabled]="rotationEnabled"
       (rotationEvent)="toggleRotation()"
+    ></app-planet-selector>
+  </div>
+  <div class="app-sidebar">
+    <app-sidebar 
+      [style.opacity]="!isLoading ? 1 : 0 "
+      [planet]="selectedPlanet" 
     ></app-sidebar>
   </div>
 </div>

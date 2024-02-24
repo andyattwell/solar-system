@@ -3,6 +3,7 @@ import PlanetMaterial from '../shaders/PlanetMaterial';
 import AtmosMaterial from '../shaders/AtmosMaterial';
 import OrbitMaterial from '../shaders/OrbitMaterial';
 import RingMaterial from '../shaders/RingMaterial';
+import { degrees_to_radians } from '../helpers';
 
 export interface PlanetProps {
   name: string;
@@ -14,6 +15,7 @@ export interface PlanetProps {
   icon: string;
   rotationSpeed: number;
   rotationDir?: boolean;
+  axialTilt?: number;
   ring?: {
     texture?: string,
     innerRadius: number,
@@ -48,6 +50,7 @@ export class Planet extends THREE.Object3D {
   public rotate: boolean = true;
   public rotationSpeed: number = 0.01;
   public rotationDir: boolean = false;
+  public axialTilt: number = 0;
   public angle: number = 0;
   public orbit: number = 0;
   private orbitY: number = 0;
@@ -60,6 +63,8 @@ export class Planet extends THREE.Object3D {
   public color: THREE.Vector3 = new THREE.Vector3(1,1,1);
   public planetIcon?: string;
   public orbitCenter: THREE.Object3D;
+
+  public positionHelper:THREE.Object3D | undefined;
 
   public moons?: Array<Planet>;
 
@@ -79,9 +84,13 @@ export class Planet extends THREE.Object3D {
         props.color.r, props.color.g, props.color.b
       )
     }
+    if (props.axialTilt) {
+      this.axialTilt = degrees_to_radians(-props.axialTilt);
+    }
 
     this.orbitY = props.position?.y || 0;
     this.container.position.y = this.orbitY;
+
     this.rotationDir = props.rotationDir || false;
     this.rotationSpeed = props.rotationSpeed / 60 / 60 / 10;
 
@@ -124,10 +133,50 @@ export class Planet extends THREE.Object3D {
       // }
     }
 
+    this.planet.rotateZ(this.axialTilt);
     this.addAtmosphere();
     this.add(this.planet);
     this.container.add(this);
     this.orbitCenter.add(this.container);
+  }
+
+  private createHelperMesh(size: any, color:any) {
+    const geometry = new THREE.BoxGeometry( size.x, size.y, size.z ); 
+    const material = new THREE.MeshBasicMaterial( {color: color} ); 
+    const cube = new THREE.Mesh( geometry, material ); 
+    return cube;
+  }
+
+  private addPositionHelper() {
+    const length = this.size * 4;
+    const width = this.size * .10;
+
+    this.positionHelper = new THREE.Object3D();
+
+    const helperX = this.createHelperMesh({x: length, y: width, z: width}, 0xff0000);
+    this.positionHelper.add( helperX );
+    const helperY = this.createHelperMesh({x: width, y: length, z: width}, 0x00ff00);
+    this.positionHelper.add( helperY );
+    const helperZ = this.createHelperMesh({x: width, y: width, z: length}, 0x0000ff);
+    this.positionHelper.add( helperZ );
+
+    this.planet.add( this.positionHelper );
+
+  }
+
+  private removePositionHelpers() {
+    if (this.positionHelper) {
+      this.planet.remove(this.positionHelper);
+      this.positionHelper = undefined;
+    }
+  }
+
+  public togglePositionHelper() {
+    if (this.positionHelper) {
+      this.removePositionHelpers();
+    } else {
+      this.addPositionHelper();
+    }
   }
 
   private addMoons(moonsProps:any) {
@@ -159,11 +208,18 @@ export class Planet extends THREE.Object3D {
     });
     const atmos = new THREE.Mesh(geo, mat);
     atmos.scale.set(1.1,1.1,1.1)
-    this.container.add(atmos)
+    this.container.add(atmos);
+
+    // const lightMat = new THREE.MeshBasicMaterial({
+    //   color:0x00ff00,
+    //   transparent: true,
+    //   opacity:0.6,
+    // })
+    // const lightMesh = new THREE.Mesh(this.planet.geometry, lightMat);
+    // this.add(lightMesh);
   }
 
   public toggleShowOrbit(show: boolean) {
-    this.showOrbit = show
     if (show) {
       this.addOrbitPath()
     } else {
@@ -176,6 +232,7 @@ export class Planet extends THREE.Object3D {
       return;
     }
     this.removeOrbitPath()
+    this.showOrbit = true;
     const half = this.size / 2;
     this.orbitPath = new THREE.Mesh(
       new THREE.RingGeometry(
@@ -206,7 +263,8 @@ export class Planet extends THREE.Object3D {
 
   public removeOrbitPath() {
     if (this.orbitPath) {
-      this.orbitCenter.remove(this.orbitPath)
+      this.orbitCenter.remove(this.orbitPath);
+      this.showOrbit = false;
       if (this.moons?.length) {
         this.moons.forEach((_moon:Planet) => {
           _moon.addOrbitPath();
@@ -290,5 +348,13 @@ export class Planet extends THREE.Object3D {
       })
     }
 
+  }
+
+  public changeOrbit(orbit:number) {
+    this.orbit = orbit;
+    if (this.showOrbit) {
+      this.addOrbitPath();
+    }
+    this.setPositionToOrbit(0, true);
   }
 }

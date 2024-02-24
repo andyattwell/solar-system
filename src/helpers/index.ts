@@ -29,10 +29,10 @@ export const DIRECTIONS = [W, A, S, D]
 // }
 
 
-// function degrees_to_radians(degrees:number):number {
-//   var pi = Math.PI;
-//   return degrees * (pi/180);
-// }
+export function degrees_to_radians(degrees:number):number {
+  var pi = Math.PI;
+  return degrees * (pi/180);
+}
 
 // function accelerate_due_to_gravity(first: Planet, second: Planet) {
   

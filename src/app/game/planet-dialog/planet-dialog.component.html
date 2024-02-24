@@ -18,6 +18,13 @@
     </mat-list-item>
     <mat-list-item>
       <mat-checkbox
+        [checked]="positionHelperEnable"
+        (change)="togglePositionHelper($event.checked)"
+      >PositionHelper: 
+      </mat-checkbox>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-checkbox
         [checked]="rotatationEnable"
         (change)="setRotate($event.checked)"
       >Rotate: 
@@ -30,11 +37,12 @@
       >Rotation Direction: 
       </mat-checkbox>
     </mat-list-item>
-    <mat-list-item>Rotation speed: {{ rotation }}</mat-list-item>
-    <mat-list-item>
-      <mat-slider>
-        <input matSliderThumb min="0" max="400" step="1" [(value)]="rotation">
-      </mat-slider>
+    <mat-list-item class="value-controls">
+      <span class="label">Rotation speed</span>
+      <button (click)="changeRotationSpeed(-1)"><</button>
+      <span class="value">{{ rotation }}</span>
+      <button (click)="changeRotationSpeed(1)">></button>
+      <button (click)="resetRotationSpeed()">R</button>
     </mat-list-item>
     <mat-list-item>
       <mat-checkbox
@@ -50,20 +58,19 @@
       >Follow orbit: 
       </mat-checkbox>
     </mat-list-item>
-    <mat-list-item>Orbit speed: {{ orbitSpeed }}</mat-list-item>
-    <mat-list-item>
-      <mat-slider>
-        <input matSliderThumb min="0" max="1000" step="1" [(value)]="orbitSpeed">
-      </mat-slider>
+    <mat-list-item class="value-controls">
+      <span class="label">Orbit speed</span>
+      <button (click)="changeOrbitSpeed(-1)"><</button>
+      <span class="value">{{ orbitSpeed }}</span>
+      <button (click)="changeOrbitSpeed(1)">></button>
+      <button (click)="resetOrbitSpeed()">R</button>
     </mat-list-item>
-    <mat-list-item>Orbit: {{ data.orbit }}</mat-list-item>
-    <mat-list-item>
-      <mat-slider>
-        <input matSliderThumb min="10" max="100" step="1" [(value)]="data.orbit">
-      </mat-slider>
+    <mat-list-item class="value-controls">
+      <span class="label">Orbit</span>
+      <button (click)="changeOrbit(-1)"><</button>
+      <span class="value">{{ orbit }}</span>
+      <button (click)="changeOrbit(1)">></button>
+      <button (click)="resetOrbit()">R</button>
     </mat-list-item>
   </mat-list>
-  <mat-dialog-actions>
-    <button mat-button mat-dialog-close>Cerrar</button>
-  </mat-dialog-actions>
 </div>

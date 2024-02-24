@@ -1,4 +1,4 @@
-import { Component, Inject, EventEmitter, Output } from '@angular/core';
+import { Component, Inject, EventEmitter, Output, AfterViewInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogTitle,
@@ -11,7 +11,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSliderModule } from '@angular/material/slider';
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { Planet } from '../../../classes/Planet';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-planet-dialog',
@@ -30,9 +30,21 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
   templateUrl: './planet-dialog.component.html',
   styleUrl: './planet-dialog.component.scss',
 })
-export class PlanetDialogComponent {
+export class PlanetDialogComponent implements AfterViewInit {
   @Output() onClose = new EventEmitter<any>();
+  public rotationMultiplyer = 1;
+  private originalRotationSpeed = 0;
+  orbitSpeedMultiplyer: number = 1;
+  originalOrbitSpeed: number = 0;
+  orbitMultiplyer: number = 1;
+  originalOrbit: number = 0;
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: Planet) {}
+  ngAfterViewInit(): void {
+    this.originalRotationSpeed = this.data.rotationSpeed
+    this.originalOrbitSpeed = this.data.orbitSpeed
+    this.originalOrbit = this.data.orbit
+  }
 
   public get rotatationEnable () {
     return this.data.rotate;
@@ -46,8 +58,14 @@ export class PlanetDialogComponent {
     return (this.data.rotationSpeed * 1000).toFixed(2)
   }
 
-  public set rotation(speed:any) {
-    this.data.rotationSpeed = speed * 0.005
+  public changeRotationSpeed(n:number) {
+    this.rotationMultiplyer += n;
+    this.data.rotationSpeed = this.originalRotationSpeed * this.rotationMultiplyer 
+  }
+
+  public resetRotationSpeed() {
+    this.rotationMultiplyer = 1;
+    this.data.rotationSpeed = this.originalRotationSpeed;
   }
 
   public get rotationDir () {
@@ -56,6 +74,10 @@ export class PlanetDialogComponent {
 
   public set rotationDir(dir:boolean) {
     this.data.rotationDir = dir
+  }
+
+  public get positionHelperEnable() {
+    return this.data.positionHelper
   }
 
   public get position () {
@@ -70,8 +92,28 @@ export class PlanetDialogComponent {
     return (this.data.orbitSpeed * 1000).toFixed(2)
   }
 
-  public set orbitSpeed(speed:any) {
-    this.data.orbitSpeed = speed * 0.01
+  public changeOrbitSpeed(n:number) {
+    this.orbitSpeedMultiplyer += n;
+    this.data.orbitSpeed = this.originalOrbitSpeed * this.orbitSpeedMultiplyer 
+  }
+
+  public resetOrbitSpeed() {
+    this.orbitSpeedMultiplyer = 1;
+    this.data.orbitSpeed = this.originalOrbitSpeed;
+  }
+
+  public get orbit() {
+    return this.data.orbit.toFixed(2)
+  }
+
+  public changeOrbit(n:number) {
+    this.orbitMultiplyer += n ;
+    this.data.changeOrbit(this.data.orbit + n * .1 );
+  }
+
+  public resetOrbit() {
+    this.orbitMultiplyer = 1;
+    this.data.changeOrbit(this.originalOrbit);
   }
 
   public get showOrbit() {
@@ -109,5 +151,9 @@ export class PlanetDialogComponent {
   close(e:MouseEvent) {
     e.stopPropagation();
     this.onClose.emit();
+  }
+
+  togglePositionHelper(show:Boolean) {
+    this.data.togglePositionHelper();
   }
 }

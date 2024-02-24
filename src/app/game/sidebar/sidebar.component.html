@@ -1,88 +1,100 @@
-<div class="planets-menu">
-  <div class="planet-li">
-    <a 
-      class="planet-icon"
-      (click)="selectPlanet($event)" 
-      [href]="'#'"
-      [style.background-image]="'url(../assets/icons/solar-system.jpg)'"
-      >
-    </a>
-  </div>
-  @if(planets && planets.length) {
-    @for (planet of planets; track planet) {
-      <div 
-        class="planet-li" 
-        [class]="{ active: selectedOpt === planet.name }"
-        [style.background]="'rgba('+planet.color.x+', '+planet.color.y+', '+planet.color.z+', 0.5)'"
-        >
-        <a
-          class="planet-icon" 
-          (click)="selectPlanet($event, planet)" 
-          [href]="'#'+planet.name"
-          [title]="planet.name"
-          [style.background-image]="'url(' + planet.planetIcon + ')'"
-          >
-        </a>
-        @if(planet.moons && planet.moons.length) {
-          <div class="moon-select">
-          @for (moon of planet.moons; track moon) {
-            <a
-              class="moon-li"
-              [class]="{ active: selectedOpt === moon.name }"
-              (click)="selectPlanet($event, moon)" 
-              [href]="'#'+moon.name"
-              [title]="moon.name"
-              
-              >
-              <span
-                class="planet-icon"
-                [style.background-image]="'url(' + moon.planetIcon + ')'"
-              ></span>
-              <span class="moon-name">{{ moon.name }}</span>
-            </a>
-          }
-          </div>
-        }
-      </div>
-    }
-    
+@if (planet) {
+  <h1>{{ planet.name }}
+    <button type="button" class="close-info" mat-mini-fab aria-label="Close" (click)="close($event)">
+      <mat-icon>close</mat-icon>
+    </button>
+  </h1>
+  <div class="info-content">
+    <mat-list>
+      <mat-list-item>Size: {{ planet.size }}</mat-list-item>
+      <mat-list-item class="value-controls"> 
+        <span class="label">Position</span>
+      </mat-list-item>
+      <mat-list-item class="value-controls"> 
+        <span class="label">X</span>
+        <span class="value">{{ position.x }}</span>
+      </mat-list-item>
+      <mat-list-item class="value-controls"> 
+        <span class="label">Y</span>
+        <span class="value">{{ position.y }}</span>
+      </mat-list-item>
+      <mat-list-item class="value-controls"> 
+        <span class="label">Z</span>
+        <span class="value">{{ position.z }}</span>
+      </mat-list-item>
+      
+      <mat-list-item class="value-controls"> 
+        <span class="label">PositionHelper</span>
+        <span class="value">
+          <mat-checkbox
+            [checked]="positionHelperEnable"
+            (change)="togglePositionHelper($event.checked)"
+          ></mat-checkbox>
+        </span>
+      </mat-list-item>
 
-    <div class="planets-confg">
-      <div class="planets-opt">
-        <button 
-          mat-mini-fab 
-          aria-label="Toggle planet rotation"
-          title="Toggle planet rotation"
-          (click)="toggleRotation()" 
-          [color]="rotationEnabled ? 'primary' : ''"
-        >
-          <mat-icon> public </mat-icon>
-        </button>
-      </div>
-  
-      <div class="planets-opt">
-        <button 
-          mat-mini-fab 
-          aria-label="Toggle planet rotation"
-          title="Toggle planet orbit"
-          (click)="toggleFollowOrbit()" 
-          [color]="followOrbit ? 'primary' : ''"
-        >
-          <mat-icon> settings_backup_restore </mat-icon>
-        </button>
-      </div>
-  
-      <div class="planets-opt">
-        <button 
-          mat-mini-fab 
-          aria-label="Toggle show orbit path"
-          title="Show orbit"
-          (click)="toggleShowOrbit()" 
-          [color]="showOrbit ? 'primary' : ''"
-        >
-          <mat-icon>trip_origin</mat-icon>
-        </button>
-      </div>
-    </div>
-  }
-</div>
+      <mat-list-item class="value-controls"> 
+        <span class="label">Rotate</span>
+        <span class="value">
+          <mat-checkbox
+            [checked]="planet.rotate"
+            (change)="setRotate($event.checked)"
+          ></mat-checkbox>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item class="value-controls"> 
+        <span class="label">Rotation Direction</span>
+        <span class="value">
+          <mat-checkbox
+            [checked]="rotationDir"
+            (change)="setRotationDir($event.checked)"
+          ></mat-checkbox>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item class="value-controls">
+        <span class="label">Rotation speed</span>
+        <button (click)="changeRotationSpeed(-1)"><</button>
+        <span class="value">{{ rotation }}</span>
+        <button (click)="changeRotationSpeed(1)">></button>
+        <button (click)="resetRotationSpeed()">R</button>
+      </mat-list-item>
+
+      <mat-list-item class="value-controls"> 
+        <span class="label">Show orbit</span>
+        <span class="value">
+          <mat-checkbox
+            [checked]="showOrbit"
+            (change)="setShowOrbit($event.checked)"
+          ></mat-checkbox>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item class="value-controls"> 
+        <span class="label">Follow orbit</span>
+        <span class="value">
+          <mat-checkbox
+            [checked]="followOrbit"
+            (change)="setFollowOrbit($event.checked)"
+          ></mat-checkbox>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item class="value-controls">
+        <span class="label">Orbit speed</span>
+        <button (click)="changeOrbitSpeed(-1)"><</button>
+        <span class="value">{{ orbitSpeed }}</span>
+        <button (click)="changeOrbitSpeed(1)">></button>
+        <button (click)="resetOrbitSpeed()">R</button>
+      </mat-list-item>
+      <mat-list-item class="value-controls">
+        <span class="label">Orbit</span>
+        <button (click)="changeOrbit(-1)"><</button>
+        <span class="value">{{ orbit }}</span>
+        <button (click)="changeOrbit(1)">></button>
+        <button (click)="resetOrbit()">R</button>
+      </mat-list-item>
+    </mat-list>
+  </div>
+}

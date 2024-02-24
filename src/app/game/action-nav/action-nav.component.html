@@ -1,57 +1,55 @@
-<div>
-  <button 
-    mat-mini-fab aria-label="Rewind" 
-    title="Rewind"
-    (click)="rewindGame()" 
-    [color]="timeScale < 0 ? 'primary' : ''"
-  >
-    <mat-icon>fast_rewind</mat-icon>
-  </button>
+<button 
+  mat-mini-fab aria-label="Rewind" 
+  title="Rewind"
+  (click)="rewindGame()" 
+  [color]="timeScale < 0 ? 'primary' : ''"
+>
+  <mat-icon>fast_rewind</mat-icon>
+</button>
 
-  <button 
-    mat-mini-fab aria-label="Pause" 
-    title="Pause"
-    (click)="pause()" 
-    [color]="!playing ? 'primary' : ''"
-  >
-    <mat-icon>pause</mat-icon>
-  </button>
-  
-  <button aria-label="Time scale" disabled class="time-scale">
-    <span>{{ timeScale }}</span>
-  </button>
+<button 
+  mat-mini-fab aria-label="Pause" 
+  title="Pause"
+  (click)="pause()" 
+  [color]="!playing ? 'primary' : ''"
+>
+  <mat-icon>pause</mat-icon>
+</button>
 
-  <button 
-    mat-mini-fab aria-label="Play"
-    title="Play"
-    (click)="play()" [color]="playing ? 'primary' : ''"
-  >
-    <mat-icon>play_arrow</mat-icon>
-  </button>
+<button aria-label="Time scale" disabled class="time-scale">
+  <span>{{ timeScale }}</span>
+</button>
 
-  <button 
-    mat-mini-fab 
-    aria-label="Fast forward" 
-    title="Fast forward" 
-    (click)="fastForward()" 
-    [color]="timeScale > 1 ? 'primary' : ''"
-  >
-    <mat-icon>fast_forward</mat-icon>
-  </button>
+<button 
+  mat-mini-fab aria-label="Play"
+  title="Play"
+  (click)="play()" [color]="playing ? 'primary' : ''"
+>
+  <mat-icon>play_arrow</mat-icon>
+</button>
 
-  <div class="camera-selector">
-    @for(camera of cameras; track camera.name) {
-      <button 
-        mat-mini-fab 
-        aria-label="Camera view"
-        [title]="camera.label"
-        (click)="changeCamera(camera.name)" 
-        [color]="isSelected(camera.name)"
-      >
-        <mat-icon> {{ camera.icon }} </mat-icon>
-      </button>
-    } @empty {
-      <li> There are no cameras. </li>
-    }
-  </div>
+<button 
+  mat-mini-fab 
+  aria-label="Fast forward" 
+  title="Fast forward" 
+  (click)="fastForward()" 
+  [color]="timeScale > 1 ? 'primary' : ''"
+>
+  <mat-icon>fast_forward</mat-icon>
+</button>
+
+<div class="camera-selector">
+  @for(camera of cameras; track camera.name) {
+    <button 
+      mat-mini-fab 
+      aria-label="Camera view"
+      [title]="camera.label"
+      (click)="changeCamera(camera.name)" 
+      [color]="isSelected(camera.name)"
+    >
+      <mat-icon> {{ camera.icon }} </mat-icon>
+    </button>
+  } @empty {
+    <li> There are no cameras. </li>
+  }
 </div>

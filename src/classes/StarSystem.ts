@@ -55,10 +55,10 @@ export class System {
     this.mesh.add(this.skybox);
   }
 
-  public toggleShowOrbit(showOrbit?:boolean): void {
-    this.showOrbit = showOrbit ? showOrbit : !this.showOrbit;
-    this.planets.forEach(p => {
-      p.toggleShowOrbit(this.showOrbit);
+  public toggleShowOrbit(showOrbit:boolean): void {
+    this.showOrbit = showOrbit;
+    this.planets.forEach(planet => {
+      planet.toggleShowOrbit(showOrbit);
     });
   }
   

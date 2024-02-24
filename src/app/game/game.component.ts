@@ -14,6 +14,7 @@ import { CameraManager } from '../../classes/CameraManager';
 
 import SystemData from "../../assets/data/planets.json";
 import { System } from '../../classes/StarSystem';
+import { PlanetSelectorComponent } from './planet-selector/planet-selector.component';
 
 @Component({
   selector: 'app-game',
@@ -21,6 +22,7 @@ import { System } from '../../classes/StarSystem';
   imports: [
     MatSidenavModule, 
     SidebarComponent, 
+    PlanetSelectorComponent,
     ActionNavComponent,
     LoaderComponent
   ],
@@ -48,7 +50,7 @@ export class GameComponent implements AfterViewInit {
   public isLoading: boolean = true;
 
   private Controller: IOController;
-  private selectedPlanet!: Planet;
+  public selectedPlanet!: Planet;
   public player:Player|null = null;
   private clock:THREE.Clock = new THREE.Clock();
 
@@ -66,14 +68,6 @@ export class GameComponent implements AfterViewInit {
 
   public get planets () {
     return [this.starSystem.star].concat(this.starSystem.planets);
-  }
-
-  public get showOrbit () {
-    return this.starSystem.showOrbit;
-  }
-
-  public set showOrbit (show: boolean) {
-    this.starSystem.showOrbit = show;
   }
   
   ngAfterViewInit(): void {
@@ -95,15 +89,12 @@ export class GameComponent implements AfterViewInit {
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
-      antialias: true
+      antialias: true,
     });
-
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1;
 
     this.cameraManager = new CameraManager(this);
-    // this.planets = this.planets.concat(this.starSystem.planets);
-    // console.log(this.planets)
     
     this.starSystem.startScene(this.scene);
     
@@ -112,7 +103,7 @@ export class GameComponent implements AfterViewInit {
     this.setCamera('player');
     this.player.init();
     
-    this.cameraManager.lookAtPlanet(this.planets[2]);
+    this.selectPlanet(this.planets[3], true);
     
     const self = this;
     setTimeout(() => {
@@ -178,7 +169,7 @@ export class GameComponent implements AfterViewInit {
     this.selectedPlanet = planet;
     if (this.selectedPlanet && show) {
       this.cameraManager.lookAtPlanet(this.selectedPlanet);
-      this.openDialog(this.selectedPlanet);
+      // this.openDialog(this.selectedPlanet);
     }
   }
 
@@ -214,7 +205,7 @@ export class GameComponent implements AfterViewInit {
 
   }
 
-  public toggleShowOrbit(showOrbit?:boolean): void {
+  public toggleShowOrbit(showOrbit:boolean): void {
     this.starSystem.toggleShowOrbit(showOrbit)
   }
 

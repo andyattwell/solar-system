@@ -53,7 +53,7 @@ export class CameraManager {
     this.camera.lookAt(0, 0, 0);
 
     this.parent.starSystem.showOrbit = false;
-    this.parent.toggleShowOrbit();
+    this.parent.toggleShowOrbit(true);
   }
 
   public setPlayerCamera() {

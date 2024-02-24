@@ -57,6 +57,7 @@
         "b": 0.2
       },
       "rotationSpeed": 24,
+      "axialTilt": 23.4,
       "moons": [
         {
           "name": "Moon",
