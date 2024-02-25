@@ -42,6 +42,10 @@ export class Planet extends THREE.Object3D {
   private loader = new THREE.TextureLoader();
   private orbitPath!:THREE.Mesh;
   private ring!:THREE.Mesh;
+  public ringTexture: string = '';
+  
+  public ringInnerRadius = 0;
+  public ringOuterRadius = 0;
   // public name: string = '';
   public container:THREE.Object3D = new THREE.Object3D();
   public planet:THREE.Mesh = new THREE.Mesh();
@@ -58,7 +62,7 @@ export class Planet extends THREE.Object3D {
   public showOrbit: boolean = false;
   public followOrbit: boolean = false;
 
-  private planetTexture: string;
+  public planetTexture: string;
   private planetBump?: string;
   public color: THREE.Vector3 = new THREE.Vector3(1,1,1);
   public planetIcon?: string;
@@ -298,6 +302,9 @@ export class Planet extends THREE.Object3D {
   }
 
   private addRings(props: any) {
+    this.ringInnerRadius = props.texture;
+    this.ringOuterRadius = props.texture;
+
     let ringGeo = new THREE.RingGeometry(
       props.innerRadius + 0.1,
       props.outerRadius + 0.1, 
@@ -307,6 +314,7 @@ export class Planet extends THREE.Object3D {
       Math.PI * 2
     );
     const mat = new THREE.MeshLambertMaterial();
+    this.ringTexture = props.texture;
     mat.map = this.loader.load(props.texture)
     mat.side = THREE.DoubleSide;
 
@@ -340,7 +348,6 @@ export class Planet extends THREE.Object3D {
     }
 
     this.setPositionToOrbit(timeScale, this.followOrbit);
-    
 
     if (this.moons?.length) {
       this.moons.forEach((_moon:Planet) => {

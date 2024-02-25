@@ -1,4 +1,4 @@
-import { Component, Inject, EventEmitter, Output, AfterViewInit, Input } from '@angular/core';
+import { Component, Inject, EventEmitter, Output, AfterViewInit, Input, ViewChild, ElementRef } from '@angular/core';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,6 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Planet } from '../../../classes/Planet';
 import { ValueControlComponent } from './value-control/value-control.component';
+import { PreviewComponent } from './preview/preview.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -15,19 +16,19 @@ import { ValueControlComponent } from './value-control/value-control.component';
     MatButtonModule,
     MatIconModule,
     MatCheckboxModule,
-    ValueControlComponent
+    ValueControlComponent,
+    PreviewComponent
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent {
   @Input('planet') public planet: Planet | undefined;
+  @Input('timeScale') public timeScale = 1;
   @Output() closeEvent = new EventEmitter<any>();
 
   orbitMultiplyer: number = 1;
   originalOrbit: number = 0;
-
-  constructor() {}
 
   ngAfterViewInit(): void {
     if (this.planet) {
@@ -35,27 +36,9 @@ export class SidebarComponent {
     }
   }
 
-  public get rotation () {
-    if (this.planet) {
-      return (this.planet.rotationSpeed * 1000)
-    }
-    return 0;
-  }
-
   public changeRotationSpeed(n:number) {
     if (!this.planet) { return }
-    console.log('changeRotationSpeed', n)
     this.planet.rotationSpeed = n * 0.0001;
-  }
-
-  public get rotationDir () {
-    return this.planet ? this.planet.rotationDir : false
-  }
-
-  public set rotationDir(dir:boolean) {
-    if (this.planet) {
-      this.planet.rotationDir = dir
-    }
   }
 
   public get positionHelperEnable() {
@@ -98,22 +81,6 @@ export class SidebarComponent {
   public get showOrbit() {
     return this.planet ? this.planet.showOrbit : false
   }
-  
-  public set showOrbit(show:any) {
-    if (this.planet) {
-      this.planet.showOrbit = show
-    }
-  }
-
-  public get followOrbit() {
-    return this.planet ? this.planet.followOrbit : 0
-  }
-  
-  public set followOrbit(show:any) {
-    if (this.planet) {
-      this.planet.followOrbit = show
-    }
-  }
 
   setShowOrbit(checked:boolean): void {
     if (this.planet) {
@@ -121,16 +88,31 @@ export class SidebarComponent {
     }
   }
   
+  public get followOrbit() {
+    return this.planet ? this.planet.followOrbit : 0
+  }
+
   setFollowOrbit(checked:boolean): void {
     if (this.planet) {
       this.planet.followOrbit = checked;
     }
   }
 
+  public get rotationDir () {
+    return this.planet ? this.planet.rotationDir : false
+  }
+
   setRotationDir(dir:boolean): void {
     if (this.planet) {
       this.planet.rotationDir = dir;
     }
+  }
+
+  public get rotation () {
+    if (this.planet) {
+      return (this.planet.rotationSpeed * 1000)
+    }
+    return 0;
   }
 
   setRotate(r: boolean) {
@@ -149,4 +131,5 @@ export class SidebarComponent {
       this.planet.togglePositionHelper();
     }
   }
+
 }

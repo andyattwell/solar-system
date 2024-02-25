@@ -30,7 +30,8 @@
   </div>
   <app-sidebar 
     [style.opacity]="!isLoading ? 1 : 0 "
-    [planet]="selectedPlanet" 
+    [planet]="selectedPlanet"
+    [timeScale]="timeScale"
     [class.opened]="showSidebar"
     (closeEvent)="closePlanetInfo()"
   ></app-sidebar>
