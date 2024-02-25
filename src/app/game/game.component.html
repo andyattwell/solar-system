@@ -1,5 +1,5 @@
 <div class="app-container">
-  <div class="game-container">
+  <div class="game-container" [class.shrink]="showSidebar">
     @if(isLoading) {
       <app-loader></app-loader>
     }
@@ -12,27 +12,27 @@
       (timeEvent)="changeSpeed($event)"
       [timeScale]="timeScale"
       [playing]="isPlaying"
-      [selectedCamera]="selectedCamera"
+      [selectedCamera]="activeCamera?.name"
       [style.opacity]="!isLoading ? 1 : 0 "
     />
+
     <app-planet-selector 
       [style.opacity]="!isLoading ? 1 : 0 "
       [planets]="planets" 
       (selectEvent)="selectPlanet($event, true)"
-  
       (orbitShowEvent)="toggleShowOrbit($event)"
-  
       [followOrbit]="followOrbit"
       (orbitEvent)="toggleFollowOrbit()"
-  
       [rotationEnabled]="rotationEnabled"
       (rotationEvent)="toggleRotation()"
     ></app-planet-selector>
+
   </div>
-  <div class="app-sidebar">
-    <app-sidebar 
-      [style.opacity]="!isLoading ? 1 : 0 "
-      [planet]="selectedPlanet" 
-    ></app-sidebar>
-  </div>
+  <app-sidebar 
+    [style.opacity]="!isLoading ? 1 : 0 "
+    [planet]="selectedPlanet" 
+    [class.opened]="showSidebar"
+    (closeEvent)="closePlanetInfo()"
+  ></app-sidebar>
+
 </div>

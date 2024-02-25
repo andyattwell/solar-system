@@ -37,10 +37,10 @@ export class GameComponent implements AfterViewInit {
   public get canvas(): HTMLCanvasElement {
     return this.canvasRef?.nativeElement;
   }
+  public showSidebar = false;
 
   public freeCamera!: THREE.PerspectiveCamera;
   public activeCamera!: THREE.PerspectiveCamera;
-  public selectedCamera: string = '';
   public renderer!: THREE.WebGLRenderer;
   public scene!: THREE.Scene;
   
@@ -170,7 +170,22 @@ export class GameComponent implements AfterViewInit {
     if (this.selectedPlanet && show) {
       this.cameraManager.lookAtPlanet(this.selectedPlanet);
       // this.openDialog(this.selectedPlanet);
+      this.openPlanetInfo()
     }
+  }
+
+  public openPlanetInfo() {
+    this.showSidebar = true;
+    setTimeout(() => {
+      this.cameraManager.setAspectRatio();
+    }, 1)
+  }
+
+  public closePlanetInfo() {
+    this.showSidebar = false;
+    setTimeout(() => {
+      this.cameraManager.setAspectRatio();
+    }, 1)
   }
 
   public openDialog(planet: Planet) {
@@ -247,8 +262,9 @@ export class GameComponent implements AfterViewInit {
       this.cameraManager.setFreeCamera();
     }
     this.activeCamera = this.cameraManager.camera;
-    this.selectedCamera = this.cameraManager.camera.name;
-    this.cameraManager.setAspectRatio();
+    setTimeout(() => {
+      this.cameraManager.setAspectRatio();
+    }, 1)
   }
 
 }

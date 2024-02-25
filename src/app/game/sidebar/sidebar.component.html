@@ -6,95 +6,104 @@
   </h1>
   <div class="info-content">
     <mat-list>
-      <mat-list-item>Size: {{ planet.size }}</mat-list-item>
       <mat-list-item class="value-controls"> 
-        <span class="label">Position</span>
+        <app-value-control label="Size">{{ planet.size }}</app-value-control>
+      </mat-list-item>
+
+      <mat-list-item class="value-controls"> 
+        <app-value-control label="Position">
+        </app-value-control>
+      </mat-list-item>
+
+      <mat-list-item class="value-controls"> 
+        <app-value-control label="X">
+          {{ position.x }}
+        </app-value-control>
       </mat-list-item>
       <mat-list-item class="value-controls"> 
-        <span class="label">X</span>
-        <span class="value">{{ position.x }}</span>
+        <app-value-control label="Y">
+          {{ position.y }}
+        </app-value-control>
       </mat-list-item>
-      <mat-list-item class="value-controls"> 
-        <span class="label">Y</span>
-        <span class="value">{{ position.y }}</span>
-      </mat-list-item>
-      <mat-list-item class="value-controls"> 
-        <span class="label">Z</span>
-        <span class="value">{{ position.z }}</span>
+      <mat-list-item class="value-controls">
+        <app-value-control label="Z">
+          {{ position.z }}
+        </app-value-control>
       </mat-list-item>
       
       <mat-list-item class="value-controls"> 
-        <span class="label">PositionHelper</span>
-        <span class="value">
+        <app-value-control label="PositionHelper">
           <mat-checkbox
             [checked]="positionHelperEnable"
             (change)="togglePositionHelper($event.checked)"
           ></mat-checkbox>
-        </span>
+        </app-value-control>
       </mat-list-item>
 
       <mat-list-item class="value-controls"> 
-        <span class="label">Rotate</span>
-        <span class="value">
+        <app-value-control label="Rotate">
           <mat-checkbox
             [checked]="planet.rotate"
             (change)="setRotate($event.checked)"
           ></mat-checkbox>
-        </span>
+        </app-value-control>
       </mat-list-item>
 
       <mat-list-item class="value-controls"> 
-        <span class="label">Rotation Direction</span>
-        <span class="value">
+        <app-value-control label="Rotation Direction">
           <mat-checkbox
             [checked]="rotationDir"
             (change)="setRotationDir($event.checked)"
           ></mat-checkbox>
-        </span>
+        </app-value-control>
       </mat-list-item>
 
       <mat-list-item class="value-controls">
-        <span class="label">Rotation speed</span>
-        <button (click)="changeRotationSpeed(-1)"><</button>
-        <span class="value">{{ rotation }}</span>
-        <button (click)="changeRotationSpeed(1)">></button>
-        <button (click)="resetRotationSpeed()">R</button>
+        <app-value-control 
+          label="Rotation speed" 
+          [value]="rotation"
+          (change)="changeRotationSpeed($event)"
+          >
+        </app-value-control>
       </mat-list-item>
 
-      <mat-list-item class="value-controls"> 
-        <span class="label">Show orbit</span>
-        <span class="value">
+      <mat-list-item class="value-controls">
+        <app-value-control label="Show orbit">
           <mat-checkbox
             [checked]="showOrbit"
             (change)="setShowOrbit($event.checked)"
           ></mat-checkbox>
-        </span>
+        </app-value-control>
       </mat-list-item>
 
       <mat-list-item class="value-controls"> 
-        <span class="label">Follow orbit</span>
-        <span class="value">
+        <app-value-control label="Follow orbit">
           <mat-checkbox
             [checked]="followOrbit"
             (change)="setFollowOrbit($event.checked)"
           ></mat-checkbox>
-        </span>
+        </app-value-control>
       </mat-list-item>
 
       <mat-list-item class="value-controls">
-        <span class="label">Orbit speed</span>
-        <button (click)="changeOrbitSpeed(-1)"><</button>
-        <span class="value">{{ orbitSpeed }}</span>
-        <button (click)="changeOrbitSpeed(1)">></button>
-        <button (click)="resetOrbitSpeed()">R</button>
+        <app-value-control 
+          label="Orbit speed" 
+          [value]="orbitSpeed"
+          (change)="changeOrbitSpeed($event)"
+          >
+        </app-value-control>
       </mat-list-item>
+      
       <mat-list-item class="value-controls">
-        <span class="label">Orbit</span>
-        <button (click)="changeOrbit(-1)"><</button>
-        <span class="value">{{ orbit }}</span>
-        <button (click)="changeOrbit(1)">></button>
-        <button (click)="resetOrbit()">R</button>
+        <app-value-control 
+          label="Orbit" 
+          [value]="orbit"
+          (change)="changeOrbit($event)"
+          [step]="1"
+          >
+        </app-value-control>
       </mat-list-item>
+
     </mat-list>
   </div>
 }

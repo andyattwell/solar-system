@@ -1,0 +1,36 @@
+$primary: rgb(23 99 143);
+
+:host{
+  display: block;
+  font-size: 14px;
+
+  button {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background-color: $primary;
+    color: #FFF;
+    font-weight: bold;
+  }
+
+  .label {
+    display: inline-block;
+    height: 30px;
+    width: 145px;
+    color: #FFF;
+    font-weight: bold;
+    line-height: 30px;
+  }
+
+  .value {
+    display: inline-block;
+    width: 50px;
+    height: 30px;
+    padding: 0;
+    margin: 0 10px;
+
+    color: #FFF;
+    font-weight: bold;
+    text-align: center;
+  }
+}

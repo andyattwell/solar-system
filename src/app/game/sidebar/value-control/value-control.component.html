@@ -1,0 +1,13 @@
+<span class="label">{{ label }}</span>
+<span class="value">
+  @if (value !== undefined) {
+    <button (click)="changeValue(-10)"><<</button>
+    <button (click)="changeValue(-1)"><</button>
+    <span class="value">{{ value.toFixed(2) }}</span>
+    <button (click)="changeValue(1)">></button>
+    <button (click)="changeValue(10)">>></button>
+    <button (click)="resetValue()">R</button>
+  } @else {
+    <ng-content></ng-content>
+  }
+</span>
