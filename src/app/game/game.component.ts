@@ -132,6 +132,8 @@ export class GameComponent implements AfterViewInit {
     this.starSystem.planets.forEach(planet => {
       planet.animate(this.timeScale);
     });
+    this.starSystem.star.animate(this.timeScale);
+    
     this.player?.animate(this.clock.getDelta(), this.Controller.keysPressed);
     
     if (this.cameraManager.camera.name === 'system' && this.selectedPlanet) {
