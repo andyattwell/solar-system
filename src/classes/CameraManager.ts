@@ -140,6 +140,8 @@ export class CameraManager {
   }
 
   public setAspectRatio(): void {
+    if (!this.parent.canvas) { return; }
+
     const height = this.parent.canvas.parentElement?.clientHeight || 1;
     const width = this.parent.canvas.parentElement?.clientWidth || 1;
     this.camera.aspect = width / height;
