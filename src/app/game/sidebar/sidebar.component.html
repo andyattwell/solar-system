@@ -7,32 +7,25 @@
   <app-preview [planet]="planet" [timeScale]="timeScale"></app-preview>
   <div class="info-content">
     <mat-list>
-      <mat-list-item class="value-controls"> 
-        <app-value-control label="Size">{{ planet.size }}</app-value-control>
-      </mat-list-item>
 
-      <mat-list-item class="value-controls"> 
+      <mat-list-item> 
         <app-value-control label="Position">
-        </app-value-control>
-      </mat-list-item>
 
-      <mat-list-item class="value-controls"> 
-        <app-value-control label="X">
-          {{ position.x }}
-        </app-value-control>
-      </mat-list-item>
-      <mat-list-item class="value-controls"> 
-        <app-value-control label="Y">
-          {{ position.y }}
-        </app-value-control>
-      </mat-list-item>
-      <mat-list-item class="value-controls">
-        <app-value-control label="Z">
-          {{ position.z }}
+          <div class="row">
+            <span class="col title">X</span>
+            <span class="col title">Y</span>
+            <span class="col title">Z</span>
+          </div>
+          <div class="row">
+            <span class="col">{{ position.x }}</span>
+            <span class="col">{{ position.y }}</span>
+            <span class="col">{{ position.z }}</span>
+          </div>
+
         </app-value-control>
       </mat-list-item>
       
-      <mat-list-item class="value-controls"> 
+      <mat-list-item> 
         <app-value-control label="PositionHelper">
           <mat-checkbox
             [checked]="positionHelperEnable"
@@ -41,7 +34,16 @@
         </app-value-control>
       </mat-list-item>
 
-      <mat-list-item class="value-controls"> 
+      <mat-list-item>
+        <app-value-control 
+          label="Size" 
+          [value]="planet.size"
+          (change)="changeSize($event)"
+          >
+        </app-value-control>
+      </mat-list-item>
+
+      <mat-list-item> 
         <app-value-control label="Rotate">
           <mat-checkbox
             [checked]="planet.rotate"
@@ -50,7 +52,7 @@
         </app-value-control>
       </mat-list-item>
 
-      <mat-list-item class="value-controls"> 
+      <mat-list-item> 
         <app-value-control label="Rotation Direction">
           <mat-checkbox
             [checked]="rotationDir"
@@ -59,7 +61,7 @@
         </app-value-control>
       </mat-list-item>
 
-      <mat-list-item class="value-controls">
+      <mat-list-item>
         <app-value-control 
           label="Rotation speed" 
           [value]="rotation"
@@ -68,7 +70,7 @@
         </app-value-control>
       </mat-list-item>
 
-      <mat-list-item class="value-controls">
+      <mat-list-item>
         <app-value-control label="Show orbit">
           <mat-checkbox
             [checked]="showOrbit"
@@ -77,7 +79,7 @@
         </app-value-control>
       </mat-list-item>
 
-      <mat-list-item class="value-controls"> 
+      <mat-list-item> 
         <app-value-control label="Follow orbit">
           <mat-checkbox
             [checked]="followOrbit"
@@ -86,7 +88,7 @@
         </app-value-control>
       </mat-list-item>
 
-      <mat-list-item class="value-controls">
+      <mat-list-item>
         <app-value-control 
           label="Orbit speed" 
           [value]="orbitSpeed"
@@ -95,9 +97,9 @@
         </app-value-control>
       </mat-list-item>
       
-      <mat-list-item class="value-controls">
+      <mat-list-item>
         <app-value-control 
-          label="Orbit" 
+          label="Orbit size" 
           [value]="orbit"
           (change)="changeOrbit($event)"
           [step]="1"

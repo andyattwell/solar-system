@@ -132,4 +132,10 @@ export class SidebarComponent {
     }
   }
 
+  changeSize(scale:number) {
+    if (!this.planet) { return }
+    // this.planet.size = scale;
+    // this.planet.planet.geometry.scale(scale, scale, scale);
+  }
+
 }

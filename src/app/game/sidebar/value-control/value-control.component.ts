@@ -1,9 +1,11 @@
 import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-value-control',
   standalone: true,
-  imports: [],
+  imports: [MatButtonModule, MatIconModule],
   templateUrl: './value-control.component.html',
   styleUrl: './value-control.component.scss'
 })

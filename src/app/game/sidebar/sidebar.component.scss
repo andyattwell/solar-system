@@ -24,3 +24,20 @@ h1 {
     float: right;
   }
 }
+
+.row {
+  display: block;
+  width: 100%;
+
+  .col {
+  
+    display: inline-block;
+    width: 75px;
+    border: 1px solid #fff;
+    text-align: center;
+  
+    &.title {
+      font-weight: bold;
+    }
+  }
+}

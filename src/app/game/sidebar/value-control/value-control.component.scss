@@ -1,36 +1,48 @@
 $primary: rgb(23 99 143);
 
 :host{
-  display: block;
+  display: table;
   font-size: 14px;
+  width: 100%;
 
   button {
-    display: inline-block;
     width: 30px;
     height: 30px;
-    background-color: $primary;
-    color: #FFF;
-    font-weight: bold;
   }
 
   .label {
-    display: inline-block;
-    height: 30px;
-    width: 145px;
-    color: #FFF;
-    font-weight: bold;
-    line-height: 30px;
+    display: table-cell;
+    width: 40%;
+
+    .field-name {
+      height: 30px;
+      width: calc(90% - 10px);
+      display: block;
+      color: #FFF;
+      background-color: #4e4e4e;
+      font-weight: bold;
+      line-height: 30px;
+      padding-left: 10px;
+    }
+
   }
 
-  .value {
-    display: inline-block;
-    width: 50px;
-    height: 30px;
-    padding: 0;
-    margin: 0 10px;
+  .value-container {
+    display: table-cell;
+    width: 60%;
+    
+    .value {
+      display: inline-block;
+      width: 70px;
+      height: 30px;
+      padding: 0;
+      margin: 0 10px;
 
-    color: #FFF;
-    font-weight: bold;
-    text-align: center;
+      background-color: #414141;
+
+      color: #FFF;
+      font-weight: bold;
+      text-align: center;
+    }
   }
 }

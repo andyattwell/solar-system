@@ -1,13 +1,56 @@
-<span class="label">{{ label }}</span>
-<span class="value">
+<div class="label">
+  <span class="field-name">{{ label }}</span>
+</div>
+<div class="value-container">
   @if (value !== undefined) {
-    <button (click)="changeValue(-10)"><<</button>
-    <button (click)="changeValue(-1)"><</button>
-    <span class="value">{{ value.toFixed(2) }}</span>
-    <button (click)="changeValue(1)">></button>
-    <button (click)="changeValue(10)">>></button>
-    <button (click)="resetValue()">R</button>
+    <button 
+      mat-mini-fab
+      (click)="changeValue(-10)"
+      aria-label="Decrease value more"
+      title="Decrease value more"
+      color="primary"
+    >
+      <mat-icon>keyboard_double_arrow_left</mat-icon>
+    </button>
+    <button 
+      mat-mini-fab
+      (click)="changeValue(-1)"
+      aria-label="Decrease value"
+      title="Decrease value"
+      color="primary"
+    >
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <input type="number" [value]="value.toFixed(2)" class="value" disabled>
+    
+    <button 
+      mat-mini-fab
+      (click)="changeValue(1)"
+      aria-label="Increase value"
+      title="Increase value"
+      color="primary"
+    >
+    <mat-icon>chevron_right</mat-icon>
+    </button>
+    <button 
+      mat-mini-fab
+      (click)="changeValue(10)"
+      aria-label="Increase value more"
+      title="Increase value more"
+      color="primary"
+    >
+      <mat-icon>keyboard_double_arrow_right</mat-icon>
+    </button>
+    <button 
+      mat-mini-fab
+      (click)="resetValue()"
+      aria-label="Reset value"
+      title="Reset value"
+      color="primary"
+    >
+    <mat-icon>restart_alt</mat-icon>
+    </button>
   } @else {
     <ng-content></ng-content>
   }
-</span>
+</div>
