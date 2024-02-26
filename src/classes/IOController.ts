@@ -61,6 +61,8 @@ export class IOController {
     if (!this.parent.player.characterControls) return;
     if (event.shiftKey) {
       this.parent.player.characterControls.switchRunToggle()
+    } else if (event.key === 'Escape') {
+      this.parent.player.characterControls.removeTarget()
     } else {
       (this.keysPressed as any)[event.key.toLowerCase()] = true
     }
@@ -89,8 +91,9 @@ export class IOController {
   doubleClickHandler(e:MouseEvent): void {
     if (e.target === this.parent.canvas && this.hovered?.parent) {
       this.parent.selectPlanet(this.hovered.parent);
-      this.parent.openDialog(this.hovered.parent);
-      this.parent.cameraManager.lookAtPlanet(this.hovered.parent);
+      // this.parent.openDialog(this.hovered.parent);
+      // this.parent.cameraManager.lookAtPlanet(this.hovered.parent);
+      this.parent.player.setTarget(this.hovered.parent);
     }
     e.stopPropagation();
   }

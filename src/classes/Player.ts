@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { GameComponent } from '../app/game/game.component';
 import { CharacterControls } from './CharacterControl';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { Planet } from './Planet';
+import { getDistance } from '../helpers';
 
 const loader =  new GLTFLoader();
 
@@ -25,11 +27,8 @@ export class Player {
   }
 
   public init() {
-    // this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 1000);
     const self = this
     loader.load( 'assets/models/ufo/scene.gltf', async function ( gltf:any ) {
-
-
       const model = gltf.scene.children[0].children[0].children[0].children[0].children[0]
       model.rotateZ(90)
       model.scale.set(self.size, self.size, self.size)
@@ -44,12 +43,15 @@ export class Player {
     function ( error ) {
       console.error( error );
     });
-    
 
   }
-
 
   public animate(updateDelta:number, keysPressed:any) {
     this.characterControls?.update(updateDelta, keysPressed);
   }
+
+  public setTarget(target: Planet) {
+    this.characterControls.setTarget(target)
+  }
+
 }

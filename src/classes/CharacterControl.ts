@@ -1,6 +1,7 @@
 import * as THREE from 'three'
-import { A, D, DIRECTIONS, S, W } from '../helpers'
+import { A, D, DIRECTIONS, S, W, getDistance } from '../helpers'
 import { CameraManager } from './CameraManager'
+import { Planet } from './Planet'
 
 export class CharacterControls {
 
@@ -21,8 +22,10 @@ export class CharacterControls {
   // constants
   fadeDuration: number = 0.2
   runVelocity = 1
-  HyperVelocity = 10
+  HyperVelocity = 50
   walkVelocity = 0.05
+
+  private target: Planet|undefined;
 
   constructor(
     model: THREE.Mesh,
@@ -44,29 +47,50 @@ export class CharacterControls {
 
   public update(delta: number, keysPressed: any) {
     if (!this.cameraManager) return;
-    const directionPressed = DIRECTIONS.some(key => keysPressed[key] == true)
-
-    if (directionPressed) {
-      if (keysPressed.control) {
-        this.currentAction = 'Hyper'
-      } else if (this.toggleRun) {
-        this.currentAction = 'Run'
-      } else {
-        this.currentAction = 'Walk'
-      } 
+    let distance = 0;
+    if (this.target) {
+      // return this.moveTo(this.target.position, delta);
+      const targetPosition = new THREE.Vector3(
+        this.target.container.position.x + this.target.size * 2,
+        this.target.container.position.y,
+        this.target.container.position.z + this.target.size * 2,
+      )
+      distance = getDistance(this.model.position, targetPosition);
+      console.log({distance})
+      if (distance <= 1) {
+        this.target = undefined;
+        return;
+      }
+      this.currentAction = 'Hyper'
+      keysPressed = this.getsKeysForTarget(targetPosition);
     } else {
-      this.currentAction = 'Idle'
+      const directionPressed = DIRECTIONS.some(key => keysPressed[key] == true)
+      if (directionPressed) {
+        if (keysPressed.control) {
+          this.currentAction = 'Hyper'
+        } else if (this.toggleRun) {
+          this.currentAction = 'Run'
+        } else {
+          this.currentAction = 'Walk'
+        } 
+      } else {
+        this.currentAction = 'Idle'
+      }
     }
+
 
     if (this.currentAction == 'Run' || this.currentAction == 'Hyper' || this.currentAction == 'Walk') {
       // diagonal movement angle offset
       const directionOffset = this.directionOffset(keysPressed)
       
       // calculate towards camera direction
-      const angleYCameraDirection = Math.atan2(
-        (this.cameraManager.camera.position.x - this.model.position.x),
-        (this.cameraManager.camera.position.z - this.model.position.z)
-      )
+      let angleYCameraDirection = 0;
+      if (!this.target) {
+        angleYCameraDirection = Math.atan2(
+          (this.cameraManager.camera.position.x - this.model.position.x),
+          (this.cameraManager.camera.position.z - this.model.position.z)
+        )
+      }
 
       // rotate model
       this.rotateQuarternion.setFromAxisAngle(
@@ -77,10 +101,11 @@ export class CharacterControls {
       this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.1)
 
       // calculate direction
-      this.cameraManager.camera.getWorldDirection(this.walkDirection)
-
-      this.walkDirection.normalize()
-      this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset)
+      if (!this.target) {
+        this.cameraManager.camera.getWorldDirection(this.walkDirection)
+        this.walkDirection.normalize()
+        this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset)
+      }
 
       // run/walk velocity
       let velocity = this.walkVelocity;
@@ -88,22 +113,76 @@ export class CharacterControls {
         velocity = this.runVelocity;
       } else if (this.currentAction === 'Hyper') {
         velocity = this.HyperVelocity;
+
+        if (this.target) {
+          if (velocity > distance) {
+            velocity -= velocity - distance;
+          }
+        }
+
       }
       
       // move model & camera
       const moveX = this.walkDirection.x * velocity * delta
       const moveZ = this.walkDirection.z * velocity * delta
-      let moveY = 0
+      let moveY = this.walkDirection.y * velocity * delta
 
-      if (this.walkDirection.y <= -0.2 || this.walkDirection.y >= 0.05) {
-        moveY = this.walkDirection.y * velocity * delta
-      }
+      // if (this.walkDirection.y <= -0.2 || this.walkDirection.y >= 0.05) {
+      //   moveY = this.walkDirection.y * velocity * delta
+      // }
 
       this.model.position.x += moveX
       this.model.position.z += moveZ
       this.model.position.y += moveY
+
       this.updateCameraTarget(moveX, moveZ, moveY);
     }
+  }
+
+  private getsKeysForTarget(target: THREE.Vector3) {
+
+    let keys = {
+      w: false,
+      a: false,
+      s: false,
+      d: false
+    };
+
+    let dx = target.x - this.model.position.x;
+    let dy = target.y - this.model.position.y;
+    let dz = target.z - this.model.position.z;
+    
+    const margin = 0.1;
+
+    if (dz > margin) {
+      keys.w = true;
+      this.walkDirection.setZ(1);
+    } else if (dz < margin) {
+      keys.s = true;
+      this.walkDirection.setZ(-1);
+    } else {
+      this.walkDirection.setZ(0);
+    }
+
+    if (dx > margin) {
+      keys.a = true;
+      this.walkDirection.setX(1);
+    } else if (dx < margin) {
+      keys.d = true
+      this.walkDirection.setX(-1);
+    } else {
+      this.walkDirection.setX(0);
+    }
+
+    if (dy > margin) {
+      this.walkDirection.setY(1);
+    } else if (dy < margin) {
+      this.walkDirection.setY(-1);
+    } else {
+      this.walkDirection.setY(0);
+    }
+
+    return keys
   }
 
   public updateCameraTarget(moveX: number, moveZ: number, moveY: number) {
@@ -113,6 +192,7 @@ export class CharacterControls {
     this.cameraManager.camera.position.z += moveZ
     this.cameraManager.camera.position.y += moveY
     // update camera target
+    
     this.cameraTarget.x = this.model.position.x
     this.cameraTarget.z = this.model.position.z
     this.cameraTarget.y = this.model.position.y
@@ -123,7 +203,6 @@ export class CharacterControls {
 
   private directionOffset(keysPressed: any) {
     var directionOffset = 0 // w
-
     if (keysPressed[W]) {
       if (keysPressed[A]) {
         directionOffset = Math.PI / 4 // w+a
@@ -146,4 +225,13 @@ export class CharacterControls {
 
     return directionOffset
   }
+
+  public setTarget(target: Planet) {
+    this.target = target;
+  }
+
+  public removeTarget() {
+    this.target = undefined;
+  }
+
 }

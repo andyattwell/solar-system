@@ -21,12 +21,12 @@ export const DIRECTIONS = [W, A, S, D]
 
 
 
-// function distance(position0: THREE.Vector3, position1: THREE.Vector3) {
-//   let d1 = Math.abs(position1.x - position0.x);
-//   let d2 = Math.abs(position1.y - position0.y);
-//   let d3 = Math.abs(position1.z - position0.z);
-//   return d1 + d2 + d3;
-// }
+export function getDistance(position0: THREE.Vector3, position1: THREE.Vector3) {
+  let d1 = Math.abs(position1.x - position0.x);
+  let d2 = Math.abs(position1.y - position0.y);
+  let d3 = Math.abs(position1.z - position0.z);
+  return d1 + d2 + d3;
+}
 
 
 export function degrees_to_radians(degrees:number):number {
