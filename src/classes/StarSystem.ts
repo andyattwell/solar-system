@@ -16,6 +16,7 @@ export class System {
   public mesh: THREE.Object3D = new THREE.Object3D();
 
   private skybox: THREE.Mesh = new THREE.Mesh();
+  private skyboxSize: number = 6000;
   public showOrbit: boolean = false;
   public followOrbit: boolean = false;
   public rotationEnabled: boolean = true;
@@ -49,7 +50,7 @@ export class System {
       map: skyTexture,
       side: THREE.BackSide
     });
-    const skyGeo = new THREE.SphereGeometry(3000, 25, 25); 
+    const skyGeo = new THREE.SphereGeometry(this.skyboxSize, 25, 25); 
     this.skybox = new THREE.Mesh(skyGeo, material);
     this.skybox.name = "skybox";
     this.mesh.add(this.skybox);

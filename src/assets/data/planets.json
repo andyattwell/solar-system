@@ -4,6 +4,7 @@
     "name": "Sun",
     "size": 20.391400,
     "orbit": 0,
+    "star": true,
     "texture": "/assets/textures/sun-texture.jpg",
     "icon": "/assets/icons/sun.jpg",
     "color": {

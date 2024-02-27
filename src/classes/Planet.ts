@@ -8,7 +8,13 @@ import { degrees_to_radians } from '../helpers';
 export interface PlanetProps {
   name: string;
   size: number;
+  star?: boolean;
   orbit: number;
+  orbitOffset?: {
+    x: number,
+    y: number,
+    z: number
+  };
   orbitSpeed?:number;
   texture: string;
   bump?: string;
@@ -57,7 +63,13 @@ export class Planet extends THREE.Object3D {
   public axialTilt: number = 0;
   public angle: number = 0;
   public orbit: number = 0;
-  private orbitY: number = 0;
+  private orbitOffset: {
+    x: number,
+    y: number,
+    z: number
+  } = {
+    x: 0, y: 0, z: 0
+  };
   public orbitSpeed: number = 0;
   public showOrbit: boolean = false;
   public followOrbit: boolean = false;
@@ -72,6 +84,8 @@ export class Planet extends THREE.Object3D {
 
   public moons?: Array<Planet>;
 
+  public isStar:boolean|undefined = false;
+
   constructor(props: PlanetProps, orbitCenter: THREE.Object3D) {
     super();
 
@@ -79,6 +93,7 @@ export class Planet extends THREE.Object3D {
     
     this.size = props.size;
     this.name = props.name;
+    this.isStar = props.star;
     this.planetIcon = props.icon;
     this.planetTexture = props.texture || '';
     this.planetBump = props.bump;
@@ -92,8 +107,12 @@ export class Planet extends THREE.Object3D {
       this.axialTilt = degrees_to_radians(-props.axialTilt);
     }
 
-    this.orbitY = props.position?.y || 0;
-    this.container.position.y = this.orbitY;
+    if (props.orbitOffset) {
+      this.orbitOffset = props.orbitOffset;
+      this.container.position.x = this.orbitOffset.x;
+      this.container.position.y = this.orbitOffset.y;
+      this.container.position.z = this.orbitOffset.z;
+    }
 
     this.rotationDir = props.rotationDir || false;
     this.rotationSpeed = props.rotationSpeed / 60 / 60 / 10;
@@ -101,11 +120,14 @@ export class Planet extends THREE.Object3D {
     this.orbit = props.orbit !== 0 ? props.orbit: 0;
     this.orbitSpeed = props.orbitSpeed ? props.orbitSpeed * 0.001 : 0;
     this.angle = ((this.angle + Math.PI / 360 * this.orbitSpeed) % (Math.PI * 2)) * 10000000;
-
+    if (props.star) {
+      this.addLight();
+    }
     this.createPlanet();
+
     this.setPositionToOrbit(0, true);
 
-    if (props.name === 'Sun') {
+    if (this.isStar) {
       this.addLight();
     }
 
@@ -121,9 +143,10 @@ export class Planet extends THREE.Object3D {
 
   private createPlanet() {
     this.planet.geometry = new THREE.SphereGeometry(this.size, 64, 32);
-    if (this.name === 'Sun') {
+    if (this.isStar) {
       this.planet.material = new THREE.MeshBasicMaterial({
-        map: this.loader.load(this.planetTexture) 
+        map: this.isStar ? this.loader.load(this.planetTexture) : null, 
+        color:  new THREE.Color(this.color.x, this.color.y, this.color.z),
       });
     } else {
       this.planet.material = new THREE.MeshLambertMaterial({
@@ -253,7 +276,9 @@ export class Planet extends THREE.Object3D {
       })
       );
     this.orbitPath.rotation.x = Math.PI * 0.5;
-    this.orbitPath.position.y = this.container.position.y -this.size - 0.001;
+    this.orbitPath.position.y = this.orbitOffset.y + this.container.position.y -this.size - 0.001;
+    this.orbitPath.position.x = this.orbitOffset.x;
+    this.orbitPath.position.z = this.orbitOffset.z;
     this.orbitPath.geometry;
     this.orbitCenter.add(this.orbitPath);
 
@@ -282,21 +307,16 @@ export class Planet extends THREE.Object3D {
       return;
     }
     
-    // if (this.orbitCenter) {
-    //   this.container.position.x = this.orbitCenter.position.x;
-    //   this.container.position.y = this.orbitCenter.position.y;
-    //   this.container.position.z = this.orbitCenter.position.z;
-    // }
-
-    this.container.position.x = this.orbit * Math.cos(this.angle);
-    this.container.position.z = this.orbit * Math.sin(this.angle);
+    this.container.position.x = this.orbitOffset.x + this.orbit * Math.cos(this.angle);
+    this.container.position.z = this.orbitOffset.z + this.orbit * Math.sin(this.angle);
+    this.container.position.y = this.orbitOffset.y;
  
     const speed = this.orbitSpeed * timeScale;
     this.angle = ((this.angle + Math.PI / 360 * speed) % (Math.PI * 2))
   }
 
   private addLight() {
-    var light = new THREE.PointLight(0x404040, 10000, 800000);
+    var light = new THREE.PointLight(0x504030, 10000, 800000);
     light.intensity = 1000000;
     this.container.add(light);
   }

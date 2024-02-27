@@ -38,6 +38,7 @@ export class GameComponent implements AfterViewInit {
     return this.canvasRef?.nativeElement;
   }
   public showSidebar = false;
+  public infoData: any;
 
   public freeCamera!: THREE.PerspectiveCamera;
   public activeCamera!: THREE.PerspectiveCamera;
@@ -102,12 +103,16 @@ export class GameComponent implements AfterViewInit {
 
     this.setCamera('player');
     this.player.init();
+    this.Controller.init(this.player, this.starSystem.star, this.starSystem.planets);
+
+    this.selectedPlanet = this.planets[3];
     
-    this.selectPlanet(this.planets[3], true);
     
     const self = this;
     setTimeout(() => {
       self.playGame();
+      self.selectPlanet(self.selectedPlanet);
+      self.goToPlanet(self.selectedPlanet);
     },1000)
   }
 
@@ -162,22 +167,26 @@ export class GameComponent implements AfterViewInit {
     }())
   }
 
-  public selectPlanet(planet?: Planet, show?: boolean): void {
+  public goToPlanet(planet: Planet) { 
+    this.player?.setTarget(planet);
+  }
+
+  public selectPlanet(planet?: Planet): void {
 
     if (!planet) {
       return this.setCamera('system');
     }
 
     this.selectedPlanet = planet;
-    if (this.selectedPlanet && show) {
-      this.cameraManager.lookAtPlanet(this.selectedPlanet);
-      // this.openDialog(this.selectedPlanet);
-      this.openPlanetInfo()
-    }
+    this.cameraManager.lookAtPlanet(this.selectedPlanet);
+    this.openPlanetInfo('planet', this.selectedPlanet)
   }
 
-  public openPlanetInfo() {
+  public openPlanetInfo(type: string, data: any) {
     this.showSidebar = true;
+    this.infoData = {
+      type, data
+    }
     setTimeout(() => {
       this.cameraManager.setAspectRatio();
     }, 1)
@@ -185,6 +194,7 @@ export class GameComponent implements AfterViewInit {
 
   public closePlanetInfo() {
     this.showSidebar = false;
+    this.infoData = {}
     setTimeout(() => {
       this.cameraManager.setAspectRatio();
     }, 1)

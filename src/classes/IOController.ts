@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Planet } from './Planet';
+import { Player } from './Player';
 
 export class IOController {
   public parent:any;
@@ -12,13 +13,13 @@ export class IOController {
 
   constructor(parent:any) {
     this.parent = parent;
-    this.init();
   }
 
-  init () {
+  init (player: Player, star: Planet, planets: Array<Planet>) {
     const self = this;
-    
-    this.parent.planets.forEach((_planet:any) => {
+    this.targets.push(player);
+    this.targets.push(star);
+    planets.forEach((_planet:any) => {
       self.targets.push(_planet)
       _planet?.moons?.forEach((_moon: Planet) => {
         self.targets.push(_moon)
@@ -63,6 +64,8 @@ export class IOController {
       this.parent.player.characterControls.switchRunToggle()
     } else if (event.key === 'Escape') {
       this.parent.player.characterControls.removeTarget()
+    } else if (event.key === 'q' || event.key === 'e') {
+      this.parent.cameraManager.rotateCamera(event.key)
     } else {
       (this.keysPressed as any)[event.key.toLowerCase()] = true
     }
@@ -90,17 +93,24 @@ export class IOController {
 
   doubleClickHandler(e:MouseEvent): void {
     if (e.target === this.parent.canvas && this.hovered?.parent) {
-      this.parent.selectPlanet(this.hovered.parent);
-      // this.parent.openDialog(this.hovered.parent);
-      // this.parent.cameraManager.lookAtPlanet(this.hovered.parent);
-      this.parent.player.setTarget(this.hovered.parent);
+      if (this.hovered.name === 'starship') {
+
+        console.log('click', this.hovered)
+      } else {
+        this.parent.goToPlanet(this.hovered.parent);
+      }
     }
     e.stopPropagation();
   }
 
   clickHandler(e:MouseEvent) {
     if (e.target === this.parent.canvas && this.hovered?.parent) {
-      this.parent.selectPlanet(this.hovered.parent);
+      if (this.hovered.name === 'starship') {
+        console.log('click', this.hovered)
+        this.parent.openPlanetInfo('player', this.hovered);
+      } else {
+        this.parent.selectPlanet(this.hovered.parent);
+      }
     }
   }
 

@@ -1,5 +1,5 @@
-import { Component, Inject, EventEmitter, Output, AfterViewInit, Input, ViewChild, ElementRef } from '@angular/core';
-
+import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
@@ -7,11 +7,13 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Planet } from '../../../classes/Planet';
 import { ValueControlComponent } from './value-control/value-control.component';
 import { PreviewComponent } from './preview/preview.component';
+import { Player } from '../../../classes/Player';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
   imports: [
+    MatTabsModule,
     MatListModule,
     MatButtonModule,
     MatIconModule,
@@ -24,6 +26,7 @@ import { PreviewComponent } from './preview/preview.component';
 })
 export class SidebarComponent {
   @Input('planet') public planet: Planet | undefined;
+  @Input('player') public player: Player | null = null;
   @Input('timeScale') public timeScale = 1;
   @Output() closeEvent = new EventEmitter<any>();
 
@@ -136,6 +139,10 @@ export class SidebarComponent {
     if (!this.planet) { return }
     // this.planet.size = scale;
     // this.planet.planet.geometry.scale(scale, scale, scale);
+  }
+
+  changePlayerRotation(rotation:number) {
+    this.player?.rotateY(rotation);
   }
 
 }

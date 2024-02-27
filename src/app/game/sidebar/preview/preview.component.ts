@@ -36,7 +36,7 @@ export class PreviewComponent implements AfterViewInit {
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
   private group = new THREE.Object3D;
-  private light = new THREE.PointLight(0x404040, 10000, 800000);
+  private light = new THREE.PointLight(0x504030, 10000, 800000);
   private lightIntensity = 500;
   
   ngAfterViewInit(): void {
