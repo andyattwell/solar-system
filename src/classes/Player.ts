@@ -26,6 +26,8 @@ export class Player extends THREE.Object3D{
       model.name = 'starship';
       model.rotateY(degrees_to_radians(180));
       model.scale.set(self.size, self.size, self.size);
+      model.receiveShadow = true;
+      model.castShadow = true; //default is false
       self.mesh.add(model);
       await self.game.renderer.compileAsync( self.mesh, self.game.cameraManager.camera, self.game.scene );
 

@@ -153,6 +153,8 @@ export class Planet extends THREE.Object3D {
         map: this.loader.load(this.planetTexture),
         side: THREE.FrontSide
       });
+      this.planet.receiveShadow = true;
+      this.planet.castShadow = true;
       // if (this.planetBump) {
       //   const normalTexture = new THREE.TextureLoader().load(this.planetBump)
       //   this.material.normalMap = normalTexture
@@ -234,6 +236,9 @@ export class Planet extends THREE.Object3D {
       }
     });
     const atmos = new THREE.Mesh(geo, mat);
+    
+    atmos.receiveShadow = false;
+    atmos.castShadow = false;
     atmos.scale.set(1.1,1.1,1.1)
     this.container.add(atmos);
 
@@ -316,8 +321,16 @@ export class Planet extends THREE.Object3D {
   }
 
   private addLight() {
-    var light = new THREE.PointLight(0x504030, 10000, 800000);
-    light.intensity = 1000000;
+    const light = new THREE.PointLight(0x504030, 1000000, 800000);
+    // light.shadow = new THREE.PointLightShadow(this.parent.camera)
+    light.castShadow = true;
+
+    //Set up shadow properties for the light
+    light.shadow.mapSize.width = 512; // default
+    light.shadow.mapSize.height = 512; // default
+    light.shadow.camera.near = 0.5; // default
+    light.shadow.camera.far = 500; // default
+
     this.container.add(light);
   }
 
