@@ -38,7 +38,6 @@ export class GameComponent implements AfterViewInit {
     return this.canvasRef?.nativeElement;
   }
   public showSidebar = false;
-  public infoData: any;
 
   public freeCamera!: THREE.PerspectiveCamera;
   public activeCamera!: THREE.PerspectiveCamera;
@@ -88,31 +87,20 @@ export class GameComponent implements AfterViewInit {
   private newGame() {
     this.createScene();
 
-    this.renderer = new THREE.WebGLRenderer({
-      canvas: this.canvas,
-      antialias: true,
-    });
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1;
-
     this.cameraManager = new CameraManager(this);
-    
     this.starSystem.startScene(this.scene);
-    
-    this.player = new Player(this)
-
+    this.player = new Player(this);
     this.setCamera('player');
-    this.player.init();
-    this.Controller.init(this.player, this.starSystem.star, this.starSystem.planets);
-
-    this.selectedPlanet = this.planets[3];
     
-    
+    this.Controller.init(this.player, this.starSystem.star, this.starSystem.planets);    
     const self = this;
     setTimeout(() => {
       self.playGame();
-      self.selectPlanet(self.selectedPlanet);
-      self.goToPlanet(self.selectedPlanet);
+      self.selectPlanet(this.planets[3]);
+      if (self.selectedPlanet.parent) {
+        // self.player?.goToPlanet(self.selectedPlanet);
+        self.player?.setPosition(self.selectedPlanet.parent.position, self.selectedPlanet.size);
+      }
     },1000)
   }
 
@@ -125,6 +113,12 @@ export class GameComponent implements AfterViewInit {
   private createScene() {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x000000);
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: this.canvas,
+      antialias: true,
+    });
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1;
   }
 
   /**
@@ -167,16 +161,12 @@ export class GameComponent implements AfterViewInit {
     }())
   }
 
-  public goToPlanet(planet: Planet) { 
-    this.player?.setTarget(planet);
-  }
-
   public selectPlanet(planet?: Planet): void {
 
     if (!planet) {
       return this.setCamera('system');
     }
-
+  
     this.selectedPlanet = planet;
     this.cameraManager.lookAtPlanet(this.selectedPlanet);
     this.openPlanetInfo('planet', this.selectedPlanet)
@@ -184,9 +174,6 @@ export class GameComponent implements AfterViewInit {
 
   public openPlanetInfo(type: string, data: any) {
     this.showSidebar = true;
-    this.infoData = {
-      type, data
-    }
     setTimeout(() => {
       this.cameraManager.setAspectRatio();
     }, 1)
@@ -194,7 +181,6 @@ export class GameComponent implements AfterViewInit {
 
   public closePlanetInfo() {
     this.showSidebar = false;
-    this.infoData = {}
     setTimeout(() => {
       this.cameraManager.setAspectRatio();
     }, 1)

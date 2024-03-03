@@ -28,13 +28,14 @@
     ></app-planet-selector>
 
   </div>
-  <app-sidebar 
-    [style.opacity]="!isLoading ? 1 : 0 "
-    [planet]="selectedPlanet"
-    [player]="player"
-    [timeScale]="timeScale"
-    [class.opened]="showSidebar"
-    (closeEvent)="closePlanetInfo()"
-  ></app-sidebar>
+  @if (!isLoading) {
+    <app-sidebar 
+      [planet]="selectedPlanet"
+      [player]="player"
+      [timeScale]="timeScale"
+      [class.opened]="showSidebar"
+      (closeEvent)="closePlanetInfo()"
+    ></app-sidebar>
+  }
 
 </div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Output, Input, AfterViewInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +8,16 @@ import { Planet } from '../../../classes/Planet';
 import { ValueControlComponent } from './value-control/value-control.component';
 import { PreviewComponent } from './preview/preview.component';
 import { Player } from '../../../classes/Player';
+import * as THREE from 'three';
+
+interface Preview {
+  model: THREE.Object3D,
+  size: number,
+  rotate: boolean,
+  dir: boolean,
+  rotationSpeed: number,
+  type: string,
+}
 
 @Component({
   selector: 'app-sidebar',
@@ -24,19 +34,24 @@ import { Player } from '../../../classes/Player';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
-export class SidebarComponent {
+export class SidebarComponent implements AfterViewInit {
+
   @Input('planet') public planet: Planet | undefined;
   @Input('player') public player: Player | null = null;
   @Input('timeScale') public timeScale = 1;
   @Output() closeEvent = new EventEmitter<any>();
 
-  orbitMultiplyer: number = 1;
-  originalOrbit: number = 0;
+  selectedTabIndex = 1
+  previewData:Preview|undefined;
+  tabs = ['planet', 'player'];
 
   ngAfterViewInit(): void {
-    if (this.planet) {
-      this.originalOrbit = this.planet.orbit
-    }
+    
+    this.selectedTabIndex = 1;
+    const self = this;
+    setTimeout(() => {
+      self.setPlayerPreview();
+    }, 10)
   }
 
   public changeRotationSpeed(n:number) {
@@ -144,5 +159,47 @@ export class SidebarComponent {
   changePlayerRotation(rotation:number) {
     this.player?.rotateY(rotation);
   }
+
+  onTabChanged($event:any) {
+    this.selectedTabIndex = $event.index;
+    this.previewData = undefined;
+
+    const self = this;
+    setTimeout(() => {
+      if (self.tabs[self.selectedTabIndex] === 'planet' && self.planet) {
+        self.setPlanetPreview();
+      } else if (self.tabs[self.selectedTabIndex] === 'player') {
+        self.setPlayerPreview()
+      }
+    }, 1)
+  }
+  setPlanetPreview() {
+    if (!this.planet) {
+      return;
+    }
+    this.previewData = {
+      model: this.planet.planet,
+      size: this.planet.size,
+      rotate: this.planet.rotate,
+      dir: this.planet.rotationDir,
+      rotationSpeed: this.planet.rotationSpeed,
+      type: 'planet',
+    }
+  }
+
+  setPlayerPreview() {
+    if (!this.player) {
+      return;
+    }
+    this.previewData = {
+      model: this.player.mesh,
+      size: this.player.size,
+      rotate: true,
+      dir: false,
+      rotationSpeed: 0.01,
+      type: 'player',
+    } 
+  }
+
 
 }

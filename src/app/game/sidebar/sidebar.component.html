@@ -1,4 +1,18 @@
-<mat-tab-group>
+<!-- <mat-tab-group [selectedIndex]="1"> -->
+<div id="preview">
+  @if(previewData) {
+    <app-preview 
+      [model]="previewData.model"
+      [timeScale]="timeScale"
+      [size]="previewData.size"
+      [rotate]="previewData.rotate"
+      [rotationDir]="previewData.dir"
+      [rotationSpeed]="previewData.rotationSpeed"
+      [type]="previewData.type"
+    ></app-preview>
+  }
+</div>
+<mat-tab-group [selectedIndex]="selectedTabIndex" (selectedTabChange)="onTabChanged($event);">
   <mat-tab label="Planet Info">
     @if (planet) {
       <h1>{{ planet.name }}
@@ -6,8 +20,14 @@
           <mat-icon>close</mat-icon>
         </button>
       </h1>
-    
-      <app-preview [planet]="planet" [timeScale]="timeScale"></app-preview>
+      <!-- <app-preview 
+        [model]="planet.planet" 
+        [timeScale]="timeScale"
+        [size]="planet.size"
+        [rotate]="planet.rotate"
+        [rotationDir]="planet.rotationDir"
+        [rotationSpeed]="planet.rotationSpeed"
+        ></app-preview> -->
       <div class="info-content">
         <mat-list>
     
@@ -122,8 +142,15 @@
         </button>
       </h1>
     
-      <!-- <app-preview [planet]="planet" [timeScale]="timeScale"></app-preview> -->
-
+      <!-- <app-preview 
+        [model]="player.mesh"
+        [timeScale]="timeScale"
+        [size]="1"
+        [rotate]="true"
+        [rotationDir]="true"
+        [rotationSpeed]="0.01"
+        [type]="'player'"
+      ></app-preview> -->
       <div class="info-content">
         <mat-list>
     

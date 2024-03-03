@@ -15,6 +15,10 @@ $primary: rgb(23 99 143);
   }
 }
 
+#preview {
+  min-height: 200px;
+}
+
 h1 {
   background-color: $primary;
   padding: 10px;

@@ -12,18 +12,25 @@ import { Planet } from '../../../../classes/Planet';
 export class PreviewComponent implements AfterViewInit {
 
   @Input('timeScale') public timeScale = 0;
-  private _planet?: Planet;
+  @Input('type') public type = 'planet';
+  @Input('size') public size = 1;
+  @Input('rotate') public rotate = true;
+  @Input('rotationDir') public rotationDir = true;
+  @Input('rotationSpeed') public rotationSpeed = 0.01;
 
-  @Input() set planet(value: Planet) {
-    this._planet = value;
-    this.group = this._planet.planet.clone();
+  private _model?: THREE.Object3D;
+
+  @Input() set model(value: THREE.Object3D) {
+    this._model = value;
+    this.group = this._model.clone();
+
     setTimeout(() => {
       this.createPreview();
-    }, 100)
+    }, 1)
   }
   
-  get planet(): Planet|undefined {
-    return this._planet;
+  get model(): THREE.Object3D|undefined {
+    return this._model;
   }
 
   @ViewChild('preview')
@@ -40,6 +47,10 @@ export class PreviewComponent implements AfterViewInit {
   private lightIntensity = 500;
   
   ngAfterViewInit(): void {
+    // this.createScene();
+  }
+
+  createScene(): void {
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.preview,
       antialias: true,
@@ -52,46 +63,82 @@ export class PreviewComponent implements AfterViewInit {
     this.camera = new THREE.PerspectiveCamera(
       45, 
       this.preview.clientWidth / this.preview.clientHeight, 
-      0.1, 
-      100
+      0.001, 
+      1000
     );
   }
 
   clearScene() {
     const self = this;
-    this.scene.children.forEach((c) => {
+    console.log('clearScene');
+    this.scene?.children.forEach((c) => {
       self.scene.remove(c)
     })
   }
 
   createPreview() {
-    if (!this._planet) { return }
+    if (!this._model) { return }
     
-    this.clearScene();
+    if (this.scene) {
+      this.clearScene();
+    } else {
+      this.createScene();
+    }
 
-    this.group.position.setZ(-this._planet.size * 3)
-    this.scene.add(this.group);
+    if (this.type === 'player') {
+      this.shipPreview();
+    } else if(this.type === 'planet'){
+      this.planetPreview();
+    }
+    
 
-    let lightPosition = 0;
-    if (this._planet.size < 0.1) {
+    this.startRenderingLoop();
+  }
+
+  private planetPreview() {
+    this.group.position.setZ(-this.size * 3)
+    
+    let lightPosition = 1000;
+    if (this.size < 0.1) {
       this.lightIntensity = 1;
-      lightPosition = this._planet.size;
-    } else if (this._planet.size >= 0.1 && this._planet.size < 0.5) {
+      lightPosition = this.size;
+    } else if (this.size >= 0.1 && this.size < 0.5) {
       this.lightIntensity = 100;
-      lightPosition = this._planet.size * 2;
-    } else if (this._planet.size >= 0.5 && this._planet.size <= 3) {
-      this.lightIntensity = 1000 * this._planet.size;
-      lightPosition = this._planet.size * 2;
-    } else if (this._planet.size >= 3) {
+      lightPosition = this.size * 2;
+    } else if (this.size >= 0.5 && this.size <= 3) {
+      this.lightIntensity = 1000 * this.size;
+      lightPosition = this.size * 2;
+    } else if (this.size >= 3) {
       this.lightIntensity = 20000;
-      lightPosition = this._planet.size;
+      lightPosition = this.size;
     }
 
     this.light.intensity = this.lightIntensity;
-    this.light.position.setZ(lightPosition)
+    this.light.position.setZ(lightPosition);
+
+    this.scene.add(this.group);
     this.scene.add(this.light);
     this.scene.add(this.camera);
-    this.startRenderingLoop();
+  }
+
+  private shipPreview() {
+
+    this.camera.position.setY(this.group.position.y + 0.002 )
+    this.camera.position.setX(this.group.position.x + 0.002 )
+    this.camera.position.setZ(this.group.position.z + 0.002 )
+
+    this.camera.lookAt(this.group.position);
+
+    let lightPosition = 10;
+    this.lightIntensity = 20000;
+
+    this.light.intensity = this.lightIntensity;
+    this.light.position.setZ(lightPosition);
+    this.light.position.setY(lightPosition);
+
+    this.scene.add(this.group);
+    this.scene.add(this.light);
+    this.scene.add(this.camera);
   }
 
   private startRenderingLoop() {
@@ -104,11 +151,11 @@ export class PreviewComponent implements AfterViewInit {
   }
 
   private animate() {
-    if (this.planet?.rotate) {
-      if (this.planet?.rotationDir) {
-        this.group.rotation.y -= this.planet.rotationSpeed * this.timeScale;
+    if (this.rotate) {
+      if (this.rotationDir) {
+        this.group.rotation.y -= this.rotationSpeed * this.timeScale;
       } else {
-        this.group.rotation.y += this.planet.rotationSpeed * this.timeScale;
+        this.group.rotation.y += this.rotationSpeed * this.timeScale;
       }
     }
   }

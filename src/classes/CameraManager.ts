@@ -106,7 +106,10 @@ export class CameraManager {
       this.controls.update();
 
     } else if (this.camera.name === 'player') {
-      this.playerLookAtPlanet(planet);
+      // if (this.controls) {
+      //   this.parent.player?.lookAtPlanet(planet, this.controls);
+      // }
+      this.parent.player?.goToPlanet(planet);
     } else if (this.camera.name === 'system') {
       this.camera.position.setX(planetPosX);
       this.camera.position.setZ(planetPosZ);
@@ -115,28 +118,6 @@ export class CameraManager {
       this.controls.target = new Vector3(planetPosX, planetPosY, planetPosZ);
       this.controls.update();
     }
-  }
-
-  private playerLookAtPlanet(planet: Planet){
-    if (!this.parent.player || !this.parent.player.characterControls || !this.controls) return;
-
-    const planetPos: Vector3 = new Vector3(
-      planet.orbitCenter.position.x + planet.container.position.x + planet.size,
-      planet.orbitCenter.position.y + planet.container.position.y,
-      planet.orbitCenter.position.z + planet.container.position.z -planet.size * 2,
-    );
-
-    // this.parent.player.position.set(planetPos.x, planetPos.y, planetPos.z);
-
-    var pos = new Vector3();
-    pos.addVectors(planetPos, this.parent.player.position);
-
-    // this.controls.rotate(-Math.PI / 4, 0);
-    this.parent.player.quaternion.rotateTowards(planet.container.quaternion, 1)
-    this.controls.rotate(0.5, 0);
-    // this.camera.lookAt(pos)
-    this.parent.player.characterControls.updateCameraTarget(planetPos.x,planetPos.z,planetPos.y)
-    this.controls.update();
   }
 
   public rotateCamera(key:string) {
