@@ -82,9 +82,9 @@ export class PlanetDialogComponent implements AfterViewInit {
 
   public get position () {
     return {
-      x: this.data.container.position.x.toFixed(2),
-      y: this.data.container.position.y.toFixed(2),
-      z: this.data.container.position.z.toFixed(2),
+      x: this.data.position.x.toFixed(2),
+      y: this.data.position.y.toFixed(2),
+      z: this.data.position.z.toFixed(2),
     }
   }
 

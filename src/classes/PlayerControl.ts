@@ -51,9 +51,9 @@ export class CharacterControls {
     if (this.target) {
       // return this.moveTo(this.target.position, delta);
       const targetPosition = new THREE.Vector3(
-        this.target.orbitCenter.position.x + this.target.container.position.x + this.target.size * 2,
-        this.target.orbitCenter.position.y + this.target.container.position.y,
-        this.target.orbitCenter.position.z + this.target.container.position.z + this.target.size * 2,
+        this.target.orbitCenter.position.x + this.target.position.x + this.target.size * 2,
+        this.target.orbitCenter.position.y + this.target.position.y,
+        this.target.orbitCenter.position.z + this.target.position.z + this.target.size * 2,
       )
       distance = getDistance(this.model.position, targetPosition);
       if (distance <= 1) {

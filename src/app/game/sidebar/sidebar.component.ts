@@ -54,11 +54,6 @@ export class SidebarComponent implements AfterViewInit {
     }, 10)
   }
 
-  public changeRotationSpeed(n:number) {
-    if (!this.planet) { return }
-    this.planet.rotationSpeed = n * 0.0001;
-  }
-
   public get positionHelperEnable() {
     return this.planet ? this.planet.positionHelper : false;
   }
@@ -66,9 +61,9 @@ export class SidebarComponent implements AfterViewInit {
   public get position () {
     if (this.planet) {
       return {
-        x: this.planet.container?.position.x.toFixed(2),
-        y: this.planet.container?.position.y.toFixed(2),
-        z: this.planet.container?.position.z.toFixed(2),
+        x: this.planet.position.x.toFixed(2),
+        y: this.planet.position.y.toFixed(2),
+        z: this.planet.position.z.toFixed(2),
       }
     }
     return {
@@ -99,31 +94,13 @@ export class SidebarComponent implements AfterViewInit {
   public get showOrbit() {
     return this.planet ? this.planet.showOrbit : false
   }
-
-  setShowOrbit(checked:boolean): void {
-    if (this.planet) {
-      this.planet.toggleShowOrbit(checked);
-    }
-  }
   
   public get followOrbit() {
     return this.planet ? this.planet.followOrbit : 0
   }
 
-  setFollowOrbit(checked:boolean): void {
-    if (this.planet) {
-      this.planet.followOrbit = checked;
-    }
-  }
-
   public get rotationDir () {
     return this.planet ? this.planet.rotationDir : false
-  }
-
-  setRotationDir(dir:boolean): void {
-    if (this.planet) {
-      this.planet.rotationDir = dir;
-    }
   }
 
   public get rotation () {
@@ -133,27 +110,9 @@ export class SidebarComponent implements AfterViewInit {
     return 0;
   }
 
-  setRotate(r: boolean) {
-    if (this.planet) {
-      this.planet.rotate = r
-    }
-  }
-
   close(e:MouseEvent) {
     e.stopPropagation();
     this.closeEvent.emit();
-  }
-
-  togglePositionHelper(show:Boolean) {
-    if (this.planet) {
-      this.planet.togglePositionHelper();
-    }
-  }
-
-  changeSize(scale:number) {
-    if (!this.planet) { return }
-    // this.planet.size = scale;
-    // this.planet.planet.geometry.scale(scale, scale, scale);
   }
 
   changePlayerRotation(rotation:number) {

@@ -91,19 +91,18 @@ export class IOController {
     }
   }
 
-  doubleClickHandler(e:MouseEvent): void {
-    if (e.target === this.parent.canvas && this.hovered?.parent) {
-      if (this.hovered.name === 'starship') {
-
-        console.log('click', this.hovered)
-      } else {
-        this.parent.goToPlanet(this.hovered.parent);
-      }
-    }
+  clickHandler(e:MouseEvent): void {
+    // if (e.target === this.parent.canvas && this.hovered?.parent) {
+    //   if (this.hovered.name === 'starship') {
+    //     console.log('click', this.hovered)
+    //   } else {
+    //     this.parent.goToPlanet(this.hovered.parent);
+    //   }
+    // }
     e.stopPropagation();
   }
 
-  clickHandler(e:MouseEvent) {
+  doubleClickHandler(e:MouseEvent) {
     if (e.target === this.parent.canvas && this.hovered?.parent) {
       if (this.hovered.name === 'starship') {
         console.log('click', this.hovered)

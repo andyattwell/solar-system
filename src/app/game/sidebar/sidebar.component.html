@@ -3,7 +3,6 @@
   @if(previewData) {
     <app-preview 
       [model]="previewData.model"
-      [timeScale]="timeScale"
       [size]="previewData.size"
       [rotate]="previewData.rotate"
       [rotationDir]="previewData.dir"
@@ -14,26 +13,17 @@
 </div>
 <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedTabChange)="onTabChanged($event);">
   <mat-tab label="Planet Info">
-    @if (planet) {
+    @if (planet && selectedTabIndex === 0) {
       <h1>{{ planet.name }}
         <button type="button" class="close-info" mat-mini-fab aria-label="Close" (click)="close($event)">
           <mat-icon>close</mat-icon>
         </button>
       </h1>
-      <!-- <app-preview 
-        [model]="planet.planet" 
-        [timeScale]="timeScale"
-        [size]="planet.size"
-        [rotate]="planet.rotate"
-        [rotationDir]="planet.rotationDir"
-        [rotationSpeed]="planet.rotationSpeed"
-        ></app-preview> -->
       <div class="info-content">
         <mat-list>
     
           <mat-list-item> 
             <app-value-control label="Position">
-    
               <div class="row">
                 <span class="col title">X</span>
                 <span class="col title">Y</span>
@@ -52,7 +42,7 @@
             <app-value-control label="PositionHelper">
               <mat-checkbox
                 [checked]="positionHelperEnable"
-                (change)="togglePositionHelper($event.checked)"
+                (change)="planet.togglePositionHelper()"
               ></mat-checkbox>
             </app-value-control>
           </mat-list-item>
@@ -61,7 +51,7 @@
             <app-value-control 
               label="Size" 
               [value]="planet.size"
-              (change)="changeSize($event)"
+              (change)="planet.changeSize($event)"
               >
             </app-value-control>
           </mat-list-item>
@@ -70,7 +60,7 @@
             <app-value-control label="Rotate">
               <mat-checkbox
                 [checked]="planet.rotate"
-                (change)="setRotate($event.checked)"
+                (change)="planet.setRotate($event.checked)"
               ></mat-checkbox>
             </app-value-control>
           </mat-list-item>
@@ -79,7 +69,7 @@
             <app-value-control label="Rotation Direction">
               <mat-checkbox
                 [checked]="rotationDir"
-                (change)="setRotationDir($event.checked)"
+                (change)="planet.setRotationDir($event.checked)"
               ></mat-checkbox>
             </app-value-control>
           </mat-list-item>
@@ -88,7 +78,7 @@
             <app-value-control 
               label="Rotation speed" 
               [value]="rotation"
-              (change)="changeRotationSpeed($event)"
+              (change)="planet.changeRotationSpeed($event)"
               >
             </app-value-control>
           </mat-list-item>
@@ -97,7 +87,7 @@
             <app-value-control label="Show orbit">
               <mat-checkbox
                 [checked]="showOrbit"
-                (change)="setShowOrbit($event.checked)"
+                (change)="planet.setShowOrbit($event.checked)"
               ></mat-checkbox>
             </app-value-control>
           </mat-list-item>
@@ -105,8 +95,8 @@
           <mat-list-item> 
             <app-value-control label="Follow orbit">
               <mat-checkbox
-                [checked]="followOrbit"
-                (change)="setFollowOrbit($event.checked)"
+                [checked]="planet.followOrbit"
+                (change)="planet.setFollowOrbit($event.checked)"
               ></mat-checkbox>
             </app-value-control>
           </mat-list-item>
@@ -114,8 +104,18 @@
           <mat-list-item>
             <app-value-control 
               label="Orbit speed" 
-              [value]="orbitSpeed"
-              (change)="changeOrbitSpeed($event)"
+              [value]="planet.orbitSpeed"
+              (change)="planet.changeOrbitSpeed($event)"
+              >
+            </app-value-control>
+          </mat-list-item>
+    
+          <mat-list-item>
+            <app-value-control 
+              label="Orbit Angle" 
+              [value]="planet.angle"
+              (change)="planet.changeOrbitAngle($event)"
+              [step]="0.01"
               >
             </app-value-control>
           </mat-list-item>
@@ -124,8 +124,8 @@
             <app-value-control 
               label="Orbit size" 
               [value]="orbit"
-              (change)="changeOrbit($event)"
-              [step]="1"
+              (change)="planet.changeOrbit($event)"
+              [step]="0.1"
               >
             </app-value-control>
           </mat-list-item>
@@ -135,7 +135,7 @@
     }
   </mat-tab>
   <mat-tab label="Player Info">
-    @if (player) {
+    @if (player && selectedTabIndex === 1) {
       <h1>Player
         <button type="button" class="close-info" mat-mini-fab aria-label="Close" (click)="close($event)">
           <mat-icon>close</mat-icon>
@@ -164,7 +164,7 @@
             <app-value-control 
               label="Size" 
               [value]="player.size"
-              (change)="changeSize($event)"
+              (change)="player.changeSize($event)"
               >
             </app-value-control>
           </mat-list-item>

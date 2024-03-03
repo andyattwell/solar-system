@@ -90,7 +90,7 @@ export class GameComponent implements AfterViewInit {
     this.cameraManager = new CameraManager(this);
     this.starSystem.startScene(this.scene);
     this.player = new Player(this);
-    this.setCamera('player');
+    this.setCamera('free');
     
     this.Controller.init(this.player, this.starSystem.star, this.starSystem.planets);    
     const self = this;
@@ -137,9 +137,9 @@ export class GameComponent implements AfterViewInit {
     
     this.player?.animate(this.clock.getDelta(), this.Controller.keysPressed);
     
-    if (this.cameraManager.camera.name === 'system' && this.selectedPlanet) {
-      this.cameraManager.lookAtPlanet(this.selectedPlanet)
-    }
+    // if ((this.cameraManager.camera.name === 'system' || this.cameraManager.camera.name === 'free') && this.selectedPlanet) {
+    //   this.cameraManager.lookAtPlanet(this.selectedPlanet)
+    // }
 
     if (!this.cameraManager.controls) return;
     this.cameraManager.controls.update()
@@ -167,6 +167,10 @@ export class GameComponent implements AfterViewInit {
 
     if (!planet) {
       return this.setCamera('system');
+    }
+
+    if (this.selectedPlanet) {
+      this.selectedPlanet.remove(this.cameraManager.camera);
     }
   
     this.selectedPlanet = planet;
@@ -251,7 +255,6 @@ export class GameComponent implements AfterViewInit {
     //   this.playGame();
     // }
   }
-
 
   public setCamera(cameraType: string) {
     if (cameraType === 'system') {

@@ -14,14 +14,13 @@ export class CameraManager {
   }
 
   public setFreeCamera() {
-
     this.camera = new PerspectiveCamera();
     this.camera.name = 'free'
     this.camera.aspect = this.parent.canvas.clientWidth / this.parent.canvas.clientHeight
     this.camera.near = 0.01;
     this.camera.far = 8000;
     this.camera.fov = 45;
-    this.camera.position.set(0, 100, 0);
+    this.camera.position.set(0, 10, 0);
 
     this.controls?.dispose();
     this.controls = new OrbitControls(this.camera, this.parent.renderer.domElement);
@@ -29,13 +28,13 @@ export class CameraManager {
     this.controls.zoomToCursor = true;
     this.controls.enablePan = true;
     this.controls.enableRotate = true;
-    this.controls.maxDistance = 8000;
+    this.controls.maxDistance = 100;
     this.controls.minDistance = 0.1;
     this.controls.target = new Vector3(0, 0, 0);
   }
 
   public setSystemCamera() {
-
+    this.parent.scene.remove(this.camera);
     this.camera = new PerspectiveCamera();
     this.camera.name = 'system'
     this.camera.aspect = this.parent.canvas.clientWidth / this.parent.canvas.clientHeight
@@ -55,11 +54,14 @@ export class CameraManager {
 
     this.parent.starSystem.showOrbit = false;
     this.parent.toggleShowOrbit(true);
+    
+    this.parent.scene.add(this.camera);
   }
 
   public setPlayerCamera() {
 
     if (!this.parent.player) return;
+    this.parent.scene.remove(this.camera);
 
     this.camera = new PerspectiveCamera();
     this.camera.name = 'player'
@@ -74,18 +76,22 @@ export class CameraManager {
     this.controls.minDistance = 0.005
     this.controls.maxDistance = 0.01
     this.controls.enablePan = false;
-    this.controls.target = this.parent.player.position;
+    this.controls.target = this.parent.player.position.clone();
     this.controls.update();
 
+    this.parent.scene.add(this.camera);
     // this.parent.starSystem.showOrbit = true;
     // this.parent.toggleShowOrbit();
 
   }
 
   public lookAtPlanet(planet: Planet): void {
-    let planetPosX = planet.container.position.x;
-    let planetPosY = planet.container.position.y;
-    let planetPosZ = planet.container.position.z;
+    
+    if (!this.controls) return;
+
+    let planetPosX = planet.position.x;
+    let planetPosY = planet.position.y;
+    let planetPosZ = planet.position.z;
 
     if (planet.orbitCenter) {
       planetPosX += planet.orbitCenter.position.x;
@@ -94,27 +100,23 @@ export class CameraManager {
     }
 
     if (this.camera.name === 'free') {
-      
-      this.camera.position.set(
-        planetPosX - (planet.size * 3),
-        planetPosY + planet.size * 2,
-        planetPosZ + (planet.size * 3)
-      );
+      // this.setFreeCamera();
+      // this.camera.position.set(planet.size * 2, 0, planet.size * 2)
+      // this.camera.lookAt(0,0,0)
+      // planet.add(this.camera);
+      // this.controls.target = planet.planet.position
+
+      this.camera.position.set(planetPosX - planet.size * 2, planetPosY, planetPosZ - planet.size * 2)
       this.camera.lookAt(planetPosX, planetPosY, planetPosZ);
-      if (!this.controls) return;
       this.controls.target = new Vector3(planetPosX, planetPosY, planetPosZ);
       this.controls.update();
 
     } else if (this.camera.name === 'player') {
-      // if (this.controls) {
-      //   this.parent.player?.lookAtPlanet(planet, this.controls);
-      // }
       this.parent.player?.goToPlanet(planet);
     } else if (this.camera.name === 'system') {
       this.camera.position.setX(planetPosX);
       this.camera.position.setZ(planetPosZ);
       this.camera.lookAt(planetPosX, planetPosY, planetPosZ);
-      if (!this.controls) return;
       this.controls.target = new Vector3(planetPosX, planetPosY, planetPosZ);
       this.controls.update();
     }

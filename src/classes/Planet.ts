@@ -53,7 +53,6 @@ export class Planet extends THREE.Object3D {
   public ringInnerRadius = 0;
   public ringOuterRadius = 0;
   // public name: string = '';
-  public container:THREE.Object3D = new THREE.Object3D();
   public planet:THREE.Mesh = new THREE.Mesh();
   public size: number;
   public velocity: THREE.Vector2 = new THREE.Vector2(0, 0);
@@ -109,9 +108,9 @@ export class Planet extends THREE.Object3D {
 
     if (props.orbitOffset) {
       this.orbitOffset = props.orbitOffset;
-      this.container.position.x = this.orbitOffset.x;
-      this.container.position.y = this.orbitOffset.y;
-      this.container.position.z = this.orbitOffset.z;
+      this.position.x = this.orbitOffset.x;
+      this.position.y = this.orbitOffset.y;
+      this.position.z = this.orbitOffset.z;
     }
 
     this.rotationDir = props.rotationDir || false;
@@ -119,20 +118,18 @@ export class Planet extends THREE.Object3D {
 
     this.orbit = props.orbit !== 0 ? props.orbit: 0;
     this.orbitSpeed = props.orbitSpeed ? props.orbitSpeed * 0.001 : 0;
-    this.angle = ((this.angle + Math.PI / 360 * this.orbitSpeed) % (Math.PI * 2)) * 10000000;
-    if (props.star) {
-      this.addLight();
+    // this.angle = ((this.angle + Math.PI / 360 * this.orbitSpeed) % (Math.PI * 2)) * 10000000;
+ 
+    if (props.moons) {
+      this.addMoons(props.moons);
     }
+
     this.createPlanet();
 
     this.setPositionToOrbit(0, true);
 
     if (this.isStar) {
       this.addLight();
-    }
-
-    if (props.moons) {
-      this.addMoons(props.moons);
     }
 
     if (props.ring) {
@@ -153,8 +150,9 @@ export class Planet extends THREE.Object3D {
         map: this.loader.load(this.planetTexture),
         side: THREE.FrontSide
       });
-      this.planet.receiveShadow = true;
       this.planet.castShadow = true;
+      this.planet.receiveShadow = true;
+
       // if (this.planetBump) {
       //   const normalTexture = new THREE.TextureLoader().load(this.planetBump)
       //   this.material.normalMap = normalTexture
@@ -165,8 +163,7 @@ export class Planet extends THREE.Object3D {
     this.planet.rotateZ(this.axialTilt);
     this.addAtmosphere();
     this.add(this.planet);
-    this.container.add(this);
-    this.orbitCenter.add(this.container);
+    this.orbitCenter.add(this);
   }
 
   private createHelperMesh(size: any, color:any) {
@@ -212,7 +209,7 @@ export class Planet extends THREE.Object3D {
     const self = this;
     let moons:Array<Planet> = [];
     moonsProps.forEach((_moonData: PlanetProps) => {
-      const moon = new Planet(_moonData, self.container);
+      const moon = new Planet(_moonData, self);
       moons.push(moon);
     });
     self.moons = moons;
@@ -236,11 +233,8 @@ export class Planet extends THREE.Object3D {
       }
     });
     const atmos = new THREE.Mesh(geo, mat);
-    
-    atmos.receiveShadow = false;
-    atmos.castShadow = false;
     atmos.scale.set(1.1,1.1,1.1)
-    this.container.add(atmos);
+    this.add(atmos);
 
     // const lightMat = new THREE.MeshBasicMaterial({
     //   color:0x00ff00,
@@ -279,9 +273,9 @@ export class Planet extends THREE.Object3D {
         color: new THREE.Color(this.color.x, this.color.y, this.color.z),
         side: THREE.DoubleSide
       })
-      );
+    );
     this.orbitPath.rotation.x = Math.PI * 0.5;
-    this.orbitPath.position.y = this.orbitOffset.y + this.container.position.y -this.size - 0.001;
+    this.orbitPath.position.y = this.orbitOffset.y + this.position.y -this.size - 0.001;
     this.orbitPath.position.x = this.orbitOffset.x;
     this.orbitPath.position.z = this.orbitOffset.z;
     this.orbitPath.geometry;
@@ -312,26 +306,26 @@ export class Planet extends THREE.Object3D {
       return;
     }
     
-    this.container.position.x = this.orbitOffset.x + this.orbit * Math.cos(this.angle);
-    this.container.position.z = this.orbitOffset.z + this.orbit * Math.sin(this.angle);
-    this.container.position.y = this.orbitOffset.y;
+    this.position.x = this.orbitOffset.x + this.orbit * Math.cos(this.angle);
+    this.position.z = this.orbitOffset.z + this.orbit * Math.sin(this.angle);
+    this.position.y = this.orbitOffset.y;
  
     const speed = this.orbitSpeed * timeScale;
     this.angle = ((this.angle + Math.PI / 360 * speed) % (Math.PI * 2))
   }
 
   private addLight() {
-    const light = new THREE.PointLight(0x504030, 1000000, 800000);
+    const light = new THREE.PointLight(0x504030, 3000000, 800000);
     // light.shadow = new THREE.PointLightShadow(this.parent.camera)
     light.castShadow = true;
 
     //Set up shadow properties for the light
-    light.shadow.mapSize.width = 512; // default
-    light.shadow.mapSize.height = 512; // default
-    light.shadow.camera.near = 0.5; // default
-    light.shadow.camera.far = 500; // default
-
-    this.container.add(light);
+    light.shadow.mapSize.width = 2048; // default
+    light.shadow.mapSize.height = 2048; // default
+    light.shadow.camera.near = 0.1; // default
+    light.shadow.camera.far = 100; // default
+    light.shadow.radius = 10;
+    this.add(light);
   }
 
   private addRings(props: any) {
@@ -367,7 +361,7 @@ export class Planet extends THREE.Object3D {
     this.ring.rotation.y = 0.05;
     this.ring.rotation.z = 0.05;
     this.ring.name = "ring";
-    this.container.add(this.ring);
+    this.add(this.ring);
   }
 
   public animate(timeScale: number) {
@@ -396,5 +390,41 @@ export class Planet extends THREE.Object3D {
       this.addOrbitPath();
     }
     this.setPositionToOrbit(0, true);
+  }
+
+  public changeOrbitSpeed(n:number) {
+    this.orbitSpeed = n * 0.0001;
+  }
+
+  public setFollowOrbit(checked:boolean): void {
+    this.followOrbit = checked;
+  }
+
+  public setShowOrbit(checked:boolean): void {
+    this.toggleShowOrbit(checked);
+  }
+
+  public changeRotationSpeed(n:number) {
+    this.rotationSpeed = n * 0.0001;
+  }
+
+  setRotationDir(dir:boolean): void {
+    this.rotationDir = dir;
+  }
+
+  setRotate(r: boolean) {
+    this.rotate = r
+  }
+
+  changeSize(scale:number) {
+    if (!this.planet) { return }
+    // this.planet.size = scale;
+    // this.planet.planet.geometry.scale(scale, scale, scale);
+  }
+
+  changeOrbitAngle(angle: number) {
+    this.angle = angle;
+    this.setPositionToOrbit(0, true);
+
   }
 }

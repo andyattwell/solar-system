@@ -11,7 +11,7 @@ import { Planet } from '../../../../classes/Planet';
 })
 export class PreviewComponent implements AfterViewInit {
 
-  @Input('timeScale') public timeScale = 0;
+  public timeScale = 1;
   @Input('type') public type = 'planet';
   @Input('size') public size = 1;
   @Input('rotate') public rotate = true;

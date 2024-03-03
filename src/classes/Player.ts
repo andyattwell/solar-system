@@ -47,9 +47,9 @@ export class Player extends THREE.Object3D{
     if (!this.characterControls) return;
 
     const planetPos: THREE.Vector3 = new THREE.Vector3(
-      planet.orbitCenter.position.x + planet.container.position.x,
-      planet.orbitCenter.position.y + planet.container.position.y,
-      planet.orbitCenter.position.z + planet.container.position.z,
+      planet.orbitCenter.position.x + planet.position.x,
+      planet.orbitCenter.position.y + planet.position.y,
+      planet.orbitCenter.position.z + planet.position.z,
     );
 
     var pos = new THREE.Vector3();
@@ -62,7 +62,7 @@ export class Player extends THREE.Object3D{
     // controls.target = planetPos;
     this.game.cameraManager.camera.lookAt(planetPos)
     // this.controls.rotate(-Math.PI / 4, 0);
-    // this.mesh.quaternion.rotateTowards(planet.container.quaternion, 1)
+    // this.mesh.quaternion.rotateTowards(planet.quaternion, 1)
 
     // Get rotation angle
     let cat1 = Math.abs(planetPos.x - this.game.cameraManager.camera.position.x);
@@ -87,7 +87,7 @@ export class Player extends THREE.Object3D{
 
   public setPosition(position: THREE.Vector3, margin: number = 0) {
     this.position.set(position.x + margin, position.y, position.z + margin);
-    this.characterControls.updateCameraTarget(position.x, position.y, position.z);
+    this.characterControls?.updateCameraTarget(position.x, position.y, position.z);
   }
 
   public animate(updateDelta:number, keysPressed:any) {
@@ -109,4 +109,7 @@ export class Player extends THREE.Object3D{
     this.light.distance = this.lightDistance;
   }
 
+  public changeSize(size: number) {
+
+  }
 }
