@@ -83,7 +83,12 @@ export class CharacterControls {
       
       // calculate towards camera direction
       let angleYCameraDirection = 0;
-      if (!this.target) {
+      if (this.target) {
+        angleYCameraDirection = Math.atan2(
+          (this.target.position.x - this.model.position.x),
+          (this.target.position.z - this.model.position.z)
+        )
+      } else {
         angleYCameraDirection = Math.atan2(
           (this.cameraManager.camera.position.x - this.model.position.x),
           (this.cameraManager.camera.position.z - this.model.position.z)
@@ -145,7 +150,7 @@ export class CharacterControls {
       s: false,
       d: false
     };
-
+    
     let dx = target.x - this.model.position.x;
     let dy = target.y - this.model.position.y;
     let dz = target.z - this.model.position.z;
@@ -155,7 +160,7 @@ export class CharacterControls {
     if (dz > margin) {
       keys.w = true;
       this.walkDirection.setZ(1);
-    } else if (dz < margin) {
+    } else if (dz < -margin) {
       keys.s = true;
       this.walkDirection.setZ(-1);
     } else {
@@ -165,7 +170,7 @@ export class CharacterControls {
     if (dx > margin) {
       keys.a = true;
       this.walkDirection.setX(1);
-    } else if (dx < margin) {
+    } else if (dx < -margin) {
       keys.d = true
       this.walkDirection.setX(-1);
     } else {
@@ -174,7 +179,7 @@ export class CharacterControls {
 
     if (dy > margin) {
       this.walkDirection.setY(1);
-    } else if (dy < margin) {
+    } else if (dy < -margin) {
       this.walkDirection.setY(-1);
     } else {
       this.walkDirection.setY(0);

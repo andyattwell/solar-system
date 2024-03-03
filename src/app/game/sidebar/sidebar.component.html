@@ -141,19 +141,8 @@
           <mat-icon>close</mat-icon>
         </button>
       </h1>
-    
-      <!-- <app-preview 
-        [model]="player.mesh"
-        [timeScale]="timeScale"
-        [size]="1"
-        [rotate]="true"
-        [rotationDir]="true"
-        [rotationSpeed]="0.01"
-        [type]="'player'"
-      ></app-preview> -->
       <div class="info-content">
         <mat-list>
-    
           <mat-list-item> 
             <app-value-control label="Position">
     
@@ -186,6 +175,26 @@
               [value]="player.rotation.y"
               (change)="changePlayerRotation($event)"
               [step]="0.1"
+              >
+            </app-value-control>
+          </mat-list-item>
+    
+          <mat-list-item>
+            <app-value-control 
+              label="lightIntensity" 
+              [value]="player.lightIntensity"
+              (change)="player.changeLightIntensity($event)"
+              [step]="1"
+              >
+            </app-value-control>
+          </mat-list-item>
+    
+          <mat-list-item>
+            <app-value-control 
+              label="Light Distance" 
+              [value]="player.lightDistance"
+              (change)="player.changeLightDistance($event)"
+              [step]="1"
               >
             </app-value-control>
           </mat-list-item>

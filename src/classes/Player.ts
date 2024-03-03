@@ -12,7 +12,9 @@ export class Player extends THREE.Object3D{
   public characterControls!:CharacterControls;
   public mesh: THREE.Mesh = new THREE.Mesh();
   private game:GameComponent;
-  
+  public lightIntensity = 10;
+  public lightDistance = 10;
+  public light = new THREE.PointLight(0x504030, this.lightIntensity, this.lightDistance);
   public size: number = 0.000001;
 
   constructor(game:GameComponent) {
@@ -28,6 +30,8 @@ export class Player extends THREE.Object3D{
       await self.game.renderer.compileAsync( self.mesh, self.game.cameraManager.camera, self.game.scene );
 
       self.add( self.mesh );
+      self.add(self.light)
+
       self.game.scene.add( self );
       self.characterControls = new CharacterControls(self, self.game.cameraManager, 'Idle')
     },
@@ -91,6 +95,16 @@ export class Player extends THREE.Object3D{
   public setTarget(target: Planet) {
     if (!this.characterControls) { return }
     this.characterControls.setTarget(target)
+  }
+
+  public changeLightIntensity(lightIntensity: number) {
+    this.lightIntensity = lightIntensity;
+    this.light.intensity = this.lightIntensity;
+  }
+
+  public changeLightDistance(lightDistance: number) {
+    this.lightDistance = lightDistance;
+    this.light.distance = this.lightDistance;
   }
 
 }
