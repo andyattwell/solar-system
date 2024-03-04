@@ -96,7 +96,32 @@ export class Player extends THREE.Object3D{
 
   public setTarget(target: Planet) {
     if (!this.characterControls) { return }
-    this.characterControls.setTarget(target)
+    // this.characterControls.setTarget(target);
+    // console.log('target', target.position)
+    this.setPosition(target.position, target.size);
+    
+    // Rotate ship to look at planet. Doesn't work
+
+    // const rotateAngle = new THREE.Vector3(0, 1, 0)
+    // const rotateQuarternion = new THREE.Quaternion();
+
+    // const angleYDirection = Math.atan2(
+    //   (target.position.x - this.mesh.position.x),
+    //   (target.position.z - this.mesh.position.z)
+    // )
+    // console.log('angleYDirection', angleYDirection)
+    // console.log('rotationY 1', this.rotation.y)
+
+    // this.rotateY(angleYDirection)
+    // this.rotation.y = angleYDirection;
+    // console.log('rotationY 2', this.rotation.y)
+
+    // rotateQuarternion.setFromAxisAngle(
+    //   rotateAngle,
+    //   angleYDirection
+    // )
+    
+    // this.quaternion.rotateTowards(rotateQuarternion, 1)
   }
 
   public changeLightIntensity(lightIntensity: number) {

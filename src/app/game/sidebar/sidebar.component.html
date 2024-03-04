@@ -14,11 +14,7 @@
 <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedTabChange)="onTabChanged($event);">
   <mat-tab label="Planet Info">
     @if (planet && selectedTabIndex === 0) {
-      <h1>{{ planet.name }}
-        <button type="button" class="close-info" mat-mini-fab aria-label="Close" (click)="close($event)">
-          <mat-icon>close</mat-icon>
-        </button>
-      </h1>
+      <h1>{{ planet.name }}</h1>
       <div class="info-content">
         <mat-list>
     
@@ -123,7 +119,7 @@
           <mat-list-item>
             <app-value-control 
               label="Orbit size" 
-              [value]="orbit"
+              [value]="orbitSize"
               (change)="planet.changeOrbit($event)"
               [step]="0.1"
               >
@@ -136,11 +132,7 @@
   </mat-tab>
   <mat-tab label="Player Info">
     @if (player && selectedTabIndex === 1) {
-      <h1>Player
-        <button type="button" class="close-info" mat-mini-fab aria-label="Close" (click)="close($event)">
-          <mat-icon>close</mat-icon>
-        </button>
-      </h1>
+      <h1>Player</h1>
       <div class="info-content">
         <mat-list>
           <mat-list-item> 
@@ -152,9 +144,9 @@
                 <span class="col title">Z</span>
               </div>
               <div class="row">
-                <span class="col">{{ player.position.x }}</span>
-                <span class="col">{{ player.position.y }}</span>
-                <span class="col">{{ player.position.z }}</span>
+                <span class="col">{{ player.position.x.toFixed(2) }}</span>
+                <span class="col">{{ player.position.y.toFixed(2) }}</span>
+                <span class="col">{{ player.position.z.toFixed(2) }}</span>
               </div>
     
             </app-value-control>

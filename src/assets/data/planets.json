@@ -3,7 +3,7 @@
   "star": {
     "name": "Sun",
     "size": 20.391400,
-    "orbit": 0,
+    "orbitSize": 0,
     "star": true,
     "texture": "/assets/textures/sun-texture.jpg",
     "icon": "/assets/icons/sun.jpg",
@@ -18,7 +18,7 @@
     {
       "name": "Mercury",
       "size": 0.3,
-      "orbit": 78,
+      "orbitSize": 78,
       "orbitSpeed": 4.79,
       "texture": "/assets/textures/mercury-texture.png",
       "icon": "/assets/icons/mercury.jpg",
@@ -32,7 +32,7 @@
     {
       "name": "Venus",
       "size": 0.7,
-      "orbit": 144,
+      "orbitSize": 144,
       "orbitSpeed": 3.50,
       "texture": "/assets/textures/venus-texture.jpg",
       "icon": "/assets/icons/venus.jpg",
@@ -47,7 +47,7 @@
     {
       "name": "Earth",
       "size": 1,
-      "orbit": 200,
+      "orbitSize": 200,
       "orbitSpeed": 2.98,
       "texture": "/assets/textures/worldColour.5400x2700.jpg",
       "bump": "/assets/textures/earth_normalmap_2048x1024.jpg",
@@ -63,7 +63,7 @@
         {
           "name": "Moon",
           "size": 0.1,
-          "orbit": 3,
+          "orbitSize": 3,
           "orbitSpeed": 15,
           "texture": "/assets/textures/moon-texture.jpg",
           "icon": "/assets/icons/moon.png",
@@ -79,7 +79,7 @@
     {
       "name": "Mars",
       "size": 0.9,
-      "orbit": 304,
+      "orbitSize": 304,
       "orbitSpeed": 2.40,
       "texture": "/assets/textures/mars-texture.jpg",
       "icon": "/assets/icons/mars.png",
@@ -93,7 +93,7 @@
         {
           "name": "Phobos",
           "size": 0.05,
-          "orbit": 6,
+          "orbitSize": 6,
           "orbitSpeed": 4,
           "rotationSpeed": 10,
           "texture": "/assets/textures/phobos-texture.jpg",
@@ -112,7 +112,7 @@
         {
           "name": "Deimos",
           "size": 0.03,
-          "orbit": 3,
+          "orbitSize": 3,
           "orbitSpeed": 10,
           "rotationSpeed": 15,
           "texture": "/assets/textures/deimos-texture.jpg",
@@ -128,7 +128,7 @@
     {
       "name": "Jupiter",
       "size": 7,
-      "orbit": 600,
+      "orbitSize": 600,
       "orbitSpeed": 1.31,
       "texture": "/assets/textures/jupiter-texture.jpg",
       "icon": "/assets/icons/jupiter.jpg",
@@ -142,7 +142,7 @@
     {
       "name": "Saturn",
       "size": 6,
-      "orbit": 1000,
+      "orbitSize": 1000,
       "orbitSpeed": 0.969,
       "texture": "/assets/textures/saturn-texture.jpg",
       "icon": "/assets/icons/saturn.jpg",
@@ -161,7 +161,7 @@
     {
       "name": "Uranus",
       "size": 3,
-      "orbit": 1600,
+      "orbitSize": 1600,
       "orbitSpeed": 0.681,
       "texture": "/assets/textures/uranus-texture.jpg",
       "icon": "/assets/icons/uranus.jpg",
@@ -176,7 +176,7 @@
     {
       "name": "Neptune",
       "size": 2,
-      "orbit": 2000,
+      "orbitSize": 2000,
       "orbitSpeed": 0.543,
       "texture": "/assets/textures/neptune-texture.jpg",
       "icon": "/assets/icons/neptune.jpg",
@@ -190,7 +190,7 @@
     {
       "name": "Pluto",
       "size": 0.05,
-      "orbit": 3000,
+      "orbitSize": 3000,
       "orbitSpeed": 0.174,
       "texture": "/assets/textures/pluto-texture.jpg",
       "icon": "/assets/icons/pluto.jpg",

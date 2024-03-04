@@ -81,8 +81,8 @@ export class SidebarComponent implements AfterViewInit {
     }
   }
 
-  public get orbit() {
-    return this.planet ? this.planet.orbit : 0
+  public get orbitSize() {
+    return this.planet ? this.planet.orbitSize : 0
   }
 
   public changeOrbit(n:number) {

@@ -9,7 +9,7 @@ export interface PlanetProps {
   name: string;
   size: number;
   star?: boolean;
-  orbit: number;
+  orbitSize: number;
   orbitOffset?: {
     x: number,
     y: number,
@@ -45,23 +45,27 @@ export interface PlanetProps {
 }
 
 export class Planet extends THREE.Object3D {
-  private loader = new THREE.TextureLoader();
-  private orbitPath!:THREE.Mesh;
-  private ring!:THREE.Mesh;
-  public ringTexture: string = '';
   
-  public ringInnerRadius = 0;
-  public ringOuterRadius = 0;
-  // public name: string = '';
+  public orbitCenter: THREE.Object3D;
   public planet:THREE.Mesh = new THREE.Mesh();
   public size: number;
+  private orbitPath!:THREE.Mesh;
+
+  private ring!:THREE.Mesh;
+  public ringInnerRadius = 0;
+  public ringOuterRadius = 0;
+  public ringTexture: string = '';
+  
+  private loader = new THREE.TextureLoader();
+
   public velocity: THREE.Vector2 = new THREE.Vector2(0, 0);
-  public rotate: boolean = true;
+  public rotate: boolean = true; // Enable/disable planet rotation
   public rotationSpeed: number = 0.01;
-  public rotationDir: boolean = false;
+  public rotationDir: boolean = false; // Clockwise / counter clockwise
   public axialTilt: number = 0;
-  public angle: number = 0;
-  public orbit: number = 0;
+  public angle: number = 0; // Position in orbit
+  public orbitSize: number = 0;
+
   private orbitOffset: {
     x: number,
     y: number,
@@ -77,7 +81,6 @@ export class Planet extends THREE.Object3D {
   private planetBump?: string;
   public color: THREE.Vector3 = new THREE.Vector3(1,1,1);
   public planetIcon?: string;
-  public orbitCenter: THREE.Object3D;
 
   public positionHelper:THREE.Object3D | undefined;
 
@@ -116,7 +119,7 @@ export class Planet extends THREE.Object3D {
     this.rotationDir = props.rotationDir || false;
     this.rotationSpeed = props.rotationSpeed / 60 / 60 / 10;
 
-    this.orbit = props.orbit !== 0 ? props.orbit: 0;
+    this.orbitSize = props.orbitSize !== 0 ? props.orbitSize: 0;
     this.orbitSpeed = props.orbitSpeed ? props.orbitSpeed * 0.001 : 0;
     // this.angle = ((this.angle + Math.PI / 360 * this.orbitSpeed) % (Math.PI * 2)) * 10000000;
  
@@ -254,7 +257,7 @@ export class Planet extends THREE.Object3D {
   }
 
   private addOrbitPath() {
-    if (!this.orbitCenter || !this.orbit || this.orbit === 0) {
+    if (!this.orbitCenter || !this.orbitSize || this.orbitSize === 0) {
       return;
     }
     this.removeOrbitPath()
@@ -262,8 +265,8 @@ export class Planet extends THREE.Object3D {
     const half = this.size / 2;
     this.orbitPath = new THREE.Mesh(
       new THREE.RingGeometry(
-        this.orbit - half, 
-        this.orbit + half,
+        this.orbitSize - half, 
+        this.orbitSize + half,
         240, 
         3, 
         0, 
@@ -293,21 +296,21 @@ export class Planet extends THREE.Object3D {
     if (this.orbitPath) {
       this.orbitCenter.remove(this.orbitPath);
       this.showOrbit = false;
-      if (this.moons?.length) {
-        this.moons.forEach((_moon:Planet) => {
-          _moon.addOrbitPath();
-        })
-      }
+    }
+    if (this.moons?.length) {
+      this.moons.forEach((_moon:Planet) => {
+        _moon.removeOrbitPath();
+      })
     }
   }
 
   public setPositionToOrbit(timeScale: number, followOrbit: boolean) {
-    if (this.orbit <= 0 || !followOrbit){
+    if (this.orbitSize <= 0 || !followOrbit){
       return;
     }
     
-    this.position.x = this.orbitOffset.x + this.orbit * Math.cos(this.angle);
-    this.position.z = this.orbitOffset.z + this.orbit * Math.sin(this.angle);
+    this.position.x = this.orbitOffset.x + this.orbitSize * Math.cos(this.angle);
+    this.position.z = this.orbitOffset.z + this.orbitSize * Math.sin(this.angle);
     this.position.y = this.orbitOffset.y;
  
     const speed = this.orbitSpeed * timeScale;
@@ -384,8 +387,8 @@ export class Planet extends THREE.Object3D {
 
   }
 
-  public changeOrbit(orbit:number) {
-    this.orbit = orbit;
+  public changeOrbit(orbitSize:number) {
+    this.orbitSize = orbitSize;
     if (this.showOrbit) {
       this.addOrbitPath();
     }

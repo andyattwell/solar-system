@@ -73,8 +73,11 @@ export class CameraManager {
     this.controls?.dispose();
     this.controls = new OrbitControls(this.camera, this.parent.renderer.domElement);
     this.controls.enableDamping = true
-    this.controls.minDistance = 0.005
-    this.controls.maxDistance = 0.01
+    this.controls.minDistance = 0.002
+    this.controls.maxDistance = 0.007
+    this.controls.maxPolarAngle = 2
+    this.controls.minPolarAngle = Math.PI / 4
+
     this.controls.enablePan = false;
     this.controls.target = this.parent.player.position.clone();
     this.controls.update();

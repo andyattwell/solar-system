@@ -90,7 +90,7 @@ export class GameComponent implements AfterViewInit {
     this.cameraManager = new CameraManager(this);
     this.starSystem.startScene(this.scene);
     this.player = new Player(this);
-    this.setCamera('free');
+    this.setCamera('player');
     
     this.Controller.init(this.player, this.starSystem.star, this.starSystem.planets);    
     const self = this;
@@ -99,7 +99,7 @@ export class GameComponent implements AfterViewInit {
       self.selectPlanet(this.planets[3]);
       if (self.selectedPlanet.parent) {
         // self.player?.goToPlanet(self.selectedPlanet);
-        self.player?.setPosition(self.selectedPlanet.parent.position, self.selectedPlanet.size);
+        self.player?.setPosition(self.selectedPlanet.position, self.selectedPlanet.size);
       }
     },1000)
   }

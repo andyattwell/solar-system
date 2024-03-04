@@ -27,8 +27,6 @@ export class ValueControlComponent implements AfterViewInit{
   public changeValue(n:number) {
     if (this.value !== undefined) {
       this.multipliyer += n;
-      console.log(this.multipliyer, this.originalValue, this.step)
-
       this.change.emit(this.originalValue + this.step * this.multipliyer)
     }
   }

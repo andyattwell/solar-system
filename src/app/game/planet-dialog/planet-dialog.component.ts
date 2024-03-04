@@ -43,7 +43,7 @@ export class PlanetDialogComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.originalRotationSpeed = this.data.rotationSpeed
     this.originalOrbitSpeed = this.data.orbitSpeed
-    this.originalOrbit = this.data.orbit
+    this.originalOrbit = this.data.orbitSize
   }
 
   public get rotatationEnable () {
@@ -102,13 +102,13 @@ export class PlanetDialogComponent implements AfterViewInit {
     this.data.orbitSpeed = this.originalOrbitSpeed;
   }
 
-  public get orbit() {
-    return this.data.orbit.toFixed(2)
+  public get orbitSize() {
+    return this.data.orbitSize.toFixed(2)
   }
 
   public changeOrbit(n:number) {
     this.orbitMultiplyer += n ;
-    this.data.changeOrbit(this.data.orbit + n * .1 );
+    this.data.changeOrbit(this.data.orbitSize + n * .1 );
   }
 
   public resetOrbit() {
