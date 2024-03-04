@@ -1,4 +1,4 @@
-<div class="planets-menu">
+<div class="planets-menu" [class.expanded]="expanded">
   <div class="planet-li">
     <a 
       class="planet-icon"
@@ -9,6 +9,7 @@
     </a>
   </div>
   @if(planets && planets.length) {
+    <div class="planets">
     @for (planet of planets; track planet) {
       <div 
         class="planet-li" 
@@ -45,44 +46,54 @@
         }
       </div>
     }
-    
-
-    <div class="planets-confg">
-      <div class="planets-opt">
-        <button 
-          mat-mini-fab 
-          aria-label="Toggle planet rotation"
-          title="Toggle planet rotation"
-          (click)="toggleRotation()" 
-          [color]="rotationEnabled ? 'primary' : ''"
-        >
-          <mat-icon> public </mat-icon>
-        </button>
-      </div>
-  
-      <div class="planets-opt">
-        <button 
-          mat-mini-fab 
-          aria-label="Toggle planet rotation"
-          title="Toggle planet orbit"
-          (click)="toggleFollowOrbit()" 
-          [color]="followOrbit ? 'primary' : ''"
-        >
-          <mat-icon> settings_backup_restore </mat-icon>
-        </button>
-      </div>
-  
-      <div class="planets-opt">
-        <button 
-          mat-mini-fab 
-          aria-label="Toggle show orbit path"
-          title="Show orbit"
-          (click)="toggleShowOrbit()" 
-          [color]="showOrbit ? 'primary' : ''"
-        >
-          <mat-icon>trip_origin</mat-icon>
-        </button>
-      </div>
+    </div>
+    <div class="planet-li expand">
+      <a (click)="expanded = !expanded" [href]="'#'">
+        @if (expanded) {
+          <mat-icon> chevron_left </mat-icon>
+        } @else {
+          <mat-icon> chevron_right </mat-icon>
+        } 
+      </a>
     </div>
   }
+</div>
+
+
+<div class="planets-confg">
+  <div class="planets-opt">
+    <button 
+      mat-mini-fab 
+      aria-label="Toggle planet rotation"
+      title="Toggle planet rotation"
+      (click)="toggleRotation()" 
+      [color]="rotationEnabled ? 'primary' : ''"
+    >
+      <mat-icon> public </mat-icon>
+    </button>
+  </div>
+
+  <div class="planets-opt">
+    <button 
+      mat-mini-fab 
+      aria-label="Toggle planet rotation"
+      title="Toggle planet orbit"
+      (click)="toggleFollowOrbit()" 
+      [color]="followOrbit ? 'primary' : ''"
+    >
+      <mat-icon> settings_backup_restore </mat-icon>
+    </button>
+  </div>
+
+  <div class="planets-opt">
+    <button 
+      mat-mini-fab 
+      aria-label="Toggle show orbit path"
+      title="Show orbit"
+      (click)="toggleShowOrbit()" 
+      [color]="showOrbit ? 'primary' : ''"
+    >
+      <mat-icon>trip_origin</mat-icon>
+    </button>
+  </div>
 </div>

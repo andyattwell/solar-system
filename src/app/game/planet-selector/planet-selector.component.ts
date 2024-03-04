@@ -17,6 +17,7 @@ export class PlanetSelectorComponent {
   @Input() public planets: Array<Planet> = [];
 
   public showOrbit: boolean = false;
+  public expanded: boolean = false;
 
   @Input() public followOrbit: boolean = false;
   @Input() public rotationEnabled: boolean = false;
