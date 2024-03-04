@@ -1,9 +1,9 @@
 import * as THREE from 'three';
-import PlanetMaterial from '../shaders/PlanetMaterial';
+// import PlanetMaterial from '../shaders/PlanetMaterial';
 import AtmosMaterial from '../shaders/AtmosMaterial';
-import OrbitMaterial from '../shaders/OrbitMaterial';
-import RingMaterial from '../shaders/RingMaterial';
-import { degrees_to_radians } from '../helpers';
+// import OrbitMaterial from '../shaders/OrbitMaterial';
+// import RingMaterial from '../shaders/RingMaterial';
+import { createPositionHelper, degrees_to_radians } from '../helpers';
 
 export interface PlanetProps {
   name: string;
@@ -121,7 +121,7 @@ export class Planet extends THREE.Object3D {
 
     this.orbitSize = props.orbitSize !== 0 ? props.orbitSize: 0;
     this.orbitSpeed = props.orbitSpeed ? props.orbitSpeed * 0.001 : 0;
-    // this.angle = ((this.angle + Math.PI / 360 * this.orbitSpeed) % (Math.PI * 2)) * 10000000;
+    this.angle = ((this.angle + Math.PI / 360 * this.orbitSpeed) % (Math.PI * 2)) * 10000000;
  
     if (props.moons) {
       this.addMoons(props.moons);
@@ -169,30 +169,6 @@ export class Planet extends THREE.Object3D {
     this.orbitCenter.add(this);
   }
 
-  private createHelperMesh(size: any, color:any) {
-    const geometry = new THREE.BoxGeometry( size.x, size.y, size.z ); 
-    const material = new THREE.MeshBasicMaterial( {color: color} ); 
-    const cube = new THREE.Mesh( geometry, material ); 
-    return cube;
-  }
-
-  private addPositionHelper() {
-    const length = this.size * 4;
-    const width = this.size * .10;
-
-    this.positionHelper = new THREE.Object3D();
-
-    const helperX = this.createHelperMesh({x: length, y: width, z: width}, 0xff0000);
-    this.positionHelper.add( helperX );
-    const helperY = this.createHelperMesh({x: width, y: length, z: width}, 0x00ff00);
-    this.positionHelper.add( helperY );
-    const helperZ = this.createHelperMesh({x: width, y: width, z: length}, 0x0000ff);
-    this.positionHelper.add( helperZ );
-
-    this.planet.add( this.positionHelper );
-
-  }
-
   private removePositionHelpers() {
     if (this.positionHelper) {
       this.planet.remove(this.positionHelper);
@@ -204,7 +180,8 @@ export class Planet extends THREE.Object3D {
     if (this.positionHelper) {
       this.removePositionHelpers();
     } else {
-      this.addPositionHelper();
+      this.positionHelper = createPositionHelper(this.size);
+      this.planet.add(this.positionHelper);
     }
   }
 

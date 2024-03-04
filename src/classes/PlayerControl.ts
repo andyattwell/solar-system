@@ -102,6 +102,13 @@ export class CharacterControls {
       )
       
       this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.1)
+      
+      // Rotate the ship vertically to reflect vertical movement
+      // console.log('walkY', this.model.rotation.x)
+      
+      // This works, but it keeps spinning
+      // this.model.rotateOnAxis(new THREE.Vector3(1,0,0), this.walkDirection.y)
+      // const rotateQuarternion2 = new THREE.Quaternion()
 
       // calculate direction
       if (!this.target) {
@@ -128,11 +135,7 @@ export class CharacterControls {
       // move model & camera
       const moveX = this.walkDirection.x * velocity * delta
       const moveZ = this.walkDirection.z * velocity * delta
-      let moveY = this.walkDirection.y * velocity * delta
-
-      // if (this.walkDirection.y <= -0.2 || this.walkDirection.y >= 0.05) {
-      //   moveY = this.walkDirection.y * velocity * delta
-      // }
+      const moveY = this.walkDirection.y * velocity * delta
 
       this.model.position.x += moveX
       this.model.position.z += moveZ

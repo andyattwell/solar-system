@@ -1,4 +1,4 @@
-import { PerspectiveCamera, Vector3 } from 'three';
+import { Object3D, PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Planet } from './Planet';
 import { GameComponent } from '../app/game/game.component';
@@ -17,7 +17,7 @@ export class CameraManager {
     this.camera = new PerspectiveCamera();
     this.camera.name = 'free'
     this.camera.aspect = this.parent.canvas.clientWidth / this.parent.canvas.clientHeight
-    this.camera.near = 0.01;
+    this.camera.near = 0.001;
     this.camera.far = 8000;
     this.camera.fov = 45;
     this.camera.position.set(0, 10, 0);
@@ -121,6 +121,18 @@ export class CameraManager {
       this.camera.position.setZ(planetPosZ);
       this.camera.lookAt(planetPosX, planetPosY, planetPosZ);
       this.controls.target = new Vector3(planetPosX, planetPosY, planetPosZ);
+      this.controls.update();
+    }
+  }
+
+  public lookAtObject(target: Object3D, margin: number = 0): void {
+    
+    if (!this.controls) return;
+
+    if (this.camera.name === 'free' || this.camera.name === 'system') {
+      this.camera.position.set(target.position.x + margin, target.position.y + margin, target.position.z + margin)
+      this.camera.lookAt(target.position.x, target.position.y, target.position.z);
+      this.controls.target = new Vector3(target.position.x, target.position.y, target.position.z);
       this.controls.update();
     }
   }

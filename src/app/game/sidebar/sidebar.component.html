@@ -26,9 +26,9 @@
                 <span class="col title">Z</span>
               </div>
               <div class="row">
-                <span class="col">{{ position.x }}</span>
-                <span class="col">{{ position.y }}</span>
-                <span class="col">{{ position.z }}</span>
+                <span class="col">{{ planet.position.x.toFixed(2) }}</span>
+                <span class="col">{{ planet.position.y.toFixed(2) }}</span>
+                <span class="col">{{ planet.position.z.toFixed(2) }}</span>
               </div>
     
             </app-value-control>
@@ -37,7 +37,7 @@
           <mat-list-item> 
             <app-value-control label="PositionHelper">
               <mat-checkbox
-                [checked]="positionHelperEnable"
+                [checked]="this.planet.positionHelper !== undefined"
                 (change)="planet.togglePositionHelper()"
               ></mat-checkbox>
             </app-value-control>
@@ -64,7 +64,7 @@
           <mat-list-item> 
             <app-value-control label="Rotation Direction">
               <mat-checkbox
-                [checked]="rotationDir"
+                [checked]="this.planet.rotationDir"
                 (change)="planet.setRotationDir($event.checked)"
               ></mat-checkbox>
             </app-value-control>
@@ -73,7 +73,7 @@
           <mat-list-item>
             <app-value-control 
               label="Rotation speed" 
-              [value]="rotation"
+              [value]="this.planet.rotationSpeed * 1000"
               (change)="planet.changeRotationSpeed($event)"
               >
             </app-value-control>
@@ -82,7 +82,7 @@
           <mat-list-item>
             <app-value-control label="Show orbit">
               <mat-checkbox
-                [checked]="showOrbit"
+                [checked]="this.planet.showOrbit"
                 (change)="planet.setShowOrbit($event.checked)"
               ></mat-checkbox>
             </app-value-control>
@@ -100,7 +100,7 @@
           <mat-list-item>
             <app-value-control 
               label="Orbit speed" 
-              [value]="planet.orbitSpeed"
+              [value]="planet.orbitSpeed * 1000"
               (change)="planet.changeOrbitSpeed($event)"
               >
             </app-value-control>
@@ -119,7 +119,7 @@
           <mat-list-item>
             <app-value-control 
               label="Orbit size" 
-              [value]="orbitSize"
+              [value]="this.planet.orbitSize"
               (change)="planet.changeOrbit($event)"
               [step]="0.1"
               >
@@ -132,7 +132,18 @@
   </mat-tab>
   <mat-tab label="Player Info">
     @if (player && selectedTabIndex === 1) {
-      <h1>Player</h1>
+      <h1>Player
+        
+        <button 
+          mat-mini-fab
+          (click)="player.lookAtShip()"
+          aria-label="Look at ship"
+          title="Look at ship"
+          color="primary"
+        >
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+      </h1>
       <div class="info-content">
         <mat-list>
           <mat-list-item> 
@@ -152,6 +163,15 @@
             </app-value-control>
           </mat-list-item>
 
+          <mat-list-item> 
+            <app-value-control label="PositionHelper">
+              <mat-checkbox
+                [checked]="player.positionHelper !== undefined"
+                (change)="player.togglePositionHelper()"
+              ></mat-checkbox>
+            </app-value-control>
+          </mat-list-item>
+
           <mat-list-item>
             <app-value-control 
               label="Size" 
@@ -165,7 +185,7 @@
             <app-value-control 
               label="Rotation Y" 
               [value]="player.rotation.y"
-              (change)="changePlayerRotation($event)"
+              (change)="this.player?.rotateY($event)"
               [step]="0.1"
               >
             </app-value-control>

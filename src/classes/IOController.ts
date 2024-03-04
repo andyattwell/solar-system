@@ -105,7 +105,7 @@ export class IOController {
   doubleClickHandler(e:MouseEvent) {
     if (e.target === this.parent.canvas && this.hovered?.parent) {
       if (this.hovered.name === 'starship') {
-        console.log('click', this.hovered)
+        this.parent.player.lookAtShip();
         this.parent.openPlanetInfo('player', this.hovered);
       } else {
         this.parent.selectPlanet(this.hovered.parent);

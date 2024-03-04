@@ -36,7 +36,19 @@ interface Preview {
 })
 export class SidebarComponent implements AfterViewInit {
 
-  @Input('planet') public planet: Planet | undefined;
+  // @Input('planet') public planet: Planet | undefined;
+  private _planet:Planet|undefined;
+  @Input() set planet(value: Planet) {
+    this._planet = value
+    if (this.selectedTabIndex === 0) {
+      this.setPlanetPreview();
+    }
+  }
+   
+  get planet(): Planet|undefined {
+    return this._planet;
+  }
+
   @Input('player') public player: Player | null = null;
   @Input('timeScale') public timeScale = 1;
   @Output() closeEvent = new EventEmitter<any>();
@@ -54,69 +66,9 @@ export class SidebarComponent implements AfterViewInit {
     }, 10)
   }
 
-  public get positionHelperEnable() {
-    return this.planet ? this.planet.positionHelper : false;
-  }
-
-  public get position () {
-    if (this.planet) {
-      return {
-        x: this.planet.position.x.toFixed(2),
-        y: this.planet.position.y.toFixed(2),
-        z: this.planet.position.z.toFixed(2),
-      }
-    }
-    return {
-      x:0, y:0, z:0
-    }
-  }
-
-  public get orbitSpeed() {
-    return this.planet ? (this.planet.orbitSpeed * 1000) : 0
-  }
-
-  public changeOrbitSpeed(n:number) {
-    if (this.planet) {
-      this.planet.orbitSpeed = n * 0.0001;
-    }
-  }
-
-  public get orbitSize() {
-    return this.planet ? this.planet.orbitSize : 0
-  }
-
-  public changeOrbit(n:number) {
-    if (this.planet) {
-      this.planet.changeOrbit(n);
-    }
-  }
-
-  public get showOrbit() {
-    return this.planet ? this.planet.showOrbit : false
-  }
-  
-  public get followOrbit() {
-    return this.planet ? this.planet.followOrbit : 0
-  }
-
-  public get rotationDir () {
-    return this.planet ? this.planet.rotationDir : false
-  }
-
-  public get rotation () {
-    if (this.planet) {
-      return (this.planet.rotationSpeed * 1000)
-    }
-    return 0;
-  }
-
   close(e:MouseEvent) {
     e.stopPropagation();
     this.closeEvent.emit();
-  }
-
-  changePlayerRotation(rotation:number) {
-    this.player?.rotateY(rotation);
   }
 
   onTabChanged($event:any) {
@@ -132,10 +84,9 @@ export class SidebarComponent implements AfterViewInit {
       }
     }, 1)
   }
+
   setPlanetPreview() {
-    if (!this.planet) {
-      return;
-    }
+    if (!this.planet) { return; }
     this.previewData = {
       model: this.planet.planet,
       size: this.planet.size,
@@ -159,6 +110,5 @@ export class SidebarComponent implements AfterViewInit {
       type: 'player',
     } 
   }
-
 
 }

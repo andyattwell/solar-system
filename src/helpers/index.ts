@@ -58,6 +58,32 @@ export function degrees_to_radians(degrees:number):number {
 //   second.position.y = second.position.y + second.velocity.y
 // }
 
+export function createPositionHelper(size:number) {
+  const length = size * 4;
+  const width = size * .10;
+
+  const positionHelper = new THREE.Object3D();
+
+  const helperX = createHelperMesh({x: length, y: width, z: width}, 0xff0000);
+  positionHelper.add( helperX );
+  
+  const helperY = createHelperMesh({x: width, y: length, z: width}, 0x00ff00);
+  positionHelper.add( helperY );
+  
+  const helperZ = createHelperMesh({x: width, y: width, z: length}, 0x0000ff);
+  positionHelper.add( helperZ );
+
+  return positionHelper;
+
+}
+
+export function createHelperMesh(size: any, color:any) {
+  const geometry = new THREE.BoxGeometry( size.x, size.y, size.z ); 
+  const material = new THREE.MeshBasicMaterial( {color: color} ); 
+  const cube = new THREE.Mesh( geometry, material ); 
+  return cube;
+}
+
 export default {
   // get2dPosition,
   // accelerate_due_to_gravity

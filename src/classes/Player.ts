@@ -3,7 +3,7 @@ import { GameComponent } from '../app/game/game.component';
 import { CharacterControls } from './PlayerControl';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Planet } from './Planet';
-import { degrees_to_radians, getDistance } from '../helpers';
+import { createPositionHelper, degrees_to_radians, getDistance } from '../helpers';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 const loader =  new GLTFLoader();
@@ -12,10 +12,12 @@ export class Player extends THREE.Object3D{
   public characterControls!:CharacterControls;
   public mesh: THREE.Mesh = new THREE.Mesh();
   private game:GameComponent;
-  public lightIntensity = 10;
+  public lightIntensity = 1;
   public lightDistance = 10;
   public light = new THREE.PointLight(0x504030, this.lightIntensity, this.lightDistance);
   public size: number = 0.000001;
+
+  public positionHelper:THREE.Object3D | undefined;
 
   constructor(game:GameComponent) {
     super();
@@ -136,5 +138,28 @@ export class Player extends THREE.Object3D{
 
   public changeSize(size: number) {
 
+  }
+
+  
+  private removePositionHelpers() {
+    if (this.positionHelper) {
+      console.log('Remove helper');
+      this.mesh.remove(this.positionHelper);
+      this.positionHelper = undefined;
+    }
+  }
+
+  public togglePositionHelper() {
+    if (this.positionHelper) {
+      this.removePositionHelpers();
+    } else {
+      console.log('Add helper');
+      this.positionHelper = createPositionHelper(this.size * 10000);
+      this.mesh.add(this.positionHelper);
+    }
+  }
+
+  public lookAtShip () {
+    this.game.cameraManager.lookAtObject(this)
   }
 }
