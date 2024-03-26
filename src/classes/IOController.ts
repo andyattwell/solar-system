@@ -53,7 +53,11 @@ export class IOController {
     window.addEventListener('keyup', (event) => {
       if (self.parent.cameraManager.camera.name === 'player') {
         if (!self.parent.player.characterControls) { return; }
-        (self.keysPressed as any)[event.key.toLowerCase()] = false
+        if (event.key === ' ') {
+          this.parent.player.characterControls.releaseBreak()
+        } else {
+          (self.keysPressed as any)[event.key.toLowerCase()] = false
+        }
       }
     }, false);
   }
@@ -66,6 +70,8 @@ export class IOController {
       this.parent.player.characterControls.removeTarget()
     } else if (event.key === 'q' || event.key === 'e') {
       this.parent.cameraManager.rotateCamera(event.key)
+    } else if (event.key === ' ') {
+      this.parent.player.characterControls.break()
     } else {
       (this.keysPressed as any)[event.key.toLowerCase()] = true
     }

@@ -16,7 +16,6 @@ export class Player extends THREE.Object3D{
   public lightDistance = 10;
   public light = new THREE.PointLight(0x504030, this.lightIntensity, this.lightDistance);
   public size: number = 0.000001;
-
   public positionHelper:THREE.Object3D | undefined;
 
   constructor(game:GameComponent) {

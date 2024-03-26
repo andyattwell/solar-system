@@ -146,6 +146,29 @@
       </h1>
       <div class="info-content">
         <mat-list>
+          <mat-list-item>
+            <app-value-control label="Break">
+              <mat-checkbox
+                [checked]="player.characterControls?.stop"
+              ></mat-checkbox>
+            </app-value-control>
+          </mat-list-item>
+          <mat-list-item>
+            <app-value-control 
+              label="Acceleration" 
+              [value]="player.characterControls?.acceleration || 0"
+              [step]="0.1"
+              >
+            </app-value-control>
+          </mat-list-item>
+          <mat-list-item>
+            <app-value-control 
+              label="Velocity" 
+              [value]="player.characterControls?.velocity || 0"
+              [step]="0.1"
+              >
+            </app-value-control>
+          </mat-list-item>
           <mat-list-item> 
             <app-value-control label="Position">
     
@@ -185,7 +208,7 @@
             <app-value-control 
               label="Rotation Y" 
               [value]="player.rotation.y"
-              (change)="this.player?.rotateY($event)"
+              (change)="player.rotateY($event)"
               [step]="0.1"
               >
             </app-value-control>

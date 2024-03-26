@@ -11,6 +11,7 @@ export class CharacterControls {
   // state
   toggleRun: boolean = false
   toggleHyper: boolean = false;
+  stop: boolean = false;
   currentAction: string
 
   // temporary data
@@ -24,6 +25,8 @@ export class CharacterControls {
   runVelocity = 1
   HyperVelocity = 50
   walkVelocity = 0.05
+  acceleration = 0
+  velocity = 0
 
   private target: Planet|undefined;
 
@@ -45,10 +48,20 @@ export class CharacterControls {
     this.toggleHyper = !this.toggleHyper
   }
 
+  public break() {
+    this.stop = true;
+  }
+
+  public releaseBreak() {
+    this.stop = false
+  }
+
   public update(delta: number, keysPressed: any) {
     if (!this.cameraManager) return;
     let distance = 0;
     if (this.target) {
+
+      // Move to target
       // return this.moveTo(this.target.position, delta);
       const targetPosition = new THREE.Vector3(
         this.target.orbitCenter.position.x + this.target.position.x + this.target.size * 2,
@@ -63,6 +76,8 @@ export class CharacterControls {
       this.currentAction = 'Hyper'
       keysPressed = this.getsKeysForTarget(targetPosition);
     } else {
+      
+      // Move by player input
       const directionPressed = DIRECTIONS.some(key => keysPressed[key] == true)
       if (directionPressed) {
         if (keysPressed.control) {
@@ -117,32 +132,42 @@ export class CharacterControls {
         this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset)
       }
 
-      // run/walk velocity
-      let velocity = this.walkVelocity;
-      if (this.currentAction === 'Run') {
-        velocity = this.runVelocity;
-      } else if (this.currentAction === 'Hyper') {
-        velocity = this.HyperVelocity;
 
-        if (this.target) {
-          if (velocity > distance) {
-            velocity -= velocity - distance;
-          }
-        }
+      let maxVelocity = this.walkVelocity; 
+      if (this.currentAction === 'Run') {
+        maxVelocity = this.runVelocity;
+      } else if (this.currentAction === 'Hyper') {
+        maxVelocity = this.HyperVelocity;
+
+        // if (this.target) {
+        //   if (this.acceleration > distance) {
+        //     this.acceleration -= this.acceleration - distance;
+        //   }
+        // }
 
       }
-      
-      // move model & camera
-      const moveX = this.walkDirection.x * velocity * delta
-      const moveZ = this.walkDirection.z * velocity * delta
-      const moveY = this.walkDirection.y * velocity * delta
-
-      this.model.position.x += moveX
-      this.model.position.z += moveZ
-      this.model.position.y += moveY
-
-      this.updateCameraTarget(moveX, moveZ, moveY);
+      if (this.acceleration < maxVelocity) {
+        this.acceleration += maxVelocity * 0.01
+      }
+    } else {
+      if (this.acceleration > 0) {
+        this.acceleration -= this.stop ? this.acceleration * 0.1 : this.acceleration * 0.001
+      } else if (this.acceleration < 0) {
+        this.acceleration = 0;
+      }
     }
+    // move model & camera
+    const moveX = this.walkDirection.x * this.acceleration * delta
+    const moveZ = this.walkDirection.z * this.acceleration * delta
+    const moveY = this.walkDirection.y * this.acceleration * delta
+
+    this.model.position.x += moveX
+    this.model.position.z += moveZ
+    this.model.position.y += moveY
+
+    this.updateCameraTarget(moveX, moveZ, moveY);
+
+    
   }
 
   private getsKeysForTarget(target: THREE.Vector3) {
