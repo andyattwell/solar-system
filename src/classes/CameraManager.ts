@@ -20,7 +20,12 @@ export class CameraManager {
     this.camera.near = 0.001;
     this.camera.far = 8000;
     this.camera.fov = 45;
-    this.camera.position.set(0, 10, 0);
+    // this.camera.position.set(0, 10, 0);
+    this.camera.position.set(
+      this.parent.player?.position.x || 0,
+      this.parent.player?.position.y || 0,
+      this.parent.player?.position.z || 0
+    );
 
     this.controls?.dispose();
     this.controls = new OrbitControls(this.camera, this.parent.renderer.domElement);
@@ -41,7 +46,7 @@ export class CameraManager {
     this.camera.near = 0.1;
     this.camera.far = 10000;
     this.camera.fov = 5;
-    
+
     this.controls?.dispose();
     this.controls = new OrbitControls(this.camera, this.parent.renderer.domElement);
     this.controls.enableZoom = true;
@@ -54,12 +59,11 @@ export class CameraManager {
 
     this.parent.starSystem.showOrbit = false;
     this.parent.toggleShowOrbit(true);
-    
+
     this.parent.scene.add(this.camera);
   }
 
   public setPlayerCamera() {
-
     if (!this.parent.player) return;
     this.parent.scene.remove(this.camera);
 
@@ -89,7 +93,7 @@ export class CameraManager {
   }
 
   public lookAtPlanet(planet: Planet): void {
-    
+
     if (!this.controls) return;
 
     let planetPosX = planet.position.x;
@@ -126,7 +130,7 @@ export class CameraManager {
   }
 
   public lookAtObject(target: Object3D, margin: number = 0): void {
-    
+
     if (!this.controls) return;
 
     if (this.camera.name === 'free' || this.camera.name === 'system') {
@@ -140,9 +144,9 @@ export class CameraManager {
   public rotateCamera(key:string) {
     if (!this.controls || !this.parent.player) { return }
     if (key === 'q') {
-      this.controls.rotate(-Math.PI / 4, 0);
+      // this.controls.rotate(-Math.PI / 4, 0);
     } else if (key === 'e') {
-      this.controls.rotate(Math.PI / 4, 0);
+      // this.controls.rotate(Math.PI / 4, 0);
     }
   }
 

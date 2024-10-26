@@ -21,7 +21,7 @@ export class Player extends THREE.Object3D{
 
   constructor(game:GameComponent) {
     super();
-    this.game = game  
+    this.game = game
     const self = this
     loader.load( 'assets/models/spaceship/scene.gltf', async function ( gltf:any ) {
       const model = gltf.scene.children[0].children[0].children[0].children[0].children[0]
@@ -39,7 +39,7 @@ export class Player extends THREE.Object3D{
       self.game.scene.add( self );
       self.characterControls = new CharacterControls(self, self.game.cameraManager, 'Idle')
     },
-    function ( xhr ) { /*called while loading is progressing */ }, 
+    function ( xhr ) { /*called while loading is progressing */ },
     function ( error ) {
       console.error( error );
     });
@@ -56,7 +56,7 @@ export class Player extends THREE.Object3D{
 
     var pos = new THREE.Vector3();
     pos.addVectors(planetPos, this.position);
-    
+
     // this.game.cameraManager.camera.position.x = this.position.x
     // this.game.cameraManager.camera.position.z += this.position.y
     // this.game.cameraManager.camera.position.y += this.position.z
@@ -78,12 +78,12 @@ export class Player extends THREE.Object3D{
     // console.log({deg})
     // console.log(controls.getAzimuthalAngle())
 
-    controls.rotate(deg, 0);
+    // controls.rotate(deg, 0);
 
     // this.characterControls.updateCameraTarget(planetPos.x, planetPos.z, planetPos.y)
   }
 
-  public goToPlanet(planet: Planet) { 
+  public goToPlanet(planet: Planet) {
     this.setTarget(planet);
   }
 
@@ -101,7 +101,7 @@ export class Player extends THREE.Object3D{
     // this.characterControls.setTarget(target);
     // console.log('target', target.position)
     this.setPosition(target.position, target.size);
-    
+
     // Rotate ship to look at planet. Doesn't work
 
     // const rotateAngle = new THREE.Vector3(0, 1, 0)
@@ -122,7 +122,7 @@ export class Player extends THREE.Object3D{
     //   rotateAngle,
     //   angleYDirection
     // )
-    
+
     // this.quaternion.rotateTowards(rotateQuarternion, 1)
   }
 
@@ -140,7 +140,7 @@ export class Player extends THREE.Object3D{
 
   }
 
-  
+
   private removePositionHelpers() {
     if (this.positionHelper) {
       console.log('Remove helper');
